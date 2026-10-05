@@ -41,7 +41,7 @@ function pedirCodigo() {
   const entrada = el("input", { placeholder: tr("Código de acceso a la demo"), autocomplete: "off", "aria-label": tr("Código de acceso a la demo") });
   const enviar = () => { guardado("demo_codigo", entrada.value.trim()); location.reload(); };
   entrada.addEventListener("keydown", e => { if (e.key === "Enter") enviar(); });
-  document.body.append(el("div", { id: "pide-codigo", class: "panel", style: "position:fixed;top:4.5rem;left:50%;transform:translateX(-50%);z-index:20;max-width:26rem" },
+  document.body.append(el("div", { id: "pide-codigo", class: "panel", style: "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;width:min(26rem,90vw);box-shadow:0 0 0 100vmax rgba(0,0,0,.72)" },
     el("h3", {}, tr("Código de acceso a la demo")),
     bilingue("Este enlace público pide un código. Pídeselo a quien te lo compartió."),
     el("div", { class: "fila" }, entrada, el("button", { onclick: enviar }, tr("Entrar")))));
