@@ -7,7 +7,7 @@ Las cifras son las medidas y están en `docs/REPORTE_EVALUACION.md`, `docs/01_DI
 import json
 from pathlib import Path
 
-PAUSA_S = 1.2
+PAUSA_S = 0.5
 ESCENAS = [
     {"id": 'hook', "bloque": 'WHY', "seg": 10,
      "en": 'A customer gets a notification: a charge she does not recognize. She cannot tell if it is hers, a mistake, or fraud.',

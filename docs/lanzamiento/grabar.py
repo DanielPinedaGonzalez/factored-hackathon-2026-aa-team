@@ -35,13 +35,14 @@ def largo(e: dict) -> float:
     return round(e["seg"] + COLA_S, 2)
 
 
-def audio_de_escena(e: dict, destino: Path) -> None:
+def pcm_de_escena(e: dict) -> bytes:
+    """La voz de la escena con su silencio de entrada y de salida, a la medida exacta de la escena (muestras de 16 bits, mono)."""
     with wave.open(str(AQUI / "audio" / f"{e['id']}.wav")) as w:
+        assert w.getframerate() == MARCO and w.getnchannels() == 1 and w.getsampwidth() == 2, f"{e['id']}.wav no es PCM mono de 16 bits a {MARCO} Hz"
         pcm = w.readframes(w.getnframes())
     ini = b"\0\0" * round(ENTRADA_VOZ_S * MARCO)
     fin = b"\0\0" * max(0, round(largo(e) * MARCO) - len(ini) // 2 - len(pcm) // 2)
-    with wave.open(str(destino), "wb") as w:
-        w.setnchannels(1); w.setsampwidth(2); w.setframerate(MARCO); w.writeframes(ini + pcm + fin)
+    return ini + pcm + fin
 
 
 def grabar_escena(i: int, e: dict, trabajo: Path) -> Path:
@@ -63,19 +64,39 @@ def grabar_escena(i: int, e: dict, trabajo: Path) -> Path:
     if caida:
         raise RuntimeError("el navegador se cayó")
     webm = next(carpeta.glob("*.webm"))
-    wav = carpeta / "voz.wav"
-    audio_de_escena(e, wav)
     salida = trabajo / f"escena_{i:02d}.mp4"
-    subprocess.run([ffmpeg(), "-y", "-loglevel", "error", "-ss", f"{t_inicio - t_contexto:.2f}", "-i", str(webm), "-i", str(wav), "-t", f"{largo(e):.2f}",
-                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "160k", "-ar", "24000", "-ac", "1",
-                    str(salida)], check=True)
+    subprocess.run([ffmpeg(), "-y", "-loglevel", "error", "-ss", f"{t_inicio - t_contexto:.2f}", "-i", str(webm), "-t", f"{largo(e):.2f}", "-an",
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-r", "30", str(salida)], check=True)
     return salida
+
+
+def unir(trabajo: Path, salida: Path) -> None:
+    """Une las escenas (solo imagen, cada una recortada a su largo actual) y pone la voz como UNA pista continua, codificada una sola vez:
+    codificar y pegar el audio escena por escena dejaba microcortes en cada unión."""
+    clips = []
+    for i, e in enumerate(ESCENAS):
+        fuente = trabajo / f"escena_{i:02d}.mp4"
+        mudo = trabajo / f"mudo_{i:02d}.mp4"
+        subprocess.run([ffmpeg(), "-y", "-loglevel", "error", "-i", str(fuente), "-t", f"{largo(e):.2f}", "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+                        "-pix_fmt", "yuv420p", "-r", "30", str(mudo)], check=True)
+        clips.append(mudo)
+    lista = trabajo / "lista.txt"
+    lista.write_text("".join(f"file '{c.name}'\n" for c in clips))
+    imagen = trabajo / "imagen.mp4"
+    subprocess.run([ffmpeg(), "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lista), "-c", "copy", str(imagen)], check=True)
+    voz = trabajo / "voz_total.wav"
+    with wave.open(str(voz), "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(MARCO)
+        for e in ESCENAS:
+            w.writeframes(pcm_de_escena(e))
+    subprocess.run([ffmpeg(), "-y", "-loglevel", "error", "-i", str(imagen), "-i", str(voz), "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "1", "-movflags", "+faststart", str(salida)], check=True)
 
 
 def main() -> None:
     args = sys.argv[1:]
     salida = Path(args[0]) if args and args[0].endswith(".mp4") else RAIZ / "privado" / "video" / "lanzamiento.mp4"
-    unir = "--unir" in args
+    juntar = "--unir" in args
     solo = [a for a in args if not a.endswith(".mp4") and a != "--unir"]
     salida.parent.mkdir(parents=True, exist_ok=True)
     trabajo = salida.parent / "_escenas"
@@ -93,11 +114,9 @@ def main() -> None:
                 print(f"{e['id']:9s} intento {intento} falló: {ex}", flush=True)
         else:
             sys.exit(f"no se pudo grabar la escena {e['id']}")
-    if solo and not unir:
+    if solo and not juntar:
         return
-    lista = trabajo / "lista.txt"
-    lista.write_text("".join(f"file 'escena_{i:02d}.mp4'\n" for i in range(len(ESCENAS))))
-    subprocess.run([ffmpeg(), "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lista), "-c", "copy", str(salida)], check=True)
+    unir(trabajo, salida)
     print(f"video: {salida} · {sum(largo(e) for e in ESCENAS):.0f} s")
 
 
