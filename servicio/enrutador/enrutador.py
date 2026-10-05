@@ -246,6 +246,11 @@ def asignar(ahora: datetime | None = None) -> list[dict]:
                 c.execute("insert into atencion.traspaso_eventos (traspaso_id, evento, detalle) values (%s,'desborde',%s)",
                           (t["traspaso_id"], json.dumps({"nivel": nivel})))
             candidatos = elegibles(asesores, t["habilidad"], t["idioma"], min(nivel, 2), ahora, True)
+            # Una transferencia es para otra persona: el caso no vuelve a quien lo transfirió (con las identidades de demo de cualquier habilidad, volvería).
+            previo = c.execute("""select autor from atencion.traspaso_eventos where traspaso_id = %s and evento = 'transferido'
+                                  order by id desc limit 1""", (t["traspaso_id"],)).fetchone()
+            if previo and previo["autor"]:
+                candidatos = [a for a in candidatos if a["employee_code"] != previo["autor"]]
             candidatos.sort(key=lambda a: (a["carga"] / a["capacidad"], a["ultima_asignacion"] or datetime.min.replace(tzinfo=timezone.utc),
                                            a["employee_code"]))
             for a in candidatos:

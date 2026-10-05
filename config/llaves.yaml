@@ -1,7 +1,7 @@
 # Reparto de llaves por papel (como la asignación de llaves por destinatario del sistema propio del autor).
 # Cada papel tiene su propio cupo: la demo, la evaluación del sistema, la línea base y el simulador no se quitan cupo
 # entre sí, y la comparación con la línea base es justa. Solo nombres de variables: las llaves viven en el entorno.
-sistema: [GROQ_API_KEY, GROQ_API_KEY_2]        # la API (demo), en pool LRU; al terminar la evaluación se le suman todas
+sistema: [GROQ_API_KEY, GROQ_API_KEY_2, GROQ_API_KEY_3, GROQ_API_KEY_4]   # la API (demo), en pool LRU; terminada la evaluación final (5-oct) se le suman las demás (solo cuentan las que estén en el entorno)
 evaluacion: [GROQ_API_KEY, GROQ_API_KEY_2, GROQ_API_KEY_3]   # el sistema propuesto en la evaluación, en pool LRU
 linea_base: [GROQ_API_KEY_4]                   # mismo modelo, cupo aparte
 simulador: [GROQ_API_KEY_4]                    # personajes y juez de trato (familia distinta), fuera de las corridas

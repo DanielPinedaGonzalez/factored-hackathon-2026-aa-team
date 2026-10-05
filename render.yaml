@@ -21,7 +21,17 @@ services:
         sync: false
       - key: GROQ_API_KEY_3
         sync: false
+      - key: GROQ_API_KEY_4          # más cupo gratuito para la demo (config/llaves.yaml, papel «sistema»); solo cuentan las que tengan valor
+        sync: false
       - key: OPENROUTER_API_KEY         # respaldo gratuito (config/llaves.yaml, orden_sistema); el valor se escribe en el panel de Render, nunca en un archivo
+        sync: false
+      - key: OPENROUTER_API_KEY_2
+        sync: false
+      - key: OPENROUTER_API_KEY_3
+        sync: false
+      - key: OPENROUTER_API_KEY_4
+        sync: false
+      - key: OPENROUTER_API_KEY_5
         sync: false
       - key: OPENROUTER_API_KEY_PAGO    # último respaldo, solo si las dos cadenas anteriores están saturadas
         sync: false
