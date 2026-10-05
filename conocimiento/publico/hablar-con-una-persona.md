@@ -15,7 +15,7 @@ fuentes: [nubank_b, cfpb2023, crmbuyer2026, decagon]
 casos: [C7]
 traduccion_pt: hecha por el equipo; retrotraducción pendiente
 datos:
-  horarios_atencion: config.atencion_humana.horarios_publicos
+  horarios_atencion: config.banco.horarios_atencion
 ---
 
 

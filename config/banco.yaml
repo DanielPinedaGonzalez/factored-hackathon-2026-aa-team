@@ -1,0 +1,21 @@
+# Ficha del banco de la demostración. SINTÉTICA y declarada: ninguno de estos datos es real.
+# Es la única fuente de los datos del banco que los artículos y la interfaz pueden decir. Un banco real reemplaza este archivo y nada más:
+# el código no contiene nombres, horarios, direcciones, teléfonos ni correos (los artículos los leen con `datos: marcador: config.banco.<clave>`).
+# Hoy los artículos leen `horarios_atencion`; lo demás queda declarado para los artículos y pantallas que lo necesiten.
+declarado: sintetico
+
+nombre: "Banco de la demostración"
+
+# Atención humana: coherente con los turnos de la plantilla de asesores (`config/atencion_humana.yaml`, `turnos`: mañana, tarde y noche,
+# de la plantilla sintética del conjunto de datos). Si el banco cambia sus horarios, cambia aquí el texto y allá los turnos.
+horarios_atencion: "todos los días, las 24 horas, por turnos de mañana, tarde y noche"
+
+canales:
+  telefono: "0000 000 0000"                    # ficticio
+  correo: "atencion@banco-demostracion.example"
+  aplicacion: "Aplicación del banco"
+
+sucursales:                                    # ficticias, una por país de la demo
+  - {pais: MX, ciudad: "Ciudad de México", direccion: "Calle Ficticia 100", horario: "lunes a viernes de 9:00 a 16:00"}
+  - {pais: CO, ciudad: "Bogotá", direccion: "Carrera Ficticia 100", horario: "lunes a viernes de 8:00 a 16:00"}
+  - {pais: AR, ciudad: "Córdoba", direccion: "Calle Ficticia 100", horario: "lunes a viernes de 10:00 a 15:00"}

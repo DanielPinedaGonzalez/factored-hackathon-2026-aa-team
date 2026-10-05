@@ -16,7 +16,7 @@ turnos:                                        # horas locales sintéticas y dec
   Rotating: [6, 14]
 zona_horaria: {MX: America/Mexico_City, CO: America/Bogota, AR: America/Argentina/Buenos_Aires}
 zona_horaria_por_defecto: America/Bogota     # quien escribe sin sesión: país desconocido (declarado)
-horarios_publicos: "todos los días, las 24 horas, por turnos de mañana, tarde y noche"
+# (el texto público del horario vive en `config/banco.yaml`, `horarios_atencion`: una sola fuente)
 plazo_interno_investigacion_dias: 15           # si la regla del país es desconocida (§P3)
 asesores_demo_siempre_en_turno: true           # las identidades de demo reciben casos a cualquier hora (declarado)
 asesores_demo_cualquier_habilidad: true       # y casos de cualquier habilidad: quien entra a la demo no tiene que saber con qué asesor entrar (declarado; el idioma sí se respeta)
