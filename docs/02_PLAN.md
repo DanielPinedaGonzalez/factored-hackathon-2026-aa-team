@@ -326,7 +326,7 @@ OpenTelemetry completo; paneles de equidad en la app; pruebas de carga más all�
 ## 9. Plan de mejoras tras la evaluación final
 
 Lo que la demo y la evaluación mostraron que hay que mejorar, en el orden en que se haría. Ninguno se aplicó antes de la entrega: el sistema evaluado
-(62 casos, una pasada) queda congelado para que la cifra siga significando lo que dice. **Regla para todos:** lo que lee el modelo (catálogo, prompts,
+(62 casos, una pasada) queda congelado para que la cifra siga significando lo que dice. **Todos son arreglos de diseño, no léxicos:** el significado lo decide el modelo dentro de un catálogo cerrado y la acción la decide el código con hechos de la base; ninguno usa listas de palabras ni respuestas por caso, y cada uno se prueba también con variantes de redacción. **Regla para todos:** lo que lee el modelo (catálogo, prompts,
 textos de hechos) se cambia solo con aprobación del autor, y después se mide contra los 62 casos para comprobar que no empeora nada.
 
 | # | Qué se observó | Qué se haría | Cómo se mide |

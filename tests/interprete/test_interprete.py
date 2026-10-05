@@ -136,3 +136,19 @@ def test_hace_n_dias_deja_un_margen_que_crece_con_la_distancia():
     assert rango_de_cuando("relativa", "hace_3_dias", hoy) == (date(2026, 9, 26), date(2026, 9, 28))
     assert rango_de_cuando("relativa", "hace_8_dias", hoy) == (date(2026, 9, 20), date(2026, 9, 24))
     assert rango_de_cuando("relativa", "hace_30_dias", hoy) == (date(2026, 8, 23), date(2026, 9, 8))
+
+
+# El modelo entiende el mensaje y a veces se descuida con el formato: la fecha escrita después de cerrar el cargo no debe costar el turno
+# (producción, 5-oct: «salida inválida dos veces: CUANDO fuera de un bloque CARGO» y el cliente recibió «no entendí»).
+BASE = "IDIOMA: es\nCOMANDO: iniciar | disputas.reportar_cargo\nRECONOCE: no\n"
+
+
+def test_el_cuando_suelto_despues_de_un_cargo_cerrado_se_une_a_ese_cargo():
+    r = leer(BASE + "CARGO: nuevo\nMONTO: 5000\nMONEDA: ARS\nFIN_CARGO\nCUANDO: relativa sábado")
+    assert len(r.cargos_referidos) == 1
+    assert r.cargos_referidos[0].monto.valor == 5000 and r.cargos_referidos[0].cuando.valor == "sábado"
+
+
+def test_un_cargo_sin_cerrar_seguido_de_un_campo_de_otro_tipo_sigue_siendo_invalido():
+    with pytest.raises(SalidaInvalida):
+        leer(BASE + "CARGO: nuevo\nMONTO: 5000\nSENAL: coaccion")

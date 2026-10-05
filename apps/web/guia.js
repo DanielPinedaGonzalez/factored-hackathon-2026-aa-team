@@ -68,10 +68,20 @@ export const NOTAS_NODO = {
 export const NOTA_SIN_MODELO = ["The model was not available, so a person takes over. That is the design.",
   "El modelo no estuvo disponible, así que una persona toma el caso. Es el diseño."];
 
-// The note for the last turn of a conversation (la nota del último turno), from its trace record.
+export const NOTA_NO_SE_LEYO = ["The model answered, but its answer could not be read. Nothing ran: the customer is asked to say it another way.",
+  "El modelo respondió, pero su respuesta no se pudo leer. No se ejecutó nada: se le pide al cliente que lo diga de otra forma."];
+export const NOTA_PASO_FALLO = ["A step of this turn did not complete. The steps below show what each part reported; nothing more is claimed.",
+  "Un paso de este turno no se completó. Los pasos de abajo muestran lo que informó cada parte; no se afirma nada más."];
+
+// The note for the last turn of a conversation (la nota del último turno), read from its trace record. The node's sentence says what the node means,
+// so it is shown only when no step of the turn failed: a note must never claim something the trace contradicts (la nota no afirma lo que la traza contradice).
 export function notaDeTurno(registro) {
   if (!registro) return null;
-  const par = registro.sin_modelo ? NOTA_SIN_MODELO : NOTAS_NODO[registro.nodo_despues];
+  const fallos = (registro.pasos || []).filter(p => p.estado === "fallo");
+  const par = registro.sin_modelo ? NOTA_SIN_MODELO
+    : fallos.some(p => p.componente === "interprete") ? NOTA_NO_SE_LEYO
+    : fallos.length ? NOTA_PASO_FALLO
+    : NOTAS_NODO[registro.nodo_despues];
   return par ? nota(par, { titulo: "What just happened" }) : null;
 }
 

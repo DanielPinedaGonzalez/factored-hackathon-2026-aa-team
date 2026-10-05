@@ -85,6 +85,7 @@ def leer(texto: str) -> Interpretacion:
     lineas = [l for l in texto.replace("\r", "").split("\n") if l.strip() and not l.strip().startswith("```")]
     datos: dict = {"comandos": [], "cargos_referidos": [], "senales_riesgo": [], "datos_secretos": []}
     cargo: dict | None = None
+    implicito = False       # el bloque lo abrió el lector porque el modelo dio un dato del cargo sin abrirlo
     borrador: list[str] | None = None
 
     for linea in lineas:
@@ -101,13 +102,18 @@ def leer(texto: str) -> Interpretacion:
             if cargo is None:
                 raise SalidaInvalida("FIN_CARGO sin CARGO")
             datos["cargos_referidos"].append(cargo)
-            cargo = None
+            cargo, implicito = None, False
             continue
         if clave in _EN_CARGO:
             if cargo is None:
                 if clave in _MODIFICADORES:
                     continue        # «aproximado» o «moneda» sin cargo ni monto no dicen nada: se ignoran en vez de perder el turno
-                raise SalidaInvalida(f"{clave} fuera de un bloque CARGO")
+                if clave not in ("CUANDO", "DESCRIPCION") or not datos["cargos_referidos"]:
+                    raise SalidaInvalida(f"{clave} fuera de un bloque CARGO")
+                # El cuándo o la descripción escritos DESPUÉS de cerrar un cargo ya declarado (visto en producción): el modelo entendió el mensaje y se descuidó con
+                # el formato; el dato pertenece a ese cargo. Sin ningún cargo declarado sigue siendo un error (se atribuiría a un cargo que nadie mencionó), igual que un monto suelto.
+                cargo = datos["cargos_referidos"].pop()
+                implicito = True
             if not valor:
                 continue
             if clave == "MONTO":
@@ -128,7 +134,10 @@ def leer(texto: str) -> Interpretacion:
                 cargo["descripcion"] = valor
             continue
         if cargo is not None:
-            raise SalidaInvalida(f"falta FIN_CARGO antes de {clave}")
+            if not implicito:
+                raise SalidaInvalida(f"falta FIN_CARGO antes de {clave}")
+            datos["cargos_referidos"].append(cargo)      # el bloque abierto por el lector termina donde empieza otro campo
+            cargo, implicito = None, False
         if clave == "CARGO":
             cargo = {"refiere_a": valor or "nuevo"}
         elif clave == "IDIOMA":
