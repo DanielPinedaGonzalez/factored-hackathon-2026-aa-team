@@ -63,8 +63,9 @@ def en_turno(a: dict, ahora: datetime, antes_del_fin: bool = False) -> bool:
 
 def elegibles(asesores: list[dict], habilidad: str, idioma: str, nivel: int, ahora: datetime,
               solo_demo: bool) -> list[dict]:
+    cualquiera = config().get("asesores_demo_cualquier_habilidad", False)       # demo declarada: sus identidades reciben casos de cualquier habilidad
     return [a for a in asesores
-            if a["habilidad"] in habilidades_por_nivel(habilidad, nivel) and idioma in a["idiomas"]
+            if (a["habilidad"] in habilidades_por_nivel(habilidad, nivel) or (cualquiera and a.get("demo"))) and idioma in a["idiomas"]
             and a["canal"] in ("Digital", "Hybrid") and en_turno(a, ahora, antes_del_fin=True)
             and (not solo_demo or (a["demo"] and a["presencia"] == "disponible" and a["carga"] < a["capacidad"]))]
 

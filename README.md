@@ -97,7 +97,7 @@ tarjeta, aclara, se abstiene o pasa el caso a la persona correcta del equipo con
 2. **Lo que pasa por dentro**, en esa misma pantalla, a la derecha tras cada mensaje (también en `/app/#/vista`, solo para desarrollo, con "Paso a paso" y "Personajes"): el mapa de nodos y, paso a paso: filtro,
    interpretación, candidatos, las cuatro verificaciones con sus números, herramienta, relectura, redacción y
    verificación. "Paso a paso" reproduce las corridas grabadas de la evaluación, con lo esperado frente a lo obtenido. Esas corridas no se publican (llevan fragmentos de registros del organizador): en la demo pública ese botón muestra directamente la vista en vivo.
-3. **Operación** (`/app/#/operacion`): entra como asesor `E30142` (fraude), `E81176` (reclamos) o `E17183` (general),
+3. **Operación** (`/app/#/operacion`): entra como cualquiera de los asesores de la demo (`E30142` fraude, `E81176` reclamos, `E17183` general; en la demo todos reciben casos de cualquier habilidad, declarado en `config/atencion_humana.yaml`; en un banco real cada caso va a quien tiene su habilidad),
    todos con español y portugués; ponte disponible y recibe los casos que pasaron a una persona, con el paquete, la
    guía del caso y la sugerencia de respuesta. Para ver un traspaso completo, en una pestaña el cliente pide una
    persona y en otra el asesor lo atiende. En la misma pantalla, "Reclamos por investigar" es el back-office: tomar el

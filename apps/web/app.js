@@ -531,6 +531,8 @@ function vistaOperacion(raiz) {
     const cod = el("select", {}, el("option", { value: "E30142" }, tr("E30142 · fraude · es, pt")),
       el("option", { value: "E81176" }, tr("E81176 · reclamos · es, pt")), el("option", { value: "E17183" }, tr("E17183 · general · es, pt")));
     zona.replaceChildren(el("div", { class: "panel", style: "max-width:520px" }, el("h3", {}, tr("Entrar (identidades de la demo)")),
+      bilingue(["In the demo, any advisor receives any case: pick one, press “Available” and open the case under “My cases”. The supervisor sees the whole system (queues, alarms, audit) and can step in.",
+        "En la demo, cualquier asesor recibe cualquier caso: elige uno, pulsa «Disponible» y abre el caso en «Mis casos». El supervisor ve todo el sistema (colas, alarmas, auditoría) e interviene."]),
       el("div", { class: "fila" }, cod, el("button", { onclick: () => entrar(cod.value, "asesor") }, tr("Entrar como asesor")),
         el("button", { class: "sec", onclick: () => entrar("SUP1", "supervisor") }, tr("Entrar como supervisor")))));
   }

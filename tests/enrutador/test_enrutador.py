@@ -3,6 +3,8 @@ from datetime import datetime, timedelta, timezone
 
 from servicio.enrutador.enrutador import _orden, elegibles, espera_excedida, habilidades_por_nivel, nivel_desborde
 
+from servicio.enrutador.enrutador import config as _config
+CONFIG_REAL = _config()
 AHORA = datetime(2026, 6, 18, 15, 0, tzinfo=timezone.utc)      # 10:00 en Bogotá, 09:00 en Ciudad de México
 
 
@@ -11,7 +13,9 @@ def asesor(code, hab, idiomas, turno="Morning", pais="Colombia", demo=True, pres
             "demo": demo, "presencia": presencia, "carga": carga, "capacidad": capacidad, "ultima_asignacion": None}
 
 
-def test_elegible_exige_habilidad_idioma_turno_capacidad():
+def test_elegible_exige_habilidad_idioma_turno_capacidad(monkeypatch):
+    from servicio.enrutador import enrutador
+    monkeypatch.setattr(enrutador, "config", lambda: {**CONFIG_REAL, "asesores_demo_cualquier_habilidad": False})      # la regla de producción
     a = [asesor("A", "fraude", ["es", "pt"]), asesor("B", "fraude", ["es"]), asesor("C", "general", ["es", "pt"]),
          asesor("D", "fraude", ["es", "pt"], turno="Night", demo=False), asesor("E", "fraude", ["es", "pt"], carga=2)]
     assert [x["employee_code"] for x in elegibles(a, "fraude", "pt", 0, AHORA, False)] == ["A", "E"]   # E: presencia, no carga
@@ -64,3 +68,12 @@ def test_espera_excedida_contra_la_primera_estimacion():
     assert espera_excedida({**t, "llegada": AHORA - timedelta(minutes=16)}, AHORA)
     assert not espera_excedida({**t, "llegada": AHORA - timedelta(minutes=16), "estado": "en_atencion"}, AHORA)
     assert not espera_excedida({**t, "espera_estimada_min": None}, AHORA)      # sin estimación no se promete nada
+
+
+def test_en_la_demo_las_identidades_de_demo_reciben_casos_de_cualquier_habilidad_pero_no_de_otro_idioma(monkeypatch):
+    """Quien entra a la demo no debe adivinar con qué asesor entrar (declarado en `config/atencion_humana.yaml`). El idioma sí se respeta; las identidades que no son de la demo siguen la regla de habilidad."""
+    from servicio.enrutador import enrutador
+    monkeypatch.setattr(enrutador, "config", lambda: {**CONFIG_REAL, "asesores_demo_cualquier_habilidad": True})
+    a = [asesor("G", "general", ["es"]), asesor("F", "fraude", ["pt"]), asesor("X", "general", ["es"], demo=False)]
+    assert [x["employee_code"] for x in elegibles(a, "reclamos", "es", 0, AHORA, False)] == ["G"]
+
