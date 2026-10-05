@@ -39,7 +39,7 @@ The raw run files are not published (they contain fragments of the organizer's r
 (those behind the 62 evaluation cases and the demo identities, with all their products and transactions, picked at random with a fixed seed so anyone can reproduce it). Reasons: the development machine has 3 GB of RAM,
 the free database tier is 0.5 GB, and the demo needs to answer in seconds. The repository does **not** contain the organizer's data: `make datos` builds the subset from your own copy.
 
-**Honest limits.** Synthetic data; a small evaluation; the Portuguese is checked by back-translation, not by a native reviewer; asking for a language with a *sentence* written in the other
+**Honest limits.** The conversation graph (its steps and transitions) is written in code, not declared as data. The author's preferred way of working is to declare processes as data (BPM-style YAML), with a generic engine that runs them; here the graph was coded directly to build and test the whole system within the hackathon. Moving it to declarative processes is the first item of the improvement plan (`docs/02_PLAN.md` §9, item 0) and is the recommended next step. Synthetic data; a small evaluation; the Portuguese is checked by back-translation, not by a native reviewer; asking for a language with a *sentence* written in the other
 language is not understood (the selector and simply writing in the other language are); the free model quota limits how many full evaluations can run.
 
 Drawings of one turn, the state machine and every failure path: [`docs/DIAGRAMAS.md`](docs/DIAGRAMAS.md).
@@ -165,7 +165,7 @@ docs/          planos, diagnóstico, reporte de evaluación y presentación
 
 ## Límites
 
-Datos sintéticos; política de demo sintética fuera de lo verificado en fuente primaria; los artículos de conocimiento
+El grafo de la conversación (sus pasos y transiciones) está escrito en código y no declarado como dato. La forma de trabajar del autor es declarar los procesos como datos (YAML estilo BPM) con un motor genérico que los ejecuta; aquí el grafo se programó directamente para construir y probar todo el sistema dentro del hackatón. Pasarlo a procesos declarativos es el primer punto del plan de mejoras (`docs/02_PLAN.md` §9, punto 0) y es el siguiente paso recomendado. Datos sintéticos; política de demo sintética fuera de lo verificado en fuente primaria; los artículos de conocimiento
 se sirven como borrador hasta su aprobación; la evaluación es pequeña y la corrida final es una sola por sistema
 (cupo gratuito); el portugués se verifica por retrotraducción; pedir el idioma con una frase escrita en el otro idioma no se entiende (sí se entiende el selector y
 escribir en el otro idioma). Lo diseñado y no construido está listado en
