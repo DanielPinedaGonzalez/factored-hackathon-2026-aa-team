@@ -104,6 +104,7 @@ def test_una_respuesta_cortada_pasa_al_siguiente_proveedor_sin_enfriar_la_llave(
     assert all(k["enfriada_s"] == 0 for k in groq.estado()["llaves"])
 
 
+@pytest.mark.db          # necesita los datos de demo cargados (servicio.datos_version), que no se publican
 def test_sin_llaves_en_el_entorno_no_revienta_y_la_conversacion_pasa_a_una_persona(monkeypatch):
     """La API arrancada sin el archivo de llaves: cada llamada falla con su razón real (no un error 500), la
     conversación sigue el camino sin modelo y la cabina lo ve como SIN_LLAVES."""
