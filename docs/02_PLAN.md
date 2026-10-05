@@ -321,3 +321,21 @@ final), *Learn then Test*, comandos de diálogo (CALM), servicios guiados por es
 
 **Fuera:** modelos de fraude por rasgos de comportamiento (no hay señal); búsqueda vectorial (`ARQUITECTURA.md` D-15);
 OpenTelemetry completo; paneles de equidad en la app; pruebas de carga más allá de p50/p95 y límites básicos.
+
+
+## 9. Plan de mejoras tras la evaluación final
+
+Lo que la demo y la evaluación mostraron que hay que mejorar, en el orden en que se haría. Ninguno se aplicó antes de la entrega: el sistema evaluado
+(62 casos, una pasada) queda congelado para que la cifra siga significando lo que dice. **Regla para todos:** lo que lee el modelo (catálogo, prompts,
+textos de hechos) se cambia solo con aprobación del autor, y después se mide contra los 62 casos para comprobar que no empeora nada.
+
+| # | Qué se observó | Qué se haría | Cómo se mide |
+|---|---|---|---|
+| 1 | **Un reembolso prometido que no llegó** (caso F6, el único resultado fuera de política de los 62): el Intérprete lo tomó por un cargo desconocido y se abrió un reclamo que no correspondía | Distinguir «cargo que no reconozco» de «me prometieron un abono que no veo» en el catálogo cerrado, y pasar el segundo a una persona | F6 y variantes escritas de otra forma; los 62 sin regresión |
+| 2 | **Mensajes con muchas faltas de ortografía** pueden terminar en «fuera de alcance» (probado en la demo) en vez de pedir que lo repita; la salida es segura (ofrece una persona) pero el texto engaña | Que el Intérprete separe «no entendí» de «fuera de alcance» y que se pida reformular; revisar `no_se_entendio` (hoy 241 caracteres y tres negaciones) | Conjunto de mensajes con errores de tecleo derivados de los casos existentes |
+| 3 | **«¿Cuál fue mi última compra?»** (una) muestra los últimos 5 movimientos, igual que «mis últimas compras» (varias) | Una señal cerrada de cantidad (una o varias) para que el código muestre 1 o 5 | Casos nuevos de cantidad; los 62 sin regresión |
+| 4 | **Depósitos y desembolsos** no están cubiertos: el sistema lo dice y pasa a una persona | Ampliar el alcance con la fuente de datos de esos movimientos; hoy sigue siendo un límite declarado | Casos nuevos por tipo de movimiento |
+| 5 | **Portugués** verificado por retrotraducción, no por una persona nativa; 12 de los 62 casos | Revisión nativa de textos y de los casos; más casos en portugués | Casos nuevos por idioma, con intervalos |
+| 6 | **Evaluación pequeña** (62 casos, intervalos anchos) | Un conjunto aparte de unos 100 casos nuevos, sin tocar el final de 62; una pasada cuesta del orden de 900.000 tokens, así que se corre con capacidad de pago medida | Mismos criterios y mismos intervalos de Wilson |
+| 7 | **Endurecimiento** | `TOKEN_SECRETO` sin valor por defecto fuera del entorno local (que el servicio se niegue a arrancar sin él); activar el escaneo de secretos del proveedor al hacer público el repositorio | Prueba que arranca solo con el secreto definido |
+| 8 | **Despliegue** | Activar el camino automático de GitHub Actions (secretos del proveedor de alojamiento y de la base) y una instancia que no se duerma | Prueba de humo del paso 7 de `DESPLIEGUE.md` §4 |
