@@ -96,15 +96,18 @@ def test_tema_de_consulta_fuera_del_catalogo_se_reintenta_con_los_validos():
 
 def test_un_modificador_suelto_no_pierde_el_turno_pero_un_dato_suelto_si_es_error():
     """Visto en la demo con un mensaje lleno de errores de tipeo: el modelo dejó «APROXIMADO» sin su bloque CARGO y el turno pasó a una
-    persona por una línea que no decía nada. «Aproximado» y «moneda» sin monto se ignoran; un monto, una fecha o una descripción
-    sueltos siguen siendo un error (se atribuirían a un cargo que nadie declaró)."""
+    persona por una línea que no decía nada. «Aproximado» y «moneda» sin monto se ignoran; un monto suelto sigue siendo un error (es un número y no
+    se adivina a qué cargo pertenece). La fecha y la descripción sueltas forman el cargo del que habla el cliente (5-oct, producción: «no reconozco un cargo de ayer»)."""
     ok = leer("IDIOMA: es\nCOMANDO: iniciar | disputas.reportar_cargo\nRECONOCE: no\nAPROXIMADO: si")
     assert [c.nombre for c in ok.comandos] == ["iniciar"] and ok.cargos_referidos == []
     ok2 = leer("IDIOMA: es\nCOMANDO: iniciar | disputas.reportar_cargo\nMONEDA: COP")
     assert ok2.cargos_referidos == []
-    for suelto in ("MONTO: 500", "CUANDO: relativa ayer", "DESCRIPCION: cobro raro"):
-        with pytest.raises(SalidaInvalida):
-            leer(f"IDIOMA: es\nCOMANDO: iniciar | disputas.reportar_cargo\n{suelto}")
+    with pytest.raises(SalidaInvalida):
+        leer("IDIOMA: es\nCOMANDO: iniciar | disputas.reportar_cargo\nMONTO: 500")
+    ayer = leer("IDIOMA: es\nCOMANDO: iniciar | disputas.reportar_cargo\nRECONOCE: no\nCUANDO: relativa ayer")
+    assert len(ayer.cargos_referidos) == 1 and ayer.cargos_referidos[0].cuando.valor == "ayer" and ayer.cargos_referidos[0].refiere_a == "nuevo"
+    cobro = leer("IDIOMA: es\nCOMANDO: iniciar | disputas.reportar_cargo\nDESCRIPCION: cobro raro")
+    assert cobro.cargos_referidos[0].descripcion == "cobro raro"
 
 
 def test_cuando_dentro_del_cargo_acepta_un_valor_del_calendario_sin_su_tipo():

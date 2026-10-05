@@ -108,11 +108,13 @@ def leer(texto: str) -> Interpretacion:
             if cargo is None:
                 if clave in _MODIFICADORES:
                     continue        # «aproximado» o «moneda» sin cargo ni monto no dicen nada: se ignoran en vez de perder el turno
-                if clave not in ("CUANDO", "DESCRIPCION") or not datos["cargos_referidos"]:
+                if clave not in ("CUANDO", "DESCRIPCION"):
                     raise SalidaInvalida(f"{clave} fuera de un bloque CARGO")
-                # El cuándo o la descripción escritos DESPUÉS de cerrar un cargo ya declarado (visto en producción): el modelo entendió el mensaje y se descuidó con
-                # el formato; el dato pertenece a ese cargo. Sin ningún cargo declarado sigue siendo un error (se atribuiría a un cargo que nadie mencionó), igual que un monto suelto.
-                cargo = datos["cargos_referidos"].pop()
+                # El cuándo o la descripción escritos sin abrir el bloque, o después de cerrarlo (visto en producción con «no reconozco un cargo de ayer»,
+                # varias veces, también en el reintento): el modelo entendió el mensaje y se descuidó con el formato. Una fecha o una descripción solo existen
+                # como rasgos de un cargo: pertenecen al cargo que acaba de describir o, si no describió ninguno, al cargo del que habla el cliente (uno nuevo).
+                # Un monto suelto sigue siendo inválido: es un número y no se adivina a qué cargo pertenece.
+                cargo = datos["cargos_referidos"].pop() if datos["cargos_referidos"] else {"refiere_a": "nuevo"}
                 implicito = True
             if not valor:
                 continue
