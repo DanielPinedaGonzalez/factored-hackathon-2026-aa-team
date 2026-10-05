@@ -68,7 +68,7 @@ GitHub Pages no se usa: en el plan gratuito solo publica desde repositorios púb
    5 más recientes y la más vieja se borra antes de crear la nueva.
 3. **Migraciones:** `scripts/migrar.py` contra Neon con el usuario de migraciones, **antes** de desplegar el código.
    Si fallan, producción sigue con el código anterior intacto.
-4. **Desplegar la API:** llama el *deploy hook* de Render (el despliegue automático de Render está apagado para que
+4. **Desplegar la API:** llama el *deploy hook* de Render (el despliegue automático de Render, «On Commit», se activó el 5-oct para iterar rápido durante las pruebas: la API se despliega sola con cada push a `main`; en el camino con pruebas del flujo, estaba apagado para que
    nada suba sin pasar por 1-3). Render construye la imagen Docker.
 5. **Verificar que corre el código nuevo** (el equivalente de comparar huellas dentro de los contenedores):
    - `GET /version` debe devolver el mismo commit que se subió (Render lo expone en `RENDER_GIT_COMMIT`);
@@ -119,7 +119,7 @@ bloquean.
 | Neon 0,5 GB | Subconjunto de demo | Se mide `pg_database_size` tras migrar; si pasa el 70%, no se despliega |
 | Neon, 1 snapshot manual gratis y 10 ramas por proyecto | Sin rotación, el despliegue n.º 10 falla | Ramas como puntos de restauración, rotadas (se conservan 5) |
 | Actions 2.000 min/mes en privado | Suficiente para ~100+ despliegues | Al hacerse público, sin límite |
-| Cupo gratuito de los modelos | La demo puede quedarse sin modelo | Guardián de cupo que espacia las llamadas; sin modelo, traspaso a una persona (CONTRATOS A12, A11) |
+| Cupo gratuito de los modelos | La demo puede quedarse sin modelo | Guardián de cupo que espacia las llamadas; un cliente espera hasta 15 s a que se libere una llave (`ESPERA_SATURADO_S`) antes de pasar a una persona (CONTRATOS A12, A11). Las llaves de la demo salen de `config/llaves.yaml` (papel `sistema`); un valor de relleno de menos de 20 caracteres no cuenta como llave |
 
 ## Referencias
 

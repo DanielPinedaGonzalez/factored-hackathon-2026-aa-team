@@ -126,8 +126,8 @@ CSS = """
 body { margin:0; font-family: Inter, system-ui, "Segoe UI", Roboto, sans-serif; background:var(--fondo); color:var(--texto) }
 section { width:1920px; height:1080px; padding:34px 80px 0; page-break-after:always; position:relative; background:var(--fondo); overflow:hidden; isolation:isolate; display:flex; flex-direction:column }
 /* curvas de nivel de la demo (apps/web/fondo.svg) detrás del contenido; se aclaran hacia el centro, donde va el texto */
-section::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; background:url("__FONDO__") center/cover no-repeat; opacity:.95;
-  -webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 52%, rgba(0,0,0,.18) 0%, rgba(0,0,0,.45) 55%, #000 100%); mask-image:radial-gradient(ellipse 75% 70% at 50% 52%, rgba(0,0,0,.18) 0%, rgba(0,0,0,.45) 55%, #000 100%) }
+section::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; background:url("__FONDO__") center/cover no-repeat; opacity:.38;
+  -webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 52%, rgba(0,0,0,.08) 0%, rgba(0,0,0,.3) 55%, #bbb 100%); mask-image:radial-gradient(ellipse 75% 70% at 50% 52%, rgba(0,0,0,.08) 0%, rgba(0,0,0,.3) 55%, #bbb 100%) }
 .cab { display:flex; justify-content:space-between; align-items:center; height:60px; font-size:24px; letter-spacing:.14em; color:var(--suave); font-weight:600 }
 .firma { display:flex; align-items:center; gap:14px; letter-spacing:0 } .firma b { font-size:32px; color:#fff } .firma i { font-style:normal; font-size:24px; color:var(--suave); border-left:2px solid #5a5a55; padding-left:14px }
 .firma svg { display:block }

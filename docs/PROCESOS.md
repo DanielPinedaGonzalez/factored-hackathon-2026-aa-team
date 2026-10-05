@@ -209,6 +209,10 @@ Una transferencia con nota **conserva la hora de llegada original**: el caso no 
 
 ### P2.4 Quién es elegible y a quién se asigna
 
+> **En la demo** (declarado en `config/atencion_humana.yaml`): las identidades de demo están siempre en turno y reciben casos de **cualquier** habilidad
+> (el idioma sí se respeta), para que quien entra no tenga que adivinar con qué asesor hacerlo. La regla de abajo es la de producción. Un caso
+> **transferido** no vuelve a quien lo transfirió.
+
 Un asesor es elegible si cumple **todo**:
 - está `disponible` y su carga es menor que su capacidad en ese canal;
 - está dentro de su turno y faltan más de 15 minutos para que termine;

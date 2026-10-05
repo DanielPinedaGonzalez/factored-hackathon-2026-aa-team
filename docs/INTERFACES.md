@@ -35,9 +35,11 @@ Es solo interfaz: no cambia el sistema que se midió.
 
 El idioma de la **interfaz** y el de la **conversación** son dos cosas distintas. La conversación con el cliente es en
 español o portugués y la decide el sistema (`ARQUITECTURA.md` §8.5). Las pantallas del personal (vista en vivo,
-operación, sistema) y los rótulos del chat tienen un selector **EN / ES** en la cabecera: el idioma se guarda en el
-navegador y, la primera vez, sigue el idioma del navegador (inglés si no es español). Así un jurado que no lee español
-puede seguir la demo, y la conversación del cliente sigue siendo la que exige el reto.
+operación, sistema) y todo lo que es de la demo (notas del presentador, tarjetas de clientes, «Reiniciar demo») tienen un
+selector **EN / ES** en la cabecera: el idioma se guarda en el navegador y, la primera vez, sigue el idioma del navegador
+(inglés si no es español). Así un jurado que no lee español puede seguir la demo. **El chat con Lora no lo sigue:** es el
+producto y va en el idioma de la conversación, español o portugués (su propio selector ES / PT; `tLora` en `i18n.js`), nunca
+en inglés, aunque la demo esté en inglés. «Reiniciar demo» no está dentro del chat: es de la demo.
 
 - El texto en español es la clave de la traducción (`apps/web/i18n.js`, `apps/web/i18n_en.js`): lo que falte se ve en
   español y no rompe nada. Una prueba candado (`tests/candados/test_interfaz.py`) exige que todo rótulo tenga traducción.
@@ -53,6 +55,9 @@ puede seguir la demo, y la conversación del cliente sigue siendo la que exige e
 **Marca.** `apps/web/marca.js` dibuja a Lora (un loro: *lora* se dice loro) en la barra, en la cabecera del chat y en el pie, que lleva los créditos (Daniel Pineda · AA TEAM · Factored AI & Data Hackathon 2026). Si existe `apps/web/hackathon.png` (fondo transparente) se muestra en el pie; si no, no aparece. En pantalla cada cliente de demostración se llama «Cliente N» (Lora es una sola asistente que los atiende a todos); `DEMO-100N` sigue siendo la identidad para iniciar sesión.
 
 ## 1. Chat del cliente
+
+**Fuente de la respuesta.** Cuando una respuesta sale de un artículo del banco, el chat muestra bajo el mensaje de qué artículo salió
+(«Fuente: título (id, versión)»): el Redactor declara la cita, el verificador la comprueba y el orquestador la entrega como elemento `fuente`.
 
 ```
 ┌──────────────────────────────────────────────┐

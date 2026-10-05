@@ -141,7 +141,7 @@ evaluacion/    verdad de referencia, corredor, métricas, línea base y reporte
 migraciones/   SQL numerado: esquema, roles y RLS
 apps/web/      sitio estático: cliente, vista en vivo, operación, sistema y About; notas del presentador (EN con ES entre paréntesis) y mapa del flujo
 conocimiento/  artículos públicos e internos
-config/        parámetros de operación, identidad, retención y textos legales
+config/        parámetros de operación, identidad, retención, textos legales y la ficha del banco (`banco.yaml`: nombre, horarios, canales, sucursales; sintética)
 artefactos/    salidas de los procedimientos (M1, dinero en juego, calidad de datos)
 scripts/       operación (migrar, humo, verificar); dev/ herramientas de desarrollo; diagnostico/ análisis de datos
 tests/         espejo de servicio/, más candados y pruebas de seguridad
