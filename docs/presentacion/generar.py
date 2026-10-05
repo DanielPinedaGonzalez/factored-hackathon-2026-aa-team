@@ -278,8 +278,8 @@ def diapositivas(conjunto: str, propuesto: list[str] | None, pruebas: str) -> tu
  <div class="tarj"><h3 style="color:var(--regla)">THE POLICY · FOUR CHECKS, ALL MUST PASS</h3><div style="width:90%;margin:0 auto">{_venn()}</div>
   <div class="nota" style="text-align:center;margin-top:6px">The intersection defines which actions Lora may perform without a person. Conceptual view: the four conditions are evaluated in code.</div>
   <div class="chips" style="margin-top:14px"><div class="chip"><b>The database re-read</b> · after she acts</div><div class="chip"><b>The text check</b> · before Lora speaks</div></div></div>
- <div class="tarj"><h3 style="color:var(--lora)">THE FRAUD SIGNAL · CERTIFIED RULE: SCORE &gt; {umbral}</h3>
-  <p style="font-size:28px;line-height:1.35;margin:0 0 14px">The bank already provides a fraud score for most transactions. We calibrated it and <b>certified</b> a cut-off: above it, Lora may offer a card block.</p>
+ <div class="tarj"><h3 style="color:var(--lora)">M1 · THE FRAUD SIGNAL · CERTIFIED RULE: SCORE &gt; {umbral}</h3>
+  <p style="font-size:28px;line-height:1.35;margin:0 0 14px">The bank already provides a fraud score for most transactions. We calibrated it (<b>isotonic regression</b>) and <b>certified</b> a cut-off with <b>Learn-then-Test</b>, FDR ≤ 1 %: above it, Lora may offer a card block.</p>
   {_barra_h("Certified cut-off", ancho(P), C_LORA, 100, caza(P), 300)}{_barra_h("Bank's cut-off (50)", ancho(B), C_BASE, 100, caza(B), 300)}
   <div class="nota" style="margin:-4px 0 12px">Share of fraud caught · locked test, Jan–Jun 2026 · {P['fraudes']} frauds · {P['legitimas']:,} legitimate transactions</div>
   <table class="tabla"><tr style="color:var(--suave);font-size:23px"><td></td><td>Recommended blocks</td><td>Wrong, observed</td><td>95% upper bound (FDR)</td></tr>

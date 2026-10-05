@@ -1,14 +1,18 @@
 # Ficha del banco de la demostración. SINTÉTICA y declarada: ninguno de estos datos es real.
 # Es la única fuente de los datos del banco que los artículos y la interfaz pueden decir. Un banco real reemplaza este archivo y nada más:
 # el código no contiene nombres, horarios, direcciones, teléfonos ni correos (los artículos los leen con `datos: marcador: config.banco.<clave>`).
-# Hoy los artículos leen `horarios_atencion`; lo demás queda declarado para los artículos y pantallas que lo necesiten.
+# Hoy los artículos leen `atencion`; lo demás queda declarado para los artículos y pantallas que lo necesiten.
 declarado: sintetico
 
 nombre: "Banco de la demostración"
 
-# Atención humana: coherente con los turnos de la plantilla de asesores (`config/atencion_humana.yaml`, `turnos`: mañana, tarde y noche,
-# de la plantilla sintética del conjunto de datos). Si el banco cambia sus horarios, cambia aquí el texto y allá los turnos.
-horarios_atencion: "todos los días, las 24 horas, por turnos de mañana, tarde y noche"
+# Horarios, como los de un banco real: Lora (la asistente) atiende todo el tiempo; las personas del equipo, las 24 horas para fraude y bloqueo de
+# tarjetas, y en horario de oficina para el resto. Si el banco cambia sus horarios, cambia aquí el texto y los turnos en `config/atencion_humana.yaml`
+# (la plantilla de asesores y el enrutador usan turnos; en la demo, sus identidades están siempre en turno, declarado).
+atencion:
+  lora: "las 24 horas, todos los días"
+  personas_fraude_y_bloqueo: "las 24 horas, todos los días"
+  personas_general_y_reclamos: "de lunes a viernes de 8:00 a 17:00 y los sábados de 9:00 a 13:00, en la hora local de cada país"
 
 canales:
   telefono: "0000 000 0000"                    # ficticio

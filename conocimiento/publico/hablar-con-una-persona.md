@@ -15,7 +15,9 @@ fuentes: [nubank_b, cfpb2023, crmbuyer2026, decagon]
 casos: [C7]
 traduccion_pt: hecha por el equipo; retrotraducción pendiente
 datos:
-  horarios_atencion: config.banco.horarios_atencion
+  horario_lora: config.banco.atencion.lora
+  horario_personas_fraude: config.banco.atencion.personas_fraude_y_bloqueo
+  horario_personas_general: config.banco.atencion.personas_general_y_reclamos
 ---
 
 
@@ -26,7 +28,7 @@ datos:
   la atención si es fuera de horario.
 - Tu caso queda registrado con su número. Puedes irte y volver: la respuesta llega a este mismo chat.
 - La persona recibe todo lo que ya contaste; no tienes que repetirlo.
-- Horarios de atención: {horarios_atencion}.
+- Horarios: Lora te atiende {horario_lora}. Una persona del equipo atiende fraude y bloqueo de tarjetas {horario_personas_fraude}, y las demás gestiones {horario_personas_general}.
 
 ## pt
 
@@ -35,7 +37,7 @@ datos:
   atendimento começa se for fora do horário.
 - O seu caso fica registrado com o número. Você pode sair e voltar: a resposta chega neste mesmo chat.
 - A pessoa recebe tudo o que você já contou; você não precisa repetir.
-- Horários de atendimento: {horarios_atencion}.
+- Horários: a Lora atende {horario_lora}. Uma pessoa da equipe atende fraude e bloqueio de cartões {horario_personas_fraude}, e as demais solicitações {horario_personas_general}.
 
 ## Respaldo
 
