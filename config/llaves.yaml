@@ -1,0 +1,26 @@
+# Reparto de llaves por papel (como la asignación de llaves por destinatario del sistema propio del autor).
+# Cada papel tiene su propio cupo: la demo, la evaluación del sistema, la línea base y el simulador no se quitan cupo
+# entre sí, y la comparación con la línea base es justa. Solo nombres de variables: las llaves viven en el entorno.
+sistema: [GROQ_API_KEY, GROQ_API_KEY_2]        # la API (demo), en pool LRU; al terminar la evaluación se le suman todas
+evaluacion: [GROQ_API_KEY, GROQ_API_KEY_2, GROQ_API_KEY_3]   # el sistema propuesto en la evaluación, en pool LRU
+linea_base: [GROQ_API_KEY_4]                   # mismo modelo, cupo aparte
+simulador: [GROQ_API_KEY_4]                    # personajes y juez de trato (familia distinta), fuera de las corridas
+# Límite diario de tokens por llave en la capa gratuita, según el propio mensaje de error del proveedor (26-sep-2026:
+# "tokens per day (TPD): Limit 200000"). Las cabeceras no lo informan: la cabina lo mide del registro de llamadas.
+limite_tokens_dia: 200000
+
+# Orden de proveedores de la demo (como el orden de texto del sistema propio del autor): primero se rota entre las
+# llaves de Groq; si todas caen, responde OpenRouter con su propio pool. La evaluación usa solo Groq: medir con otro
+# modelo a mitad de corrida no es válido. OpenRouter gratuito no garantiza cero retención: se permite porque todos los
+# datos son sintéticos (decisión de Daniel, 27-sep); con datos reales exigiría un proveedor con cero retención.
+orden_sistema: [groq, openrouter, openrouter_pago]
+openrouter:
+  llaves: [OPENROUTER_API_KEY, OPENROUTER_API_KEY_2, OPENROUTER_API_KEY_3, OPENROUTER_API_KEY_4, OPENROUTER_API_KEY_5]
+  modelo: nvidia/nemotron-3-super-120b-a12b:free   # medido el 27-sep con los prompts reales (el más rápido que respondió)
+  cero_retencion: false
+# Último respaldo de la demo: la llave de pago de OpenRouter, para que quien prueba no se quede sin sistema cuando las gratuitas no alcanzan. Mismo modelo que
+# el sistema usa en Groq (el medido); solo responde si las dos cadenas anteriores están saturadas.
+openrouter_pago:
+  llaves: [OPENROUTER_API_KEY_PAGO]
+  modelo: openai/gpt-oss-120b
+  cero_retencion: false

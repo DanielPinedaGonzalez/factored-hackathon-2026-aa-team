@@ -1,0 +1,171 @@
+[
+ {
+  "documento": "DEMO-1001",
+  "pais": "MX",
+  "segmento": "Plus",
+  "productos": [
+   "Cuenta Ahorro",
+   "Cuenta Ahorro",
+   "Préstamo Hipotecario",
+   "Tarjeta Crédito"
+  ],
+  "movimientos": 45,
+  "cargos_ayer": 1,
+  "mayor": {
+   "tipo": "Transfer",
+   "usd": 7832
+  },
+  "comercio_repetido": null,
+  "riesgo": {
+   "score_max": 29.35,
+   "umbral": 30.0,
+   "supera": false
+  }
+ },
+ {
+  "documento": "DEMO-1002",
+  "pais": "AR",
+  "segmento": "Student",
+  "productos": [
+   "Cuenta Ahorro",
+   "Cuenta Ahorro",
+   "Tarjeta Crédito",
+   "Tarjeta Débito"
+  ],
+  "movimientos": 55,
+  "cargos_ayer": 0,
+  "mayor": {
+   "tipo": "Transfer",
+   "usd": 8780
+  },
+  "comercio_repetido": {
+   "comercio": "Tienda Don José",
+   "veces": 6
+  },
+  "riesgo": {
+   "score_max": 29.53,
+   "umbral": 30.0,
+   "supera": false
+  }
+ },
+ {
+  "documento": "DEMO-1003",
+  "pais": "MX",
+  "segmento": "Basic",
+  "productos": [
+   "Cuenta Corriente",
+   "Cuenta Corriente",
+   "Préstamo Personal"
+  ],
+  "movimientos": 34,
+  "cargos_ayer": 1,
+  "mayor": {
+   "tipo": "Transfer",
+   "usd": 8703
+  },
+  "comercio_repetido": null,
+  "riesgo": {
+   "score_max": 29.14,
+   "umbral": 30.0,
+   "supera": false
+  }
+ },
+ {
+  "documento": "DEMO-1004",
+  "pais": "MX",
+  "segmento": "Premium",
+  "productos": [
+   "Cuenta Ahorro",
+   "Cuenta Ahorro",
+   "Cuenta Corriente",
+   "Tarjeta Crédito",
+   "Tarjeta Crédito",
+   "Tarjeta Crédito"
+  ],
+  "movimientos": 92,
+  "cargos_ayer": 0,
+  "mayor": {
+   "tipo": "Transfer",
+   "usd": 9563
+  },
+  "comercio_repetido": {
+   "comercio": "Óptica Visión",
+   "veces": 5
+  },
+  "riesgo": {
+   "score_max": 29.27,
+   "umbral": 30.0,
+   "supera": false
+  }
+ },
+ {
+  "documento": "DEMO-1005",
+  "pais": "MX",
+  "segmento": "Premium",
+  "productos": [
+   "Cuenta Corriente",
+   "Tarjeta Crédito",
+   "Tarjeta Crédito"
+  ],
+  "movimientos": 45,
+  "cargos_ayer": 1,
+  "mayor": {
+   "tipo": "Transfer",
+   "usd": 9651
+  },
+  "comercio_repetido": {
+   "comercio": "Ferretería",
+   "veces": 4
+  },
+  "riesgo": {
+   "score_max": 29.46,
+   "umbral": 30.0,
+   "supera": false
+  }
+ },
+ {
+  "documento": "DEMO-1006",
+  "pais": "MX",
+  "segmento": "Premium",
+  "productos": [
+   "Cuenta Ahorro",
+   "Tarjeta Débito"
+  ],
+  "movimientos": 13,
+  "cargos_ayer": 1,
+  "mayor": {
+   "tipo": "Purchase",
+   "usd": 475
+  },
+  "comercio_repetido": {
+   "comercio": "Restaurante El Buen Sabor",
+   "veces": 3
+  },
+  "riesgo": {
+   "score_max": 29.92,
+   "umbral": 30.0,
+   "supera": false
+  }
+ },
+ {
+  "documento": "DEMO-1007",
+  "pais": "MX",
+  "segmento": "Plus",
+  "productos": [
+   "Cuenta Corriente",
+   "Tarjeta Débito"
+  ],
+  "movimientos": 16,
+  "cargos_ayer": 1,
+  "mayor": {
+   "tipo": "Deposit",
+   "usd": 4413
+  },
+  "comercio_repetido": null,
+  "riesgo": {
+   "score_max": 59.82,
+   "umbral": 30.0,
+   "supera": true
+  }
+ }
+]

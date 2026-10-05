@@ -1,0 +1,47 @@
+# Guía del caso para el asesor (PROCESOS §P2.8): pasos por motivo del traspaso. Texto interno del equipo, no conversación.
+por_defecto: ["Leer el paquete y la conversación.", "Responder lo que el cliente pidió sin preguntar lo ya dicho."]
+identidad_no_verificada: "Identidad no verificada: no revelar datos de la cuenta ni ejecutar acciones; nunca cambiar teléfono ni correo por chat."
+motivos:
+  producto_en_manos_de_otro:
+    pasos: ["Confirmar que el bloqueo quedó hecho (acciones realizadas).", "Revisar movimientos desde la fecha del robo o la pérdida.", "Ofrecer reclamo por cada cargo que no reconozca.", "Si hay compromiso confirmado, escalar a reemplazo."]
+    articulos: [interno.robo-o-perdida-bloquear-primero, publico.robo-o-perdida-de-tarjeta]
+  engano_por_tercero:
+    pasos: ["Tratar al cliente como víctima: nunca 'usted lo autorizó'.", "Confirmar si entregó códigos o claves.", "Revisar movimientos posteriores al engaño."]
+    articulos: [interno.estafa-autorizada, interno.clave-o-codigo-entregado, publico.que-hacer-ante-una-estafa]
+  coaccion:
+    pasos: ["Priorizar la seguridad del cliente.", "Tratar como estafa autorizada si pagó bajo presión."]
+    articulos: [interno.estafa-autorizada]
+  credencial_comprometida:
+    pasos: ["Ofrecer bloqueo si no está hecho.", "Indicar el cambio de clave por el canal seguro."]
+    articulos: [interno.clave-o-codigo-entregado, publico.cambiar-o-recuperar-tu-clave]
+  vulnerabilidad_declarada:
+    pasos: ["Lenguaje simple, un paso por mensaje.", "No acusar al cliente ni a su familia."]
+    articulos: [interno.trato-a-clientes-vulnerables]
+  revision_humana_politica:
+    pasos: ["Revisar las cuatro verificaciones en la evidencia.", "Decidir el tipo de disputa y si se abre el reclamo."]
+    articulos: [interno.criterios-tipo-de-disputa, interno.investigacion-de-un-reclamo]
+  fraude_no_automatizable:
+    pasos: ["Revisar la señal de riesgo y los movimientos cercanos.", "Abrir el reclamo con el tipo confirmado."]
+    articulos: [interno.criterios-tipo-de-disputa]
+  bloqueo_recomendado_por_riesgo:
+    pasos: ["La señal supera el umbral certificado: confirmar con el cliente si reconoce los cargos recientes."]
+    articulos: [interno.robo-o-perdida-bloquear-primero]
+  desbloqueo_tras_riesgo:
+    pasos: ["Verificar que el caso asociado al riesgo esté atendido antes de desbloquear."]
+    articulos: [interno.desbloqueo-tras-riesgo]
+  identidad_no_verificada:
+    pasos: ["Seguir el procedimiento de verificación del banco (en la demo no existe: registrar el caso)."]
+    articulos: [interno.verificar-identidad-sin-codigo]
+  pedir_persona:
+    pasos: ["Preguntar en qué puede ayudar, con el contexto del paquete."]
+    articulos: [publico.hablar-con-una-persona]
+  sin_modelo:
+    pasos: ["El asistente no estaba disponible: el paquete no tiene resumen; leer la conversación enlazada."]
+    articulos: []
+  accion_estado_desconocido:
+    pasos: ["Verificar por la clave indicada si la acción quedó hecha antes de repetirla."]
+    articulos: []
+  identidad_fallida: {pasos: [], articulos: []}
+  codigos_fallidos:
+    pasos: ["Tres códigos fallidos: posible suplantación; no revelar datos."]
+    articulos: [interno.verificar-identidad-sin-codigo]

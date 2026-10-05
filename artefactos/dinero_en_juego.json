@@ -1,0 +1,38 @@
+{
+ "componente": "dinero_en_juego",
+ "creado": "2026-10-03T00:38:53+00:00",
+ "cuantil": 0.9,
+ "fuente": "plata/transacciones (todos los movimientos con amount_usd)",
+ "por_tipo": {
+  "Adjustment": {
+   "umbral_usd": 901.48,
+   "n": 132117,
+   "tasa_fraude": 0.00109
+  },
+  "Deposit": {
+   "umbral_usd": 4505.81,
+   "n": 609404,
+   "tasa_fraude": 0.001
+  },
+  "Payment": {
+   "umbral_usd": 1806.16,
+   "n": 738958,
+   "tasa_fraude": 0.00099
+  },
+  "Purchase": {
+   "umbral_usd": 450.3,
+   "n": 1083397,
+   "tasa_fraude": 0.001
+  },
+  "Transfer": {
+   "umbral_usd": 9002.56,
+   "n": 896431,
+   "tasa_fraude": 0.00089
+  },
+  "Withdrawal": {
+   "umbral_usd": 451.99,
+   "n": 964666,
+   "tasa_fraude": 0.00099
+  }
+ }
+}

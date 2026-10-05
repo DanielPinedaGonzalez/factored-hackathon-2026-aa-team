@@ -1,0 +1,31 @@
+# Datos del organizador y derivados: nunca al repositorio
+data/
+bronce/
+plata/
+oro/
+*.parquet
+*.csv
+!evaluacion/casos/*.csv
+# Entornos y secretos
+.venv/
+.env
+*.env
+__pycache__/
+tmp_duck/
+# Material del organizador (PDF, capturas con credenciales)
+*.png
+*.pdf
+# las diapositivas de la entrega sí son públicas
+!docs/presentacion/presentacion.pdf
+.pytest_cache/
+*.egg-info/
+node_modules/
+apps/*/dist/
+# generado de los datos del organizador (ids de clientes y transacciones); se reconstruye con pipeline/seleccion.py
+evaluacion/manifest_casos.json
+# corridas con el puente (el asistente de desarrollo como modelo): prueban el código, no el modelo
+evaluacion/corridas/puente/
+
+# voz y video de la película: se generan con docs/lanzamiento/voz.py y grabar.py (la voz es de pago; las duraciones sí se versionan)
+docs/lanzamiento/audio/*.wav
+privado/video/

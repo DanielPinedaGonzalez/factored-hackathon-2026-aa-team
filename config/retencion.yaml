@@ -1,0 +1,4 @@
+# Retención (MODELO_DATOS §5).
+conversaciones_dias: 90
+adjuntos_sin_reclamo_dias: 90
+registro_dias: 90

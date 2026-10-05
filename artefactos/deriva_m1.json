@@ -1,0 +1,112 @@
+{
+ "componente": "deriva_m1",
+ "creado": "2026-09-27T09:42:18+00:00",
+ "referencia": {
+  "ventana": [
+   "2023-06-01",
+   "2025-07-01"
+  ],
+  "movimientos": 2994597,
+  "sin_score": 0.1999
+ },
+ "tramos": [
+  0,
+  10,
+  20,
+  30,
+  40,
+  50,
+  60,
+  70,
+  80,
+  90
+ ],
+ "umbral_alerta": 0.2,
+ "por_mes": [
+  {
+   "mes": "2025-07",
+   "movimientos": 126882,
+   "psi": 0.0002,
+   "sin_score": 0.2,
+   "alerta": false
+  },
+  {
+   "mes": "2025-08",
+   "movimientos": 126039,
+   "psi": 0.0001,
+   "sin_score": 0.2006,
+   "alerta": false
+  },
+  {
+   "mes": "2025-09",
+   "movimientos": 118563,
+   "psi": 0.0001,
+   "sin_score": 0.2016,
+   "alerta": false
+  },
+  {
+   "mes": "2025-10",
+   "movimientos": 129268,
+   "psi": 0.0001,
+   "sin_score": 0.201,
+   "alerta": false
+  },
+  {
+   "mes": "2025-11",
+   "movimientos": 120775,
+   "psi": 0.0001,
+   "sin_score": 0.2001,
+   "alerta": false
+  },
+  {
+   "mes": "2025-12",
+   "movimientos": 122382,
+   "psi": 0.0,
+   "sin_score": 0.1996,
+   "alerta": false
+  },
+  {
+   "mes": "2026-01",
+   "movimientos": 121962,
+   "psi": 0.0,
+   "sin_score": 0.1993,
+   "alerta": false
+  },
+  {
+   "mes": "2026-02",
+   "movimientos": 115098,
+   "psi": 0.0001,
+   "sin_score": 0.2006,
+   "alerta": false
+  },
+  {
+   "mes": "2026-03",
+   "movimientos": 123915,
+   "psi": 0.0001,
+   "sin_score": 0.2004,
+   "alerta": false
+  },
+  {
+   "mes": "2026-04",
+   "movimientos": 126492,
+   "psi": 0.0001,
+   "sin_score": 0.1998,
+   "alerta": false
+  },
+  {
+   "mes": "2026-05",
+   "movimientos": 127559,
+   "psi": 0.0001,
+   "sin_score": 0.1989,
+   "alerta": false
+  },
+  {
+   "mes": "2026-06",
+   "movimientos": 71476,
+   "psi": 0.0003,
+   "sin_score": 0.2018,
+   "alerta": false
+  }
+ ],
+ "alerta": false
+}

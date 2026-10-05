@@ -1,0 +1,31 @@
+# Mantenimiento semanal (GOBERNANZA §11.6, MODELO_DATOS §5): vigilancia de las fuentes de la bibliografía y purga por
+# retención. Si una fuente cambió, sus huellas se guardan en el repositorio; ese commit pasa por el despliegue y la API
+# deja de servir los artículos de criticidad alta que la citan hasta que alguien la revise.
+name: mantenimiento
+on:
+  schedule:
+    - cron: "0 9 * * 1"          # lunes, 09:00 UTC
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  mantener:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements.txt
+      - name: Vigilancia de las fuentes
+        id: fuentes
+        run: python scripts/vigilar_fuentes.py || echo "cambio=si" >> "$GITHUB_OUTPUT"
+      - name: Guardar las huellas (y avisar si alguna fuente cambió)
+        run: |
+          git config user.name "vigilancia-de-fuentes"
+          git config user.email "vigilancia-de-fuentes@users.noreply.github.com"
+          git add artefactos/huellas_fuentes.json artefactos/fuentes_cambiadas.json
+          git diff --cached --quiet || git commit -m "vigilancia de fuentes: huellas de la semana" && git push
+          if [ "${{ steps.fuentes.outputs.cambio }}" = "si" ]; then echo "::warning::Una fuente cambió: revisar artefactos/fuentes_cambiadas.json"; fi
+      - name: Purga por retención (producción)
+        env: {DATABASE_URL_ADMIN: "${{ secrets.NEON_URL_MIGRACIONES }}"}
+        run: python scripts/purgar_retencion.py

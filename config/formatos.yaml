@@ -1,0 +1,24 @@
+# Formato de valores en los marcadores (ARQUITECTURA §8.5). Datos de configuración, no conversación.
+meses:
+  es: [enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre]
+  pt: [janeiro, fevereiro, março, abril, maio, junho, julho, agosto, setembro, outubro, novembro, dezembro]
+fecha: {es: "{d} de {mes} de {a}", pt: "{d} de {mes} de {a}"}
+moneda:
+  COP: {simbolo: "$", miles: ".", decimales: ",", cifras: 0, sufijo: " COP"}
+  ARS: {simbolo: "$", miles: ".", decimales: ",", cifras: 2, sufijo: " ARS"}
+  MXN: {simbolo: "$", miles: ",", decimales: ".", cifras: 2, sufijo: " MXN"}
+  USD: {simbolo: "US$", miles: ",", decimales: ".", cifras: 2, sufijo: ""}
+tipos_producto:
+  es: {"Tarjeta Crédito": "tarjeta de crédito", "Tarjeta Débito": "tarjeta de débito", "Cuenta Ahorro": "cuenta de ahorros",
+       "Cuenta Corriente": "cuenta corriente", "Préstamo Personal": "préstamo personal", "Préstamo Hipotecario": "préstamo hipotecario",
+       "Inversión": "inversión", "Seguro": "seguro"}
+  pt: {"Tarjeta Crédito": "cartão de crédito", "Tarjeta Débito": "cartão de débito", "Cuenta Ahorro": "conta poupança",
+       "Cuenta Corriente": "conta corrente", "Préstamo Personal": "empréstimo pessoal", "Préstamo Hipotecario": "financiamento imobiliário",
+       "Inversión": "investimento", "Seguro": "seguro"}
+# Nombre de cada tipo de movimiento de los datos (transaction_type). Es el valor del marcador {MOVIMIENTO_n}: lo que el
+# cliente ve cuando el movimiento no tiene comercio. Todo tipo de los datos tiene su nombre (candado en las pruebas).
+tipos_movimiento:
+  es: {Purchase: compra, Withdrawal: retiro de efectivo, Transfer: transferencia, Payment: pago, Adjustment: ajuste del banco,
+       Deposit: depósito}
+  pt: {Purchase: compra, Withdrawal: saque, Transfer: transferência, Payment: pagamento, Adjustment: ajuste do banco,
+       Deposit: depósito}

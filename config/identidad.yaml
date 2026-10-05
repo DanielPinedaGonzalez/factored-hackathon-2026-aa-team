@@ -1,0 +1,9 @@
+# Identidad de la demo (ARQUITECTURA §8.10). Valores de diseño declarados.
+sesion_minutos: 15
+codigo_minutos: 10
+max_intentos_codigo: 3
+max_desafios_por_ip: 30      # cada clic en un escenario de la demo pide un código; 10 bloqueaba a quien probaba varios escenarios
+max_desafios_por_documento: 5
+ventana_limites_minutos: 15
+tiempo_minimo_respuesta_s: 0.35
+sesion_equipo_horas: 8

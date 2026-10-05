@@ -1,0 +1,13 @@
+pais: MX
+version: "2026.09.27-1"
+umbral_monto_usd: 1000            # sintético de demo, declarado: sobre esto, revisión humana
+ventana_reclamo_dias: 90          # CONDUSEF: aclaración hasta 90 días naturales
+ventana_investigacion_dias: 45    # CONDUSEF: dictamen en 45 días
+plazo_tipo: naturales
+abono_provisional_debito:
+  horas_reporte: 48               # solo débito y solo si el banco no exigió dos factores (dato inexistente → desconocido)
+  dia_habil_maximo: 2
+fuentes:
+  ventana_reclamo_dias: "CONDUSEF (s. f.-a)"
+  ventana_investigacion_dias: "CONDUSEF (s. f.-a)"
+  umbral_monto_usd: "sintética de demo"

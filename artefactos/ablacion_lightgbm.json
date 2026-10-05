@@ -1,0 +1,30 @@
+{
+ "aprender": {
+  "filas": 152374,
+  "fraudes": 3014
+ },
+ "certificar": {
+  "filas": 743909,
+  "fraudes": 699
+ },
+ "a_puntaje_del_banco": {
+  "auc": 0.7100179018905715,
+  "ap": 0.5381516322569683
+ },
+ "b_lightgbm_solo_puntaje": {
+  "auc": 0.8200242167626919,
+  "ap": 0.5226224269632844
+ },
+ "c_lightgbm_todas": {
+  "auc": 0.8180631675468624,
+  "ap": 0.5247444841690259
+ },
+ "d_lightgbm_sin_puntaje": {
+  "auc": 0.5122707853584667,
+  "ap": 0.0010053150365137147
+ },
+ "azar": {
+  "ap": 0.0009396310570244479
+ },
+ "nota": "ventana de certificaci\u00f3n 2025-H2; la prueba bloqueada 2026-H1 no se usa"
+}

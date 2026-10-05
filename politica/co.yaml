@@ -1,0 +1,14 @@
+pais: CO
+version: "2026.09.27-1"
+umbral_monto_usd: 1000            # sintético de demo, declarado
+ventana_reclamo_dias: 90          # sintética de demo: no hay una regla general verificada de cargos no reconocidos
+ventana_investigacion_dias: 15    # sintética de demo (plazo interno declarado), en días hábiles
+plazo_tipo: habiles
+reversion_comercio_electronico:   # Decreto 587 de 2016: solo reversión de pagos de comercio electrónico
+  plazo_solicitud_dias_habiles: 5
+  plazo_efectiva_dias_habiles: 15
+fuentes:
+  reversion_comercio_electronico: "Decreto 587 de 2016"
+  ventana_reclamo_dias: "sintética de demo"
+  ventana_investigacion_dias: "sintética de demo"
+  umbral_monto_usd: "sintética de demo"

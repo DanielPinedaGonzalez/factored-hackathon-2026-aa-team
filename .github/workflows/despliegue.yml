@@ -1,0 +1,47 @@
+# Un solo camino a producción (DESPLIEGUE §4): pruebas → punto de restauración → migraciones → API → verificación → web → humo.
+name: despliegue
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  desplegar:
+    # Solo despliega si se activa a propósito: la variable del repositorio DESPLEGAR = true, o a mano (workflow_dispatch).
+    # Así el primer push, antes de configurar los secretos, no deja una ejecución fallida a la vista.
+    if: ${{ vars.DESPLEGAR == 'true' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:16
+        env: {POSTGRES_USER: aa_admin, POSTGRES_PASSWORD: aa_admin_local, POSTGRES_DB: aa_team}
+        ports: ["5433:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements.txt
+      - name: 1. Escaneo de llaves
+        run: python scripts/escanear_llaves.py
+      - name: 1. Pruebas sin datos del organizador (candados, contratos, lógica pura)
+        run: |
+          python scripts/migrar.py
+          python -m pytest -q -m "not db" tests
+      - name: 1. Auditoría de dependencias (SEG-8)
+        run: pip install pip-audit && pip-audit -r requirements.txt
+      - name: 2. Punto de restauración en Neon (se conservan 5 ramas)
+        env: {NEON_API_KEY: "${{ secrets.NEON_API_KEY }}", NEON_PROYECTO: "${{ secrets.NEON_PROYECTO }}"}
+        run: python scripts/rama_neon.py "${GITHUB_SHA::7}"
+      - name: 3. Migraciones contra Neon (usuario de migraciones)
+        env: {DATABASE_URL_ADMIN: "${{ secrets.NEON_URL_MIGRACIONES }}", APP_API_PASSWORD: "${{ secrets.APP_API_PASSWORD }}"}
+        run: python scripts/migrar.py
+      - name: 4. Desplegar la API (deploy hook de Render)
+        run: curl -fsS -X POST "${{ secrets.RENDER_HOOK_API }}"
+      - name: 5. Verificar que corre el commit nuevo y la salud
+        env: {API: "${{ secrets.API_URL }}"}
+        run: python scripts/verificar_despliegue.py "$API" "${GITHUB_SHA::7}"
+      - name: 6. Desplegar las interfaces
+        run: curl -fsS -X POST "${{ secrets.RENDER_HOOK_WEB }}"
+      - name: 7. Humo determinista (identidad, movimientos, RLS; sin cupo del modelo)
+        env: {API: "${{ secrets.API_URL }}", DEMO_CODIGO: "${{ secrets.DEMO_CODIGO }}"}
+        run: python scripts/humo.py "$API"

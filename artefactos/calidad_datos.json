@@ -1,0 +1,89 @@
+{
+ "fecha": "2026-09-26T20:45:04+00:00",
+ "marca_anterior": null,
+ "marca_nueva": "2026-06-17",
+ "meses_reprocesados": "todos",
+ "contratos": [
+  {
+   "contrato": "transaction_id único",
+   "severidad": "bloquea",
+   "incumplen": 0,
+   "total": 4425008,
+   "porcentaje": 0.0,
+   "cumple": true
+  },
+  {
+   "contrato": "customer_id presente",
+   "severidad": "bloquea",
+   "incumplen": 0,
+   "total": 4425008,
+   "porcentaje": 0.0,
+   "cumple": true
+  },
+  {
+   "contrato": "fecha válida",
+   "severidad": "bloquea",
+   "incumplen": 0,
+   "total": 4425008,
+   "porcentaje": 0.0,
+   "cumple": true
+  },
+  {
+   "contrato": "monto numérico y positivo",
+   "severidad": "advierte",
+   "incumplen": 0,
+   "total": 4425008,
+   "porcentaje": 0.0,
+   "cumple": true
+  },
+  {
+   "contrato": "estado conocido",
+   "severidad": "bloquea",
+   "incumplen": 0,
+   "total": 4425008,
+   "porcentaje": 0.0,
+   "cumple": true
+  },
+  {
+   "contrato": "fraud_score en [0, 100] o ausente",
+   "severidad": "bloquea",
+   "incumplen": 0,
+   "total": 4425008,
+   "porcentaje": 0.0,
+   "cumple": true
+  },
+  {
+   "contrato": "moneda coherente con el país (marca)",
+   "severidad": "advierte",
+   "incumplen": 99434,
+   "total": 4425008,
+   "porcentaje": 2.25,
+   "cumple": false
+  },
+  {
+   "contrato": "tipo coherente con el canal (marca)",
+   "severidad": "advierte",
+   "incumplen": 1838247,
+   "total": 4425008,
+   "porcentaje": 41.54,
+   "cumple": false
+  },
+  {
+   "contrato": "fecha posterior a la apertura del producto (marca)",
+   "severidad": "advierte",
+   "incumplen": 827610,
+   "total": 4425008,
+   "porcentaje": 18.7,
+   "cumple": false
+  },
+  {
+   "contrato": "monto en USD conocido",
+   "severidad": "advierte",
+   "incumplen": 35,
+   "total": 4425008,
+   "porcentaje": 0.0,
+   "cumple": false
+  }
+ ],
+ "segundos": 145.3
+}

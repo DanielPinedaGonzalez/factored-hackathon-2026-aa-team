@@ -1,0 +1,15 @@
+# Parámetros de operación (PROCESOS §P9): los decide el banco, no el código. Aquí vive solo el valor inicial; el
+# vigente lo ve cualquiera en la cabina y lo cambia un supervisor desde la operación, con motivo, y queda en
+# operacion.parametros con su historia.
+presupuesto_tokens_conversacion:
+  inicial: 80000          # medido: 4.000-4.500 tokens por turno → unos 18 turnos
+  minimo: 0               # 0 = sin tope
+  maximo: 2000000
+  unidad: tokens
+  descripcion: "Tokens del modelo que puede gastar una conversación. Al agotarse, la conversación sigue con una persona. 0 = sin tope."
+dias_espera_respuesta_cliente:
+  inicial: 10             # días que un reclamo espera la información pedida al cliente antes de cerrarse
+  minimo: 1
+  maximo: 90
+  unidad: días
+  descripcion: "Días que un reclamo espera la respuesta del cliente antes de cerrarse por vencimiento; el cliente recibe el aviso."

@@ -1,0 +1,12 @@
+pais: AR
+version: "2026.09.27-1"
+umbral_monto_usd: 1000            # sintético de demo, declarado
+ventana_reclamo_dias: 90          # sintética de demo
+ventana_investigacion_dias: 10    # BCRA: plazo general de resolución de reclamos, días hábiles
+plazo_resolucion_reclamo_dias_habiles: 10
+plazo_tipo: habiles
+fuentes:
+  plazo_resolucion_reclamo_dias_habiles: "BCRA Usuarios (s. f.)"
+  ventana_investigacion_dias: "BCRA Usuarios (s. f.)"
+  ventana_reclamo_dias: "sintética de demo"
+  umbral_monto_usd: "sintética de demo"

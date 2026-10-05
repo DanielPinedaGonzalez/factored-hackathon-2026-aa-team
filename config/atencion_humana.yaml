@@ -1,0 +1,21 @@
+# Parámetros de la atención humana (PROCESOS §P2). Valores de diseño declarados, versionados.
+version: "2026.09.27-1"
+hitos_minutos: {1: 2, 2: 5, 3: 10, 4: 20}       # primera respuesta comprometida por prioridad (§P2.3)
+seguimiento_minutos: 60
+alarma_fraccion: 0.8                          # alarma interna al 80 % del hito
+desborde_fraccion: {1: 0.5, 2: 0.8}           # nivel de desborde por fracción del hito consumida (§P2.5)
+afines: {fraude: [reclamos], reclamos: [fraude], general: []}
+aceptacion_segundos: 60
+espera_excedida_fraccion: 1.5                  # aviso cuando la espera real supera la primera estimación en 50 % (§P2.6)
+fin_de_turno_minutos: 15
+tma_segundos: {fraude: 431, reclamos: 431, general: 431}   # supuesto inicial: mediana de llamadas de queja (Diag §2.2)
+turnos:                                        # horas locales sintéticas y declaradas (§P2.7)
+  Morning: [6, 14]
+  Afternoon: [14, 22]
+  Night: [22, 6]
+  Rotating: [6, 14]
+zona_horaria: {MX: America/Mexico_City, CO: America/Bogota, AR: America/Argentina/Buenos_Aires}
+zona_horaria_por_defecto: America/Bogota     # quien escribe sin sesión: país desconocido (declarado)
+horarios_publicos: "todos los días, las 24 horas, por turnos de mañana, tarde y noche"
+plazo_interno_investigacion_dias: 15           # si la regla del país es desconocida (§P3)
+asesores_demo_siempre_en_turno: true           # las identidades de demo reciben casos a cualquier hora (declarado)

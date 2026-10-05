@@ -1,0 +1,130 @@
+{
+ "version_m1": "73cb373b96e6",
+ "prevalencia_referencia_aprender": 0.0009950443950910587,
+ "ventanas": {
+  "ltt": {
+   "con_score": {
+    "n": 594773,
+    "fraudes": 562,
+    "prevalencia": 0.0009448983057401731,
+    "roc_auc_score_crudo": 0.823224839893705,
+    "pr_auc_score_crudo": 0.6691090062149618,
+    "pr_auc_al_azar": 0.0009448983057401731,
+    "brier_calibrada": 0.0003143098216180291,
+    "brier_prevalencia_constante": 0.0009440079875622595,
+    "brier_skill_score": 0.6670474977339111,
+    "calibracion_por_tramos": [
+     {
+      "desde": 0.0,
+      "hasta": 0.0001,
+      "n": 675,
+      "fraudes": 1,
+      "prob_media_predicha": 0.0,
+      "frecuencia_observada": 0.0014814814814814814,
+      "ic95_frecuencia": [
+       0.0002615590168525677,
+       0.00834368851070025
+      ]
+     },
+     {
+      "desde": 0.0001,
+      "hasta": 0.001,
+      "n": 593723,
+      "fraudes": 186,
+      "prob_media_predicha": 0.0003065712462632464,
+      "frecuencia_observada": 0.0003132774037724663,
+      "ic95_frecuencia": [
+       0.00027137937269216194,
+       0.00036164169636910247
+      ]
+     },
+     {
+      "desde": 0.5,
+      "hasta": 1.0,
+      "n": 375,
+      "fraudes": 375,
+      "prob_media_predicha": 1.0,
+      "frecuencia_observada": 1.0,
+      "ic95_frecuencia": [
+       0.9898596141500828,
+       1.0
+      ]
+     }
+    ]
+   },
+   "sin_score": {
+    "n": 149136,
+    "fraudes": 137,
+    "frecuencia_observada": 0.0009186246110932303,
+    "ic95": [
+     0.0007771888366092237,
+     0.0010857714362411666
+    ],
+    "p_ausente_guardada": 0.001052237758967404,
+    "dentro_del_ic": true
+   }
+  },
+  "test": {
+   "con_score": {
+    "n": 549205,
+    "fraudes": 479,
+    "prevalencia": 0.0008721697726714069,
+    "roc_auc_score_crudo": 0.8556963437882383,
+    "pr_auc_score_crudo": 0.726000988497577,
+    "pr_auc_al_azar": 0.0008721697726714069,
+    "brier_calibrada": 0.00024029650710403151,
+    "brier_prevalencia_constante": 0.00087142419073188,
+    "brier_skill_score": 0.7242485236699541,
+    "calibracion_por_tramos": [
+     {
+      "desde": 0.0,
+      "hasta": 0.0001,
+      "n": 671,
+      "fraudes": 0,
+      "prob_media_predicha": 0.0,
+      "frecuencia_observada": 0.0,
+      "ic95_frecuencia": [
+       0.0,
+       0.005692595121581124
+      ]
+     },
+     {
+      "desde": 0.0001,
+      "hasta": 0.001,
+      "n": 548187,
+      "fraudes": 132,
+      "prob_media_predicha": 0.00030661250116946243,
+      "frecuencia_observada": 0.0002407937437407308,
+      "ic95_frecuencia": [
+       0.00020307352062237506,
+       0.00028551837051220307
+      ]
+     },
+     {
+      "desde": 0.5,
+      "hasta": 1.0,
+      "n": 347,
+      "fraudes": 347,
+      "prob_media_predicha": 1.0,
+      "frecuencia_observada": 1.0,
+      "ic95_frecuencia": [
+       0.9890503292654008,
+       1.0
+      ]
+     }
+    ]
+   },
+   "sin_score": {
+    "n": 137297,
+    "fraudes": 124,
+    "frecuencia_observada": 0.0009031515619423586,
+    "ic95": [
+     0.0007576109815367625,
+     0.0010766210382034576
+    ],
+    "p_ausente_guardada": 0.001052237758967404,
+    "dentro_del_ic": true
+   }
+  }
+ }
+}

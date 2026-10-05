@@ -1,0 +1,182 @@
+/* Un sitio, dos caras. Las vistas del equipo (vista en vivo, operación, sistema) usan la cabina: fondo oscuro, cian
+   de trabajo, dorado de acento, verde sano y rojo crítico, como el centro de comandos del sistema propio del autor.
+   El chat del cliente se ve como la app del banco: clara y tranquila. Letra grande y legible: la base crece con la
+   pantalla. */
+:root {
+  --fondo: oklch(0.16 0.02 250); --tarjeta: oklch(0.2 0.025 250); --tarjeta-2: oklch(0.24 0.028 250);
+  --texto: oklch(0.94 0.02 220); --suave: oklch(0.78 0.03 225); --borde: oklch(0.42 0.06 220 / 35%);
+  --marca: oklch(0.82 0.15 210); --marca-texto: oklch(0.16 0.03 250); --marca-tenue: oklch(0.82 0.15 210 / 16%);
+  --acento: oklch(0.82 0.14 80); --ok: oklch(0.78 0.16 155); --alerta: oklch(0.82 0.14 80); --error: oklch(0.68 0.2 22);
+  --radio: 6px;
+  /* la app del banco (cliente) */
+  --b-fondo: oklch(0.975 0.005 250); --b-tarjeta: #fff; --b-texto: oklch(0.25 0.03 260); --b-suave: oklch(0.52 0.03 260);
+  --b-borde: oklch(0.9 0.01 260); --b-marca: oklch(0.45 0.16 295); --b-cliente: oklch(0.93 0.035 295); --b-asesor: oklch(0.94 0.04 160);
+}
+html { font-size: clamp(16px, 0.45vw + 12px, 20px); }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--fondo);
+  color: var(--texto); font-feature-settings: "tnum" 1; line-height: 1.4;
+  background-image: url("fondo.svg");               /* curvas de nivel: pozos de gravedad, no una cuadrícula */
+  background-size: cover; background-position: center; background-attachment: fixed; }
+::selection { background: var(--marca); color: var(--marca-texto); }
+::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-thumb { background: var(--marca-tenue); border-radius: 999px; }
+
+.barra { display: flex; gap: 1.5rem; align-items: center; padding: .6rem 1.2rem; background: oklch(0.18 0.025 250 / 92%);
+  border-bottom: 1px solid var(--borde); flex-wrap: wrap; position: sticky; top: 0; z-index: 5; backdrop-filter: blur(6px); }
+.barra strong { letter-spacing: .06em; text-transform: uppercase; font-size: .85rem; color: var(--marca); }
+.barra nav { display: flex; gap: .3rem; flex-wrap: wrap; }
+.barra a { color: var(--suave); text-decoration: none; padding: .3rem .7rem; border-radius: var(--radio); font-size: .9rem; }
+.barra a:hover { color: var(--texto); background: var(--marca-tenue); }
+.barra a.activo { color: var(--marca-texto); background: var(--marca); }
+.salud { margin-left: auto; font-size: .75rem; color: var(--suave); font-family: ui-monospace, "JetBrains Mono", monospace; }
+main { padding: 1rem; max-width: 1400px; margin: 0 auto; }
+
+.dos { display: grid; grid-template-columns: minmax(320px, 460px) 1fr; gap: 1rem; }
+.grid3 { display: grid; grid-template-columns: minmax(340px, 26rem) 1fr; gap: 1rem; }       /* la cola cabe entera: caso, habilidad, idioma, prioridad y estado */
+.dos.mitad { grid-template-columns: 1fr 1fr; }          /* paneles del sistema: dos mitades iguales (con tablas, la columna angosta no cabe) */
+.panel { min-width: 0; overflow-x: auto; }               /* una tabla ancha se desplaza dentro de su caja, nunca se sale de ella */
+.panel.ancho { grid-column: 1 / -1; }
+@media (max-width: 900px) { .dos, .dos.mitad, .grid3 { grid-template-columns: 1fr; } }
+.panel { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: var(--radio); padding: .9rem; }
+.panel h3 { margin: .2rem 0 .6rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--marca); }
+h3 { font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; color: var(--marca); }
+.fila { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: .5rem; align-items: center; }
+.suave { color: var(--suave); font-size: .85rem; } .ok { color: var(--ok); } .mal { color: var(--error); }
+
+button { background: var(--marca); color: var(--marca-texto); border: 0; border-radius: var(--radio); padding: .45rem .85rem;
+  cursor: pointer; font-size: .88rem; font-weight: 600; font-family: inherit; }
+button:hover { filter: brightness(1.08); } button:disabled { opacity: .45; cursor: default; }
+button.sec { background: transparent; color: var(--marca); border: 1px solid var(--borde); font-weight: 500; }
+button.sec:hover { background: var(--marca-tenue); }
+input, textarea, select { background: var(--tarjeta-2); color: var(--texto); border: 1px solid var(--borde); border-radius: var(--radio);
+  padding: .45rem .6rem; font-size: .92rem; font-family: inherit; }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--marca); outline-offset: 0; }
+
+table { border-collapse: collapse; width: 100%; font-size: .86rem; }
+td, th { border-bottom: 1px solid var(--borde); padding: .4rem .45rem; text-align: left; vertical-align: top; }
+.evidencia { border-left: 3px solid var(--marca); padding: .35rem .7rem; margin: .4rem 0; display: grid; gap: .3rem; }          /* señal de M1 y cuatro verificaciones del caso */
+table.cola td, table.cola th { white-space: nowrap; }          /* el número de caso no se parte en dos líneas */
+th { color: var(--suave); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
+.p1 { color: var(--error); font-weight: 700; } .p2 { color: var(--alerta); font-weight: 700; }
+.etiqueta { display: inline-block; font-size: .72rem; padding: .12rem .45rem; border-radius: 999px; background: var(--marca-tenue);
+  color: var(--marca); margin-right: .25rem; } .etiqueta.mal { background: oklch(0.68 0.2 22 / 18%); color: var(--error); }
+.cita { border-left: 3px solid var(--marca); padding-left: .5rem; }
+code { font-family: ui-monospace, "JetBrains Mono", monospace; }
+
+/* Paso a paso del turno (vista en vivo) */
+.pasos { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .35rem; }
+.pasos li { border: 1px solid var(--borde); border-left: 3px solid var(--ok); border-radius: var(--radio); padding: .45rem .6rem;
+  font-size: .84rem; display: grid; grid-template-columns: 1.4rem 11rem 1fr; gap: .4rem; background: var(--tarjeta-2); }
+.pasos li.fallo { border-left-color: var(--error); } .pasos li.no_aplica { opacity: .5; border-left-color: var(--borde); }
+.pasos code { font-size: .78rem; white-space: pre-wrap; word-break: break-word; color: var(--suave); }
+
+/* Chat: la app del banco (clara), también dentro de la vista en vivo */
+.chat, .app-banco .panel { background: var(--b-tarjeta); color: var(--b-texto); border-color: var(--b-borde); }
+.chat { display: flex; flex-direction: column; height: calc(100vh - 150px); min-height: 480px; border-radius: 14px;
+  box-shadow: 0 10px 40px oklch(0 0 0 / 35%); }
+.chat .cab { display: flex; justify-content: space-between; align-items: center; padding: .2rem .2rem .6rem;
+  border-bottom: 1px solid var(--b-borde); }
+.chat .cab strong { color: var(--b-marca); }
+.chat .suave, .app-banco .suave { color: var(--b-suave); }
+.chat button { background: var(--b-marca); color: #fff; } .chat button.sec { background: #fff; color: var(--b-marca); border-color: var(--b-borde); }
+.chat input, .chat select, .app-banco input, .app-banco select { background: #fff; color: var(--b-texto); border-color: var(--b-borde); }
+.mensajes { flex: 1; overflow-y: auto; padding: .7rem .1rem; display: flex; flex-direction: column; gap: .55rem; }
+.burbuja { padding: .6rem .8rem; border-radius: 14px; max-width: 86%; white-space: pre-wrap; line-height: 1.4; font-size: .95rem;
+  background: var(--b-fondo); border: 1px solid var(--b-borde); }
+.burbuja.cliente { background: var(--b-cliente); align-self: flex-end; border-bottom-right-radius: 4px; }
+.burbuja.asistente { border-bottom-left-radius: 4px; } .burbuja.asesor { background: var(--b-asesor); }
+.burbuja .quien { font-size: .72rem; color: var(--b-suave); display: block; margin-bottom: .15rem; font-weight: 600; }
+.caja { border: 1px solid var(--b-borde); border-radius: 12px; padding: .7rem; background: var(--b-fondo); font-size: .9rem; color: var(--b-texto); }
+.caja h4 { margin: .1rem 0 .4rem; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--b-suave); }
+.caja .dato { font-weight: 700; font-size: 1.02rem; } .caja.espera { background: oklch(0.96 0.04 80); border-color: oklch(0.85 0.09 80); }
+.caja.mal { color: oklch(0.5 0.2 22); }
+.entrada { display: flex; gap: .4rem; padding-top: .6rem; border-top: 1px solid var(--b-borde); } .entrada input { flex: 1; }
+.acciones-chat { display: flex; gap: .4rem; flex-wrap: wrap; padding: .45rem 0; }
+.app-banco { max-width: 540px; margin: 0 auto; }
+.app-banco .panel h3 { color: var(--b-marca); }
+.app-banco > .fila { color: var(--suave); }
+
+/* Cabina del sistema */
+.cabina { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; }
+.kpi { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: var(--radio); padding: .8rem; }
+.kpi .rotulo { font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; color: var(--suave); }
+.kpi .valor { font-size: 1.7rem; font-weight: 700; margin-top: .2rem; font-family: ui-monospace, "JetBrains Mono", monospace; }
+.kpi .detalle { font-size: .8rem; color: var(--suave); margin-top: .15rem; }
+.estado { display: inline-flex; align-items: center; gap: .45rem; font-weight: 700; letter-spacing: .06em; }
+.estado::before { content: ""; width: .7rem; height: .7rem; border-radius: 50%; background: currentColor; box-shadow: 0 0 12px currentColor; }
+.estado.NOMINAL, .estado.sano { color: var(--ok); } .estado.DEGRADADO { color: var(--alerta); }
+.estado.SATURADO, .estado.enfermo { color: var(--error); } .estado.SIN_POOL { color: var(--suave); }
+.aviso { border: 1px solid var(--borde); border-left: 4px solid var(--suave); border-radius: var(--radio); padding: .55rem .7rem;
+  background: var(--tarjeta-2); margin-bottom: .45rem; font-size: .9rem; }
+.aviso.critica { border-left-color: var(--error); } .aviso.advertencia { border-left-color: var(--alerta); } .aviso.informativa { border-left-color: var(--marca); }
+.aviso .origen { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--suave); margin-right: .4rem; }
+.barra-cupo { height: 6px; border-radius: 999px; background: var(--tarjeta-2); overflow: hidden; margin-top: .35rem; }
+.barra-cupo > span { display: block; height: 100%; background: var(--ok); }
+.barra-cupo > span.bajo { background: var(--alerta); } .barra-cupo > span.agotado { background: var(--error); }
+.pasos li.ok { color: var(--texto); }
+#idioma-ui { margin-left: auto; background: transparent; color: var(--suave); border: 1px solid var(--marca-tenue); border-radius: var(--radio); padding: .2rem .4rem; font-size: .8rem; }
+
+/* Modo jurado: sugerencias y escenarios como fichas */
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .45rem; }
+.chips button { font-size: .85rem; padding: .35rem .7rem; border-radius: 999px; text-align: left; }
+.pasos .ayuda-paso { grid-column: 1 / -1; font-size: .85rem; margin-top: .15rem; }
+
+/* Presenter notes (notas del presentador): English first, Spanish in parentheses below. body.sin-guia hides them all. */
+.nota-guia { display: grid; gap: .15rem; margin: .5rem 0; padding: .55rem .8rem; border-left: 3px solid var(--acento); border-radius: var(--radio);
+  background: oklch(0.82 0.14 80 / 10%); font-size: .9rem; }
+.nota-guia strong { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--acento); }
+.nota-guia .nota-es { color: var(--suave); font-size: .85rem; }
+body.sin-guia .nota-guia { display: none; }
+.guia-interruptor { font-size: .8rem; color: var(--suave); cursor: pointer; white-space: nowrap; }
+.bil .nota-es { color: var(--suave); opacity: .8; }
+.pasos .ayuda-paso .nota-es, .bil.suave .nota-es { font-size: .82rem; }
+body.sin-guia .bil .nota-es { display: none; }
+
+/* Flow map (mapa del flujo) */
+.mapa-flujo { width: 100%; height: auto; margin: .4rem 0; }
+.mapa-flujo .borde, .mapa-flujo .borde-visto { stroke: var(--borde); stroke-width: 2; }
+.mapa-flujo .borde-visto { stroke: var(--marca); stroke-width: 3; }
+.mapa-flujo .nodo { fill: var(--tarjeta-2); stroke: var(--borde); stroke-width: 1.5; }
+.mapa-flujo .nodo.visto { fill: var(--marca-tenue); stroke: var(--marca); stroke-width: 2; }
+.mapa-flujo .nodo.actual { fill: oklch(0.82 0.14 80 / 28%); stroke: var(--acento); stroke-width: 3; }
+.mapa-flujo .nodo-texto { fill: var(--texto); font-size: 13px; font-family: inherit; }
+.acerca-linea { margin: .55rem 0; font-size: .95rem; } .acerca-linea .nota-en { color: var(--texto); }
+
+/* Brand (marca) */
+.loro { flex: none; vertical-align: middle; }
+.barra .loro { margin-right: -.6rem; }
+.cab { display: flex; align-items: center; gap: .5rem; } .cab select { margin-left: auto; }
+.pie { display: flex; align-items: center; gap: .6rem; justify-content: center; flex-wrap: wrap; padding: 1.2rem 1rem 1.6rem; color: var(--suave); font-size: .8rem; }
+.marca-hackathon { height: 30px; width: auto; mix-blend-mode: screen; }       /* el fondo negro del JPG desaparece sobre el fondo oscuro */
+
+/* tarjetas de los clientes de demostración: siempre a la vista; al pasar el mouse se despliega lo que tiene cada una; la elegida queda marcada */
+#escenarios { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; margin-top: .7rem; }
+@media (max-width: 900px) { #escenarios { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+#zona-demo { scroll-margin-top: 4rem; }
+button.perfil { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; text-align: left; padding: .75rem .9rem; border-radius: 12px; font-weight: 400;
+  background: var(--tarjeta-2); color: var(--texto); border: 1px solid var(--borde); transition: border-color .15s, box-shadow .15s, transform .15s; }
+button.perfil:hover, button.perfil:focus-visible { border-color: var(--marca); transform: translateY(-2px); z-index: 7; }
+button.perfil strong { font-size: 1rem; color: var(--marca); }
+button.perfil .rasgo { font-size: .82rem; opacity: .9; line-height: 1.3; }
+button.perfil .detalle { display: none; position: absolute; left: -1px; right: -1px; top: calc(100% - 1px); z-index: 6; flex-direction: column; gap: .3rem; padding: .7rem .9rem .8rem;
+  background: var(--tarjeta-2); border: 1px solid var(--marca); border-top-color: var(--borde); border-radius: 0 0 12px 12px; box-shadow: 0 14px 30px #000a; font-size: .82rem; line-height: 1.3; }
+button.perfil:hover .detalle, button.perfil:focus-visible .detalle { display: flex; }
+button.perfil:hover, button.perfil:focus-visible { border-radius: 12px 12px 0 0; }
+button.perfil .marca-elegido { display: none; position: absolute; top: .55rem; right: .7rem; width: 1.4rem; height: 1.4rem; border-radius: 50%; place-items: center; background: var(--ok); color: var(--marca-texto); font-weight: 800; font-size: .85rem; }
+button.perfil.elegido { border-color: var(--ok); box-shadow: 0 0 0 2px var(--ok), 0 0 28px oklch(0.78 0.16 155 / 25%); background: oklch(0.78 0.16 155 / 10%); }
+button.perfil.elegido .marca-elegido { display: grid; }
+button.perfil.elegido strong { color: var(--ok); }
+
+/* elegido el cliente, el selector es una fila compacta que queda arriba; el desplegable de cada tarjeta muestra todo lo que tiene */
+#escenarios .detalle .d-card { display: none; }
+button.perfil .detalle.vacio { display: none !important; }
+.panel.compacto { padding: .55rem .7rem; }
+.panel.compacto > h3, .panel.compacto > .bil { display: none; }
+.panel.compacto #escenarios { grid-template-columns: repeat(8, minmax(0, 1fr)); gap: .45rem; margin-top: 0; }
+.panel.compacto button.perfil { padding: .45rem .6rem; }
+.panel.compacto button.perfil strong { font-size: .88rem; }
+.panel.compacto button.perfil .rasgo { display: none; }
+.panel.compacto button.perfil .marca-elegido { top: .3rem; right: .4rem; width: 1.1rem; height: 1.1rem; font-size: .7rem; }
+.panel.compacto button.perfil .detalle .d-card { display: block; }
+.panel.compacto button.perfil:hover .detalle.vacio, .panel.compacto button.perfil:focus-visible .detalle.vacio { display: flex !important; }
+@media (max-width: 900px) { .panel.compacto #escenarios { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

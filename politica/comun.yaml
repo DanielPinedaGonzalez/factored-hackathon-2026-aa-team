@@ -1,0 +1,39 @@
+# Política común (ARQUITECTURA §8.3). Sintética de demo, declarada. No es asesoría legal.
+version: "2026.09.27-2"
+irreversibilidad:            # 0 = se deshace sin costo; 1 = nunca automático
+  consultar: {valor: 0.0, razon: "Solo lee."}
+  abrir_reclamo: {valor: 0.0, razon: "Se puede retirar mientras no esté resuelto."}
+  agregar_informacion_reclamo: {valor: 0.0, razon: "Agrega una nota; no cambia el fondo."}
+  retirar_reclamo: {valor: 0.2, razon: "El cliente desiste; puede volver a reclamar dentro de la ventana."}
+  bloquear_producto: {valor: 0.3, razon: "Reversible, pero deja al cliente sin su tarjeta mientras dure."}
+  desbloquear_producto: {valor: 0.3, razon: "Reversible, pero reabre el producto a su uso."}
+  abono: {valor: 1.0, razon: "Mueve dinero: nunca automático; lo decide una persona."}
+tope_reclamos_90_dias: 2          # con 2 o más reclamos previos en 90 días → revisión humana, sin inferir culpa
+zona_incertidumbre_p_min: 0.05    # señal calibrada por encima de esto y sin superar el umbral certificado → persona
+fdr_maximo_recomendacion: 0.01    # el sistema recomienda bloquear por su cuenta solo con FDR certificado ≤ 1 %
+dinero_en_juego:                  # PROCESOS §P2.3: prioridad 3 para un movimiento no reconocido de monto alto para su tipo
+  cuantil: 0.9                    # el 10 % más alto de cada tipo (decisión de Daniel, 27-sep); umbrales en artefactos/dinero_en_juego.json
+  razon: "Daño posible para el cliente. En los datos la tasa de fraude es igual en todo tramo de monto: no es señal de riesgo."
+tipos_operacion_reclamables: [Purchase, Withdrawal, Payment, Transfer, Adjustment]
+senales_seguridad: [engano_por_tercero, coaccion, credencial_comprometida, producto_en_manos_de_otro]
+tipos_siempre_humanos: [estafa_autorizada]
+estados_sin_cobro: [Declined, Reversed]
+reglas:
+  - nombre: acciones_de_dinero_nunca_automaticas
+    condicion: "accion = abono"
+    accion: revision_humana
+    excepciones: []
+    fuente: "enunciado del reto (no autoriza mover dinero)"
+    version: 1
+    vigente_desde: "2026-09-27"
+    verificada_el: "2026-09-26"
+    prueba: tests/politica/test_motor.py::test_abono_nunca_automatico
+  - nombre: senal_de_seguridad_a_persona
+    condicion: "senales ∩ senales_seguridad ≠ ∅"
+    accion: revision_humana
+    excepciones: ["bloquear_producto a pedido del cliente sigue disponible (PROCESOS §P4)"]
+    fuente: "CASOS.md PR-4, PR-8"
+    version: 1
+    vigente_desde: "2026-09-27"
+    verificada_el: "2026-09-26"
+    prueba: tests/politica/test_motor.py::test_senal_de_seguridad_va_a_persona_pero_deja_bloquear

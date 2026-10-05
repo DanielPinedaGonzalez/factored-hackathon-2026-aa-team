@@ -1,0 +1,10 @@
+[project]
+name = "aa-team-no-reconozco"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["db: requiere Postgres local", "llm_real: llama a un proveedor real (nunca en la suite normal)"]
+addopts = "-m 'not llm_real'"

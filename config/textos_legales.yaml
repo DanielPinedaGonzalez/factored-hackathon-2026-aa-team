@@ -1,0 +1,9 @@
+# Textos legales LITERAL (GOBERNANZA §7): la única excepción cerrada al texto redactado por el modelo.
+# El sistema los agrega tal cual; ninguna otra frase al cliente es fija. La asistente se presenta (con su nombre) solo
+# aquí, en el primer mensaje. El saludo que va antes lo escribe el Redactor con el momento del día del cliente.
+divulgacion:
+  es: "Soy Lora, la asistente virtual del banco. Puedes pedir una persona en cualquier momento. Nunca te pediremos tu clave, tu PIN ni códigos."
+  pt: "Sou a Lora, a assistente virtual do banco. Você pode pedir uma pessoa a qualquer momento. Nunca vamos pedir sua senha, seu PIN nem códigos."
+privacidad:
+  es: "Lo que escribes lo procesa un proveedor de IA sin guardarlo; los datos de tu cuenta no salen del banco."
+  pt: "O que você escreve é processado por um provedor de IA sem armazená-lo; os dados da sua conta não saem do banco."

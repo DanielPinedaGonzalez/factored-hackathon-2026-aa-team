@@ -1,0 +1,19 @@
+# Desarrollo local (docs/DESPLIEGUE.md §2). Separado de cualquier otro proyecto: otro puerto, otro volumen.
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: aa-team-db
+    environment:
+      POSTGRES_USER: aa_admin
+      POSTGRES_PASSWORD: aa_admin_local
+      POSTGRES_DB: aa_team
+    command: ["postgres", "-c", "shared_buffers=64MB", "-c", "max_connections=40", "-c", "work_mem=4MB"]
+    ports: ["127.0.0.1:5433:5432"]
+    volumes: ["aa_team_db:/var/lib/postgresql/data"]
+    mem_limit: 384m
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "aa_admin", "-d", "aa_team"]
+      interval: 5s
+      retries: 20
+volumes:
+  aa_team_db:

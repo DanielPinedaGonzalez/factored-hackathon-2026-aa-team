@@ -1,0 +1,10 @@
+.venv
+.git
+.env
+privado
+data
+*.parquet
+tests
+scripts/dev
+scripts/diagnostico
+evaluacion/manifest_casos.json

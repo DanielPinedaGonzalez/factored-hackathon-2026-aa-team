@@ -1,0 +1,45 @@
+# Blueprint de Render (DESPLIEGUE §1). El despliegue automático está apagado: sube solo por GitHub Actions.
+services:
+  - type: web
+    name: aa-team-api
+    runtime: docker
+    plan: free
+    autoDeploy: false
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL          # Neon, usuario de ejecución (app_api)
+        sync: false
+      - key: TOKEN_SECRETO
+        generateValue: true
+      - key: DEMO_CODIGO
+        sync: false
+      - key: MODELO_MODO
+        value: groq
+      - key: GROQ_API_KEY          # llaves propias del enlace público (pool LRU: servicio/llm/pool.py)
+        sync: false
+      - key: GROQ_API_KEY_2
+        sync: false
+      - key: GROQ_API_KEY_3
+        sync: false
+      - key: OPENROUTER_API_KEY         # respaldo gratuito (config/llaves.yaml, orden_sistema); el valor se escribe en el panel de Render, nunca en un archivo
+        sync: false
+      - key: OPENROUTER_API_KEY_PAGO    # último respaldo, solo si las dos cadenas anteriores están saturadas
+        sync: false
+      - key: ORIGENES
+        sync: false
+      - key: LIMITE_IP_MINUTO       # llamadas por minuto por IP (la interfaz consulta cada pocos segundos con un caso en espera)
+        value: "120"
+      - key: DB_POOL
+        value: "3"
+      - key: CONOCIMIENTO_INCLUIR_PENDIENTES   # los artículos siguen en borrador hasta su aprobación: la demo pública
+        value: "1"                             # sirve lo mismo que se evaluó; se quita al aprobarlos (README, límites)
+  - type: web
+    name: aa-team-web
+    runtime: static
+    autoDeploy: false
+    rootDir: apps/web
+    buildCommand: echo "window.API_URL='${API_URL}';" > config.js
+    staticPublishPath: .
+    envVars:
+      - key: API_URL
+        sync: false

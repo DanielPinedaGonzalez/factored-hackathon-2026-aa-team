@@ -1,0 +1,27 @@
+# Pruebas en cada cambio, sin datos del organizador, sin llaves y sin desplegar nada (DESPLIEGUE §4, paso 1).
+name: pruebas
+on:
+  push:
+  pull_request:
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:16
+        env: {POSTGRES_USER: aa_admin, POSTGRES_PASSWORD: aa_admin_local, POSTGRES_DB: aa_team}
+        ports: ["5433:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements.txt
+      - name: Escaneo de llaves
+        run: python scripts/escanear_llaves.py
+      - name: Pruebas sin datos del organizador (candados, contratos, lógica pura)
+        run: |
+          python scripts/migrar.py
+          python -m pytest -q -m "not db" tests
+      - name: Auditoría de dependencias
+        run: pip install pip-audit && pip-audit -r requirements.txt

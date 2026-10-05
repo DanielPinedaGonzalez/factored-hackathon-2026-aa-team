@@ -1,0 +1,16 @@
+duckdb==1.5.5
+fastapi==0.141.1
+httpx==0.28.1
+langid==1.1.6
+numpy==2.5.3
+psycopg==3.3.6
+psycopg-binary==3.3.6
+psycopg-pool==3.3.3
+pyarrow==25.0.1
+pydantic==2.13.5
+pytest==9.1.1
+python-multipart==0.0.32
+PyYAML==6.0.3
+scikit-learn==1.9.1
+scipy==1.18.1
+uvicorn==0.54.0
