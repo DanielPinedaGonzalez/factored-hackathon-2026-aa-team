@@ -9,7 +9,7 @@ jobs:
     services:
       db:
         image: postgres:16
-        env: {POSTGRES_USER: aa_admin, POSTGRES_PASSWORD: aa_admin_local, POSTGRES_DB: aa_team}
+        env: {POSTGRES_USER: aa_admin, POSTGRES_PASSWORD: aa_admin_local, POSTGRES_DB: aa_team_pruebas}
         ports: ["5433:5432"]
         options: --health-cmd pg_isready --health-interval 5s --health-retries 20
     steps:
@@ -21,7 +21,7 @@ jobs:
         run: python scripts/escanear_llaves.py
       - name: Pruebas sin datos del organizador (candados, contratos, lógica pura)
         run: |
-          python scripts/migrar.py
+          DATABASE_URL_ADMIN=postgresql://aa_admin:aa_admin_local@127.0.0.1:5433/aa_team_pruebas python scripts/migrar.py
           python -m pytest -q -m "not db" tests
       - name: Auditoría de dependencias
         run: pip install pip-audit && pip-audit -r requirements.txt
