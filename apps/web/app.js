@@ -1,6 +1,6 @@
 // Un sitio, tres rutas (INTERFACES.md). Ningún texto dirigido al cliente vive aquí: sale de la API.
 // Los rótulos (botones, títulos) son textos de interfaz, no conversación.
-import { t as tr, tn, idiomaUI, fijarIdiomaUI } from "./i18n.js";
+import { t as tr, tn, idiomaUI, fijarIdiomaUI, tLora, idiomaChat, fijarIdiomaChat } from "./i18n.js";
 import { pintarMapa } from "./flujo.js";
 import { loro, pie } from "./marca.js";
 import { guiaActiva, fijarGuia, nota, notaDeTurno, bilingue, NOTAS_VISTA, TEXTOS_DEMO, ACERCA } from "./guia.js";
@@ -77,13 +77,15 @@ const sesionInvalida = e => e && (e.estado === 401 || e.estado === 403);
 
 // ------------------------------------------------------------------ chat del cliente (reutilizado por la vista en vivo)
 function crearChat(contenedor, { alTurno } = {}) {
+  const tr = tLora;       // el chat es Lora: español o portugués, nunca el idioma de la interfaz de la demo (un `tr` propio tapa al de la demo)
   const est = { conv: guardado("conversacion") || null, token: guardado("token_cliente"), idioma: "es", ultimoN: 0, asesorVistos: 0, sondeo: null };
   const mensajes = el("div", { class: "mensajes", "aria-live": "polite" });
   const entrada = el("input", { placeholder: tr("Escribe aquí…"), "aria-label": tr("Mensaje") });
   // El selector pide el idioma de la conversación: es un evento del canal, no pasa por el modelo (ARQUITECTURA §8.5).
   const selIdioma = el("select", { title: tr("Idioma de la conversación"), "aria-label": tr("Idioma de la conversación"),
-    onchange: e => { est.idioma = e.target.value; evento({ tipo: "cambiar_idioma", idioma: est.idioma }); } },
+    onchange: e => { est.idioma = e.target.value; fijarIdiomaChat(est.idioma); etiquetar(); evento({ tipo: "cambiar_idioma", idioma: est.idioma }); } },
     el("option", { value: "es" }, "ES"), el("option", { value: "pt" }, "PT"));
+  selIdioma.value = idiomaChat(); est.idioma = idiomaChat();
   const archivo = el("input", { type: "file", accept: ".jpg,.jpeg,.png,.pdf,.ogg,.mp3", style: "display:none", onchange: e => adjuntar(e.target.files[0]) });
 
   const burbuja = (rol, texto) => { if (!texto) return; mensajes.append(el("div", { class: `burbuja ${rol}` },
@@ -212,16 +214,25 @@ function crearChat(contenedor, { alTurno } = {}) {
 
   const enviarTexto = () => { const t = entrada.value.trim(); if (!t) return; burbuja("cliente", t); entrada.value = ""; enviar({ texto: t }); };
   entrada.addEventListener("keydown", e => { if (e.key === "Enter") enviarTexto(); });
+  const titulo = el("strong", {}, tr("Lora · asistente virtual"));
+  const bMov = el("button", { class: "sec", onclick: movimientos }, tr("Mis movimientos"));
+  const bAdj = el("button", { class: "sec", onclick: () => archivo.click() }, tr("📎 Adjuntar"));
+  const bPer = el("button", { class: "sec", onclick: () => evento({ tipo: "pedir_persona" }) }, tr("Hablar con una persona"));
+  const bNue = el("button", { class: "sec", onclick: () => { if (guardado("canal") !== "app") guardado("token_cliente", ""); guardado("conversacion", ""); location.reload(); } }, tr("Nueva conversación"));
+  const bEnv = el("button", { onclick: enviarTexto }, tr("Enviar"));
+  // Las etiquetas fijas del chat siguen el idioma de la conversación (los mensajes y tarjetas se arman con él al dibujarse).
+  function etiquetar() {
+    titulo.textContent = tr("Lora · asistente virtual"); bMov.textContent = tr("Mis movimientos"); bAdj.textContent = tr("📎 Adjuntar");
+    bPer.textContent = tr("Hablar con una persona"); bNue.textContent = tr("Nueva conversación"); bEnv.textContent = tr("Enviar");
+    entrada.placeholder = tr("Escribe aquí…"); entrada.setAttribute("aria-label", tr("Mensaje"));
+    selIdioma.title = tr("Idioma de la conversación"); selIdioma.setAttribute("aria-label", tr("Idioma de la conversación"));
+  }
+  etiquetar();
   contenedor.append(el("div", { class: "panel chat" },
-    el("div", { class: "cab" }, loro(26), el("strong", {}, tr("Lora · asistente virtual")), selIdioma),
+    el("div", { class: "cab" }, loro(26), titulo, selIdioma),
     mensajes,
-    el("div", { class: "acciones-chat" }, el("button", { class: "sec", onclick: movimientos }, tr("Mis movimientos")),
-      el("button", { class: "sec", onclick: () => archivo.click() }, tr("📎 Adjuntar")), archivo,
-      el("button", { class: "sec", onclick: () => evento({ tipo: "pedir_persona" }) }, tr("Hablar con una persona")),
-      el("button", { class: "sec", onclick: () => { if (guardado("canal") !== "app") guardado("token_cliente", ""); guardado("conversacion", ""); location.reload(); } }, tr("Nueva conversación")),
-      el("button", { class: "sec", title: tr("Borra los reclamos, bloqueos y traspasos de las identidades DEMO"), onclick: async () => {
-        await llamar("/demo/reiniciar", { metodo: "POST" }); guardado("conversacion", ""); location.reload(); } }, tr("Reiniciar demo"))),
-    el("div", { class: "entrada" }, entrada, el("button", { onclick: enviarTexto }, tr("Enviar")))));
+    el("div", { class: "acciones-chat" }, bMov, bAdj, archivo, bPer, bNue),     // «Reiniciar demo» es de la demo, no de Lora: vive fuera del chat
+    el("div", { class: "entrada" }, entrada, bEnv)));
   if (est.conv) recuperar();
   est.escribir = texto => { entrada.value = texto; entrada.focus(); };      // las sugerencias rellenan la caja; el jurado decide si enviarlas
   return est;
@@ -261,7 +272,9 @@ function montarCliente(cont, opciones = {}) {
   const cab = el("div", { class: "fila suave" }, canal === "app" && guardado("token_cliente")
     ? `${tr("App del banco · sesión iniciada")} (${guardado("documento_app")})` : tr("Sitio web · sin sesión"),
     el("button", { class: "sec", onclick: () => { ["token_cliente", "canal", "conversacion", "documento_app"].forEach(k => guardado(k, "")); montarCliente(cont, opciones); } },
-      canal === "app" ? tr("Cerrar sesión") : tr("Cambiar de canal")));
+      canal === "app" ? tr("Cerrar sesión") : tr("Cambiar de canal")),
+    el("button", { class: "sec", title: tr("Borra los reclamos, bloqueos y traspasos de las identidades DEMO"), onclick: async () => {
+      await llamar("/demo/reiniciar", { metodo: "POST" }); guardado("conversacion", ""); location.reload(); } }, tr("Reiniciar demo")));
   cont.append(cab);
   crearChat(cont, opciones);
 }

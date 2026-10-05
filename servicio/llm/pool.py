@@ -25,12 +25,17 @@ from servicio.recursos.guardian import Guardian
 SUFIJOS = ("", "_1", "_2", "_3", "_4", "_5")
 
 
+def _parece_llave(v: str) -> bool:
+    """Un valor de relleno («.», «x») que se puso para dejar una variable sin llave no es una llave: no cuenta como una que falla."""
+    return len(v) >= 20
+
+
 def llaves_del_entorno(prefijo: str = "GROQ_API_KEY") -> list[tuple[str, str]]:
     """(nombre de la variable, llave) de las llaves del entorno, sin repetir valores."""
     vistas: list[tuple[str, str]] = []
     for s in SUFIJOS:
         v = (os.environ.get(prefijo + s) or "").strip()
-        if v and v not in [x for _, x in vistas]:
+        if _parece_llave(v) and v not in [x for _, x in vistas]:
             vistas.append((prefijo + s, v))
     return vistas
 
@@ -44,7 +49,7 @@ def reparto() -> dict:
 def llaves_del_papel(papel: str) -> list[tuple[str, str]]:
     """(nombre de la variable, llave) de las llaves de Groq de un papel según `config/llaves.yaml`; si ese papel no tiene ninguna en el entorno
     (p. ej. en el despliegue, que trae solo las suyas), todas las del entorno. El nombre es lo único que se muestra o se registra de una llave."""
-    propias = [(n, os.environ[n].strip()) for n in reparto().get(papel, []) if (os.environ.get(n) or "").strip()]
+    propias = [(n, os.environ[n].strip()) for n in reparto().get(papel, []) if _parece_llave((os.environ.get(n) or "").strip())]
     vistas: list[tuple[str, str]] = []
     for n, v in propias:
         if v not in [x for _, x in vistas]:

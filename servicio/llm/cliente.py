@@ -272,10 +272,11 @@ def modelo_desde_entorno(rol: str = "sistema") -> Modelo:
                 lotes = rol in ("evaluacion", "linea_base")      # sin cliente esperando: puede esperar el cupo
                 p = PoolLlaves("groq", [v for _, v in llaves], modelos, modelos["interpretar"], nombres=[n for n, _ in llaves],
                                espacio_s=float(os.environ.get("ESPACIO_LLAMADAS_S", "2")), temperaturas=TEMPERATURAS_SISTEMA,
-                               espera_guardian_s=60.0 if lotes else 0.0, espera_saturado_s=65.0 if lotes else 0.0)
+                               espera_guardian_s=60.0 if lotes else 0.0,
+                               espera_saturado_s=65.0 if lotes else float(os.environ.get("ESPERA_SATURADO_S", "15")))     # un cliente espera unos segundos a que se libere una llave antes de pasar a una persona
             else:                    # respaldo: su propio pool, con el modelo y la privacidad declarados en la ficha
                 ficha = reparto()[proveedor]
-                propias = [(n, os.environ[n].strip()) for n in ficha["llaves"] if (os.environ.get(n) or "").strip()]
+                propias = [(n, os.environ[n].strip()) for n in ficha["llaves"] if len((os.environ.get(n) or "").strip()) >= 20]     # un relleno («.») no es una llave
                 if not propias:
                     continue
                 p = PoolLlaves(proveedor, [v for _, v in propias], {}, ficha["modelo"], nombres=[n for n, _ in propias], espacio_s=3.0,

@@ -19,7 +19,10 @@ body { margin: 0; font-family: "Inter", system-ui, -apple-system, "Segoe UI", Ro
   background-image: url("fondo.svg");               /* curvas de nivel: pozos de gravedad, no una cuadrícula */
   background-size: cover; background-position: center; background-attachment: fixed; }
 ::selection { background: var(--marca); color: var(--marca-texto); }
-::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-thumb { background: var(--marca-tenue); border-radius: 999px; }
+/* barra de la página: gris claro y de 10 px, para que se vea sobre el fondo oscuro de la demo */
+html { scrollbar-width: auto; scrollbar-color: #8b93a1 #1b2230; }
+::-webkit-scrollbar { width: 10px; height: 10px; } ::-webkit-scrollbar-track { background: #1b2230; }
+::-webkit-scrollbar-thumb { background: #8b93a1; border-radius: 999px; border: 2px solid #1b2230; } ::-webkit-scrollbar-thumb:hover { background: #aab1bd; }
 
 .barra { display: flex; gap: 1.5rem; align-items: center; padding: .6rem 1.2rem; background: oklch(0.18 0.025 250 / 92%);
   border-bottom: 1px solid var(--borde); flex-wrap: wrap; position: sticky; top: 0; z-index: 5; backdrop-filter: blur(6px); }

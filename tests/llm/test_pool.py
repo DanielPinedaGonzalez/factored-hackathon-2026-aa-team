@@ -124,3 +124,12 @@ def test_sin_llaves_en_el_entorno_no_revienta_y_la_conversacion_pasa_a_una_perso
     from servicio.orquestador.orquestador import Entrada, procesar
     s = procesar("c_" + secrets.token_hex(6), Entrada(texto="no reconozco un cargo"), None, m)
     assert s.sin_modelo and any(u["tipo"] == "aviso_espera" for u in s.ui)
+
+
+def test_un_valor_de_relleno_no_cuenta_como_llave(monkeypatch):
+    """5-oct: la variable de la llave de pago se dejó con «.» en el despliegue y la cabina la contaba como una llave que falla (401)."""
+    from servicio.llm.pool import llaves_del_entorno
+    monkeypatch.setenv("GROQ_API_KEY", "gsk_" + "a" * 40)
+    monkeypatch.setenv("GROQ_API_KEY_2", ".")
+    assert [n for n, _ in llaves_del_entorno()] == ["GROQ_API_KEY"]
+
