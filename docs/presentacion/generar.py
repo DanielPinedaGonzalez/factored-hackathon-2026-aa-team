@@ -267,7 +267,7 @@ def diapositivas(conjunto: str, propuesto: list[str] | None, pruebas: str) -> tu
         f"""<div class="mapa">{mapa_proceso.svg("en")}</div>
 <div class="chips"><div class="chip">The model <b>cannot execute</b> any banking action.</div><div class="chip">Lora reports an action as done <b>only after the database confirms it</b>.</div>
  <div class="chip">If the model fails, <b>no further action runs</b>: a person takes the case.</div><div class="chip az">Row-Level Security: each customer reads only their own rows</div></div>""",
-        "", "The policy's checks run in code. The fraud signal is a learned input to the policy, not a decision-maker.")
+        "", "The policy's checks run in code, with each country's own deadlines and thresholds (Mexico, Colombia, Argentina: sourced where verified, otherwise declared synthetic). The fraud signal is a learned input, not a decision-maker.")
     s3 = s3.replace('<h1>', '<h1 style="font-size:52px;margin:2px 0 0">', 1)
 
     # ---- 4 · los controles y la señal de fraude
@@ -310,14 +310,14 @@ def diapositivas(conjunto: str, propuesto: list[str] | None, pruebas: str) -> tu
     inseguros = [r["caso"] for r in prop["resultados"] if r.get("inseguro")]
     cuerpo5 = f"""<div style="display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap"><span style="border:2px solid var(--suave);border-radius:999px;padding:6px 24px;font-size:26px;font-weight:700">{etiqueta}</span>
  <span class="nota">{mp['casos']} cases ({n_pt} in Portuguese) · normal · ambiguous · needs a person · attacks · tool failures · scored from the database, not from the text</span></div>
-<div>{par("Cases passed", mp_par["pasan"], mb and mb["pasan"], "all expected outcomes met, nothing unsafe")}{par("Correct escalation", mp_par["escalada_correcta"], mb and mb["escalada_correcta"], f"of the {mp_par['escalada_correcta']['denominador']} cases that needed a person")}
- {par("Unsafe outcomes", mp_par["inseguros"], ins_b, "lower is better")}</div>
+<div>{par("Cases passed", mp_par["pasan"], mb and mb["pasan"], "all expected outcomes met, no out-of-policy action")}{par("Correct escalation", mp_par["escalada_correcta"], mb and mb["escalada_correcta"], f"of the {mp_par['escalada_correcta']['denominador']} cases that needed a person")}
+ {par("Out-of-policy actions", mp_par["inseguros"], ins_b, "an action the policy forbids, e.g. opening a claim that did not apply · lower is better")}</div>
 {_leyenda([(C_LORA, "Lora"), (C_BASE, "plain assistant: same model, data, identity and tools; rules only in the prompt")])}
 <div class="nota" style="text-align:center;font-size:26px">Latency p50 / p95 per turn: {mp_par['latencia_ms']['p50'] / 1000:.1f} / {mp_par['latencia_ms']['p95'] / 1000:.1f} s · cost per case ≈ {mp['consumo']['equivalente_usd_por_caso']:.4f} USD at public model prices · bars on one 0–100% scale · brackets: 95% Wilson interval</div>"""
     s5 = _marco(5, "EVIDENCE", "In our test, rules outside the prompt improved safety" if (mb and mb["inseguros"]["numerador"] > mp_par["inseguros"]["numerador"]) else "The system works on our battery of cases",
         "", cuerpo5,
         "Same model and tools. Different control architecture. Different results in this test.",
-        f"Offline results on synthetic data, one pass on {mp['casos']} cases never used in development: “tested in our battery”, not “validated”. Lora's unsafe outcome{'s' if len(inseguros) != 1 else ''}: {_explicar_inseguros(inseguros)} {aviso}")
+        f"Offline results on synthetic data, one pass on {mp['casos']} cases never used in development: “tested in our battery”, not “validated”. Lora's out-of-policy action{'s' if len(inseguros) != 1 else ''}: {_explicar_inseguros(inseguros)} {aviso}")
 
     # ---- 6 · límites y ruta a la operación
     s6 = _marco(6, "LIMITS AND ROUTE TO OPERATION", "What it would take to make it real", "",
@@ -372,7 +372,7 @@ def _notas(c: dict) -> list[str]:
         [("We compare Lora with a plain assistant: same model, data, identity, row-level security and tools, with the rules only in its prompt and no policy engine.", "Comparamos Lora con un asistente simple: mismo modelo, datos, identidad, seguridad por fila y herramientas, con las reglas solo en el prompt y sin motor de política."),
          (f"{c['etiqueta']}: Lora passes {pct(c['mp_par']['pasan'])} of cases; the plain assistant passes {pct(c['mb']['pasan']) if c['mb'] else 'not measured'}.",
           f"{'Corrida final' if c['etiqueta'].startswith('Final') else 'Corrida de desarrollo'}: Lora pasa {pct(c['mp_par']['pasan'])} de los casos; el asistente simple pasa {pct(c['mb']['pasan']) if c['mb'] else 'sin medir'}."),
-         (f"Unsafe outcomes: Lora {pct(c['mp_par']['inseguros'])}, the plain assistant {pct(c['mb']['inseguros']) if c['mb'] else 'not measured'}. We report Lora's one unsafe outcome.",
+         (f"Out-of-policy actions: Lora {pct(c['mp_par']['inseguros'])}, the plain assistant {pct(c['mb']['inseguros']) if c['mb'] else 'not measured'}. We report Lora's one out-of-policy action.",
           f"Resultados inseguros: Lora {pct(c['mp_par']['inseguros'])}, el asistente simple {pct(c['mb']['inseguros']) if c['mb'] else 'sin medir'}. Reportamos el único resultado inseguro de Lora."),
          ("The test is small and the brackets show it (95% Wilson intervals). Same model and tools, different control architecture, different results in this test. We say tested in our battery, not validated.", "La prueba es pequeña y los corchetes lo muestran (intervalos de Wilson al 95 %). Mismo modelo y herramientas, distinta arquitectura de control, resultados distintos en esta prueba. Decimos probado en nuestra batería, no validado.")],
         [("Today it is a prototype on synthetic data.", "Hoy es un prototipo con datos sintéticos."),

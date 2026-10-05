@@ -29,7 +29,7 @@ system) have an **EN / ES** switch in the header; the conversation itself is in 
 **Presenter notes** (switch `🎙` in the header) explain each screen, each demo customer and each turn, in English with the Spanish in parentheses; a **flow map** highlights the nodes this conversation went through; the **About** tab lists the key ideas and the honest limits.
 
 **Measured, and what that means.** On the **final set** (62 canonical cases with customers and transactions from 2026-H1, never used to develop; one pass of the frozen system) **55 pass (89 %, 95 % CI 79–94 %)**
-and **1 is unsafe** (upper bound 7.4 %). The baseline (the same model with the rules only in the prompt) passes 23/62 (37 %) with 11 unsafe outcomes (upper bound 27.7 %). Correct escalation: 15/16 against 6/16.
+and **1 has an out-of-policy action** (an action the policy forbids, here opening a claim that did not apply; upper bound 7.4 %). The baseline (the same model with the rules only in the prompt) passes 23/62 (37 %) with 11 out-of-policy actions (upper bound 27.7 %). Correct escalation: 15/16 against 6/16.
 Seven cases fail and we show them, with their causes (a model reading a sentence the wrong way, a documented priority rule, a known language limit): they are in
 [`docs/REPORTE_EVALUACION.md`](docs/REPORTE_EVALUACION.md) and [`evaluacion/EXPERIMENTOS.md`](evaluacion/EXPERIMENTOS.md), together with the experiments we tried and reverted, a LightGBM comparison
 (more variables do not beat the bank's fraud score) and one earlier final pass that we interrupted and discarded. Few cases, wide intervals: "tested in our battery", not "validated".

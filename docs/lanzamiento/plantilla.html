@@ -357,7 +357,7 @@ function barras(cont, filas) {
 barras($('#barras-motivos'), [{ nombre: 'Transactional', ancho: 92, valor: '92%' }, { nombre: 'Product', ancho: 90, valor: '90%' }, { nombre: 'Technical', ancho: 70, valor: '70%' },
   { nombre: 'Commercial', ancho: 65, valor: '65%' }, { nombre: 'Retention', ancho: 60, valor: '60%' }, { nombre: 'Complaint', ancho: 44, valor: '44%', clase: 'rojo' }]);
 barras($('#barras-prueba'), [{ k: 'p55', nombre: 'Lora · passed', ancho: 89, valor: '55 / 62', clase: 'verde' }, { k: 'p23', nombre: 'Plain assistant', ancho: 37, valor: '23 / 62' },
-  { k: 'u1', nombre: 'Lora · unsafe', ancho: 2, valor: '1', clase: 'azul' }, { k: 'u11', nombre: 'Plain · unsafe', ancho: 18, valor: '11', clase: 'rojo' }]);
+  { k: 'u1', nombre: 'Lora · out of policy', ancho: 2, valor: '1', clase: 'azul' }, { k: 'u11', nombre: 'Plain · out of policy', ancho: 18, valor: '11', clase: 'rojo' }]);
 barras($('#barras-m1'), [{ k: 'b57', nombre: 'Certified', ancho: 57.5, valor: '57.5% of fraud caught', clase: 'azul' }, { k: 'b42', nombre: "Bank's", ancho: 42, valor: '42.0%' }]);
 const crecerBarra = (cont, k) => { const b = document.querySelector(`${cont} .barra[data-k="${k}"] .relleno`); if (b) b.style.width = b.dataset.w + '%'; };
 
