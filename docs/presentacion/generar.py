@@ -100,6 +100,9 @@ SCRIPT_PRESENTADOR = """
 """
 
 
+import base64
+_FONDO = 'data:image/svg+xml;base64,' + base64.b64encode((RAIZ / 'apps' / 'web' / 'fondo.svg').read_bytes()).decode()
+
 CSS = """
 @page { size: 1920px 1080px; margin: 0 }
 /* Convención de color (una sola, con leyenda en cada gráfico): verde = Lora (lo nuestro) · gris = línea base / comparación · rojo = el problema o lo inseguro ·
@@ -108,7 +111,10 @@ CSS = """
         --modelo:#9085e9; --marca:#2cc4e0 }
 * { box-sizing:border-box }
 body { margin:0; font-family: Inter, system-ui, "Segoe UI", Roboto, sans-serif; background:var(--fondo); color:var(--texto) }
-section { width:1920px; height:1080px; padding:34px 80px 0; page-break-after:always; position:relative; background:var(--fondo); overflow:hidden; display:flex; flex-direction:column }
+section { width:1920px; height:1080px; padding:34px 80px 0; page-break-after:always; position:relative; background:var(--fondo); overflow:hidden; isolation:isolate; display:flex; flex-direction:column }
+/* curvas de nivel de la demo (apps/web/fondo.svg) detrás del contenido; se aclaran hacia el centro, donde va el texto */
+section::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; background:url("__FONDO__") center/cover no-repeat; opacity:.95;
+  -webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 52%, rgba(0,0,0,.18) 0%, rgba(0,0,0,.45) 55%, #000 100%); mask-image:radial-gradient(ellipse 75% 70% at 50% 52%, rgba(0,0,0,.18) 0%, rgba(0,0,0,.45) 55%, #000 100%) }
 .cab { display:flex; justify-content:space-between; align-items:center; height:60px; font-size:24px; letter-spacing:.14em; color:var(--suave); font-weight:600 }
 .firma { display:flex; align-items:center; gap:14px; letter-spacing:0 } .firma b { font-size:32px; color:#fff } .firma i { font-style:normal; font-size:24px; color:var(--suave); border-left:2px solid #5a5a55; padding-left:14px }
 .firma svg { display:block }
@@ -308,7 +314,7 @@ def diapositivas(conjunto: str, propuesto: list[str] | None, pruebas: str) -> tu
  <div class="tarj"><h3 class="k" style="color:var(--modelo)">NEXT</h3><ul><li>Real bank systems integration</li><li>Native review of the Portuguese</li><li>A larger evaluation</li><li>Evaluate paid model capacity and latency</li><li>Deposits and disbursements (today: a person)</li></ul></div></div>
 <div class="limites"><div>Synthetic data, not production</div><div>Small evaluation: 62 cases</div><div>Portuguese checked by back-translation, not by a native reviewer</div></div>
 <div class="cierre"><span>The model understands.</span> The code decides and acts. <em>Every action is verified.</em></div>
-<div class="credito">{LORO.replace('width="52" height="52"', 'width="76" height="76"')}<div><b>Lora · Daniel Pineda</b><small>Factored AI &amp; Data Hackathon 2026 · repository and live demo: see the links in the submission</small></div></div>""",
+<div class="credito">{LORO.replace('width="52" height="52"', 'width="76" height="76"')}<div><b>Lora · Daniel Pineda</b><small>Factored AI &amp; Data Hackathon 2026</small></div><div style="border-left:2px solid #5a5a55;padding-left:22px"><small>Code: github.com/DanielPinedaGonzalez/factored-hackathon-2026-aa-team</small><small>Live demo: aa-team-api.onrender.com/app/ · access code in the submission email</small></div></div>""",
         "", "A projection, not a measured improvement. Today it is a prototype on synthetic data.")
     contexto = {"mp": mp, "mp_par": mp_par, "mb": mb, "P": P, "B": B, "pruebas": pruebas, "etiqueta": etiqueta, "una": True, "umbral": umbral}
     return [s1, s2, s3, s4, s5, s6], contexto
@@ -375,7 +381,7 @@ def _con_presentador(html: str, notas: list[str]) -> str:
 
 def generar(conjunto: str, propuesto: list[str] | None = None, pruebas: str | None = None) -> str:
     secciones, contexto = diapositivas(conjunto, propuesto, pruebas or _tamano_de_las_pruebas())
-    html = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Lora · I don\'t recognize this charge</title><style>{CSS}</style></head>'
+    html = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Lora · I don\'t recognize this charge</title><style>{CSS.replace('__FONDO__', _FONDO)}</style></head>'
             f'<body>{"".join(secciones)}</body></html>')
     return _con_presentador(html, _notas(contexto))
 

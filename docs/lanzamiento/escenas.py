@@ -65,9 +65,9 @@ ESCENAS = [
      "visual": 'Barras: 55 de 62 contra 23 de 62; inseguros 1 contra 11; intervalo de Wilson al 95 % rotulado; «offline · synthetic data».',
      "sync": [["passed fifty-five", "p55"], ["passed twenty-three", "p23"], ["eleven unsafe", "u11"], ["Lora had one unsafe", "u1"]]},
     {"id": 'close', "bloque": 'CLOSE', "seg": 17,
-     "en": 'For her, a clear answer. For the human agent, a complete case. For the bank, every action with its rule and its evidence. A real bank would still need its real systems, native review of the Portuguese, and a larger evaluation. Thank you.',
-     "es": 'Para ella, una respuesta clara. Para el agente humano, un caso completo. Para el banco, cada acción con su regla y su evidencia. Un banco real aún necesitaría sus sistemas reales, revisión nativa del portugués y una evaluación más grande. Gracias.',
-     "visual": 'Tres columnas (la clienta, el agente humano, el banco); lo que falta; el loro se va; créditos y «narration: AI voice».',
+     "en": 'For her, a clear answer. For the human agent, a complete case. For the bank, every action with its rule and its evidence. Lora: the virtual assistant for banks, for the charges customers do not recognize. Thank you.',
+     "es": 'Para ella, una respuesta clara. Para el agente humano, un caso completo. Para el banco, cada acción con su regla y su evidencia. Lora: la asistente virtual para bancos, para los cargos que el cliente no reconoce. Gracias.',
+     "visual": 'Tres columnas (la clienta, el agente humano, el banco); Lora y su descripción; el loro se va; créditos y «narration: AI voice».',
      "sync": []},
 ]
 
