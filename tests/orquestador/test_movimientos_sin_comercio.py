@@ -48,13 +48,15 @@ def test_transferencia_no_reconocida_se_encuentra_y_se_nombra_por_su_tipo():
     assert reg["tokens"]["llamadas"] == llamadas_del_primer_turno
 
 
-def test_si_la_descripcion_no_coincide_se_muestran_los_del_monto_y_la_fecha_para_elegir():
+def test_si_la_descripcion_no_coincide_y_hay_uno_solo_se_muestra_y_se_pregunta_si_lo_reconoce():
+    """5-oct: con un único movimiento del monto y la fecha dichos no hay nada que elegir; se le muestra y se le pregunta si lo reconoce."""
     token, cid = token_de("DEMO-1003")
     limpiar_cliente(cid)
     conv = "c_" + secrets.token_hex(6)
     s = procesar(conv, Entrada(texto="no reconozco un pago de 8703 de ayer"), token,
                  ModeloFalso(Guion([TRANSFERENCIA.replace("transferencia", "pago")], comparar=_solo("pago"))))
-    assert s.nodo == "N4" and next(u for u in s.ui if u["tipo"] == "opciones")["opciones"][0]["movimiento"] == "transferencia"
+    assert s.nodo == "N5" and not any(u["tipo"] == "opciones" for u in s.ui)
+    assert next(u for u in s.ui if u["tipo"] == "tarjeta_cargo")["movimiento"] == "transferencia"
 
 
 def test_presupuesto_de_la_conversacion_agotado_pasa_a_una_persona_sin_llamar_al_modelo():

@@ -565,6 +565,10 @@ function vistaOperacion(raiz) {
     const esperando = cola.cola.length, presencia = cola.yo && cola.yo.presencia;
     if (est.rol === "asesor" && presencia && presencia !== "disponible" && esperando)       // sin esto «Mis casos» queda vacío y parece que nadie escaló
       izq.append(el("div", { class: "aviso advertencia" }, llenar(tr("Hay {} casos esperando en la cola y no estás disponible: pulsa «Disponible» para recibir los de tu habilidad."), esperando)));
+    const pedidas = [...new Set(cola.cola.map(c => c.habilidad))];
+    if (est.rol === "asesor" && presencia === "disponible" && esperando && !cola.mios.length && cola.yo && !pedidas.includes(cola.yo.habilidad))     // disponible, pero el caso pide otra habilidad: dice por qué no llega
+      izq.append(el("div", { class: "aviso advertencia" }, llenar(tr("Hay {} casos en la cola, pero piden otra habilidad ({}) y la tuya es {}: un caso solo llega a quien tiene su habilidad (o a una afín si espera mucho). Para verlo, entra como un asesor de esa habilidad."),
+        esperando, pedidas.map(h => cod(h)).join(", "), cod(cola.yo.habilidad))));
     if (est.rol === "asesor") izq.append(el("div", { class: "fila" },
       el("button", { onclick: async () => { await llamar("/equipo/presencia", { metodo: "POST", token: est.token, cuerpo: { presencia: "disponible", capacidad: 2 } }); pintar(); } }, tr("● Disponible")),
       el("button", { class: "sec", onclick: async () => { await llamar("/equipo/presencia", { metodo: "POST", token: est.token, cuerpo: { presencia: "en_pausa", capacidad: 2 } }); pintar(); } }, tr("Pausa"))));

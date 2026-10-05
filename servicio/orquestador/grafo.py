@@ -412,7 +412,8 @@ def buscar_cargo(ctx: Contexto, referido: CargoReferido):
         elif comp.candidatos == []:
             r.candidatos, r.clase = [], "0"
     if descripcion_distinta:
-        ctx.ec.afirmar("descripcion_distinta")
+        if len(r.candidatos) > 1:          # «elige el tuyo» solo tiene sentido con varios; con uno, se muestra y pregunta si lo reconoce
+            ctx.ec.afirmar("descripcion_distinta")
         _listar_opciones(ctx, r.candidatos)
         return
     if r.clase == "1":
@@ -446,7 +447,11 @@ def buscar_cargo(ctx: Contexto, referido: CargoReferido):
 
 
 def _listar_opciones(ctx: Contexto, candidatos: list[dict], con_ninguno: bool = False):
-    """N4: varios movimientos posibles; el cliente elige el suyo por su alias. Con `con_ninguno`, la interfaz agrega «Ninguno de estos»."""
+    """N4: varios movimientos posibles; el cliente elige el suyo por su alias. Con `con_ninguno`, la interfaz agrega «Ninguno de estos».
+    Un solo movimiento no es una lista: no se le pide elegir entre uno, se le muestra y se le pregunta si lo reconoce (como cuando el resolutor halla uno)."""
+    if len(candidatos) == 1 and not con_ninguno:
+        mostrar_cargo(ctx, candidatos[0])
+        return
     ctx.estado.nodo = Nodo.N4
     opciones = []
     for tx in candidatos:

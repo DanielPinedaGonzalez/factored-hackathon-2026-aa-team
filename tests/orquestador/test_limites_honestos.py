@@ -83,3 +83,17 @@ def test_sin_monto_ni_fecha_no_se_dice_que_los_movimientos_con_el_monto_y_la_fec
     procesar(c, Entrada(texto="necesito saber cuándo entró mi dinero"), token, m)
     hechos = [e.get("hecho") for e in visto["estado"]]
     assert "descripcion_distinta" not in hechos
+
+
+def test_un_solo_movimiento_no_se_presenta_como_una_lista_para_elegir(monkeypatch):
+    """5-oct, demo: el cliente dio un monto y una fecha, hubo UN movimiento con otra descripción y Lora pidió «cuál de estas opciones» con una sola
+    opción, y después volvió a preguntar si lo reconocía. Con uno solo se muestra y se pregunta si lo reconoce; con varios sigue la lista."""
+    from types import SimpleNamespace
+
+    from servicio.orquestador import grafo
+    vistos = []
+    monkeypatch.setattr(grafo, "mostrar_cargo", lambda ctx, tx, *a, **k: vistos.append(tx["transaction_id"]))
+    ctx = SimpleNamespace(ui=[], estado=SimpleNamespace(opciones_mostradas=[]))
+    grafo._listar_opciones(ctx, [{"transaction_id": "T1"}])
+    assert vistos == ["T1"] and ctx.ui == [] and ctx.estado.opciones_mostradas == []
+

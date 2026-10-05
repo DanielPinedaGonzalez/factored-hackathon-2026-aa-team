@@ -1,4 +1,4 @@
-# Blueprint de Render (DESPLIEGUE §1). Despliegue automático de la API al hacer push a main (5-oct, para iterar rápido durante las pruebas); el camino con pruebas y migraciones por GitHub Actions sigue disponible (DESPLEGAR).
+# Blueprint de Render (DESPLIEGUE §1). La API se despliega sola al hacer push a main (Auto-Deploy «On Commit» en el panel); el camino con pruebas y migraciones por GitHub Actions sigue disponible (DESPLEGAR).
 services:
   - type: web
     name: aa-team-api
