@@ -96,6 +96,7 @@ function crearChat(contenedor, { alTurno } = {}) {
       mensajes.querySelectorAll(".caja.formulario").forEach(f => f.remove());
       return formulario();
     }
+    if (u.tipo === "fuente") return el("div", { class: "fuente" }, `${tr("Fuente")}: ${u.titulo} (${u.id}, v${u.version})`);
     if (u.tipo === "tarjeta_cargo") return el("div", { class: "caja" }, el("h4", {}, `${tr("Cargo")} ${u.alias}`),
       el("div", { class: "dato" }, `${[u.movimiento, u.comercio].filter(Boolean).join(" · ")} · ${u.monto}`), el("div", {}, [u.fecha, u.hora, u.ciudad].filter(Boolean).join(" · ")), el("div", { class: "suave" }, u.producto),
       el("div", { class: "fila" },

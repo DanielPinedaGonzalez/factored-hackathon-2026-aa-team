@@ -230,6 +230,7 @@ export const EN = {
  "puede hacerse sin una persona": "can be done without a person",
  "Las cuatro verificaciones: ": "The four checks: ",
  "Ninguno de estos": "None of these",
+ "Fuente": "Source",
  "Hay {} casos en la cola, pero piden otra habilidad ({}) y la tuya es {}: un caso solo llega a quien tiene su habilidad (o a una afín si espera mucho). Para verlo, entra como un asesor de esa habilidad.": "There are {} cases in the queue, but they need a different skill ({}) and yours is {}: a case only reaches someone with its skill (or a related one if it waits long). To see it, sign in as an advisor with that skill.",
  "Hay {} casos esperando en la cola y no estás disponible: pulsa «Disponible» para recibir los de tu habilidad.": "{} cases are waiting in the queue and you are not available: press “Available” to receive those for your skill.",
  "Mis movimientos": "My transactions",

@@ -57,3 +57,14 @@ def test_b10_pedir_una_persona_y_preguntar_en_el_mismo_mensaje_responde_y_traspa
     hechos = _estado_comunicable(m)
     assert s.nodo == "N11" or s.traspaso                                           # pasó a una persona
     assert any(e["clase"] == "RESPONDER" and e["articulo"].startswith("publico.si-llamas-por-otra-persona") for e in hechos)
+
+
+def test_la_respuesta_con_un_articulo_entrega_su_fuente_para_mostrarla():
+    """5-oct (Daniel): cuando una respuesta sale de un documento del banco, el cliente ve de cuál."""
+    token, cid = token_de("DEMO-1001")
+    limpiar_cliente(cid)
+    m = ModeloFalso(Guion(["IDIOMA: es\nCOMANDO: fuera_de_alcance | cupo\nCOMANDO: consulta_informativa | publico.otras-gestiones"]))
+    s = procesar("c_" + secrets.token_hex(6), Entrada(texto="súbanme el cupo de la tarjeta"), token, m)
+    fuente = next(u for u in s.ui if u["tipo"] == "fuente")
+    assert fuente["id"] == "publico.otras-gestiones" and fuente["titulo"] and fuente["version"]
+

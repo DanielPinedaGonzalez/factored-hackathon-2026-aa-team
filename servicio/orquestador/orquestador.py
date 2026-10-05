@@ -337,6 +337,9 @@ def _procesar(conversation_id: str, entrada: Entrada, token: str | None, modelo:
                          where traspaso_id = %s""", (traspaso_info["traspaso_id"],))
         grafo._paso(ctx, "siguiente", "ok", nodo=estado.nodo.name,
                     traspaso=({"habilidad": traspaso_info["habilidad"], "prioridad": traspaso_info["prioridad"]} if traspaso_info else None))
+        if rr and ec.articulo and rr.redaccion.cita_articulo == f"{ec.articulo['id']}@{ec.articulo['version']}":
+            # La respuesta salió de un artículo del banco: el cliente ve cuál (transparencia; la cita ya está verificada).
+            ctx.ui.append({"tipo": "fuente", "titulo": ec.articulo["titulo"], "id": ec.articulo["id"], "version": ec.articulo["version"]})
         salida = Salida(conversation_id, version_leida + 1, texto_final, ctx.ui, estado.nodo.name, estado.sin_modelo,
                         traspaso_info and {k: traspaso_info[k] for k in ("numero", "habilidad", "prioridad", "posicion", "espera_minutos", "abre") if k in traspaso_info},
                         turn_id)

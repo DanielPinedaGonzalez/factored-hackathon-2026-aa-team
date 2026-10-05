@@ -186,3 +186,5 @@ button.perfil .detalle.vacio { display: none !important; }
 .panel.compacto button.perfil .detalle .d-card { display: block; }
 .panel.compacto button.perfil:hover .detalle.vacio, .panel.compacto button.perfil:focus-visible .detalle.vacio { display: flex !important; }
 @media (max-width: 900px) { .panel.compacto #escenarios { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* de qué artículo del banco salió la respuesta: una nota pequeña bajo el mensaje */
+.fuente { font-size: .78rem; color: var(--b-suave); padding: 0 .3rem; }

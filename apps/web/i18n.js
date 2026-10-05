@@ -42,7 +42,7 @@ const LORA_PT = {
   "No estoy seguro": "Não tenho certeza", "No lo reconozco": "Não reconheço", "No reconozco este cargo": "Não reconheço esta cobrança",
   "No se pudo enviar. Intenta de nuevo.": "Não foi possível enviar. Tente novamente.", "Nueva conversación": "Nova conversa", "Persona del equipo": "Pessoa da equipe",
   "Posición": "Posição", "Retirar reclamo": "Retirar reclamação", "Si el documento existe, el código llegó a tus canales registrados.": "Se o documento existir, o código chegou aos seus canais cadastrados.",
-  "Sí, hazlo": "Sim, faça isso", "Tu caso": "Seu caso", "Tú": "Você", "Una persona del equipo tiene tu caso": "Uma pessoa da equipe está com o seu caso",
+  "Sí, hazlo": "Sim, faça isso", "Tu caso": "Seu caso", "Tú": "Você", "Fuente": "Fonte", "Una persona del equipo tiene tu caso": "Uma pessoa da equipe está com o seu caso",
   "tu caso sigue en la fila": "seu caso continua na fila", "📎 Adjuntar": "📎 Anexar", "Desbloquear": "Desbloquear", "Espera estimada": "Espera estimada",
   "Enviar código": "Enviar código", "Documento (demo: DEMO-1001)": "Documento (demo: DEMO-1001)",
 };
