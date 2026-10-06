@@ -61,7 +61,7 @@ async function llamar(ruta, { metodo = "GET", cuerpo, token, archivo } = {}) {
   if (archivo) { body = new FormData(); body.append("archivo", archivo); }
   else if (cuerpo !== undefined) { h["Content-Type"] = "application/json"; body = JSON.stringify(cuerpo); }
   const r = await fetch(API + ruta, { method: metodo, headers: h, body }).catch(e => { destapar(); throw e; });
-  if (r.status !== 401) destapar();
+  if (r.ok && !ruta.startsWith("/health")) destapar();         // /health y los 403 de rol no piden el código: no prueban que se tenga
   if (!r.ok) {
     const detalle = await r.text();
     if (r.status === 401 && detalle.includes("codigo_de_demo")) pedirCodigo();
