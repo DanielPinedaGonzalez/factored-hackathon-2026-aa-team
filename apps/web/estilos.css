@@ -188,3 +188,6 @@ button.perfil .detalle.vacio { display: none !important; }
 @media (max-width: 900px) { .panel.compacto #escenarios { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* de qué artículo del banco salió la respuesta: una nota pequeña bajo el mensaje */
 .fuente { font-size: .78rem; color: var(--b-suave); padding: 0 .3rem; }
+
+/* Sin el código de acceso no se ve ni se puede tocar nada de la demo: solo el fondo y la ventana que lo pide */
+body.sin-acceso > *:not(#pide-codigo) { visibility: hidden !important; }

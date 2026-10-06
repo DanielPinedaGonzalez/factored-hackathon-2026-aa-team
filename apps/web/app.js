@@ -35,13 +35,19 @@ window.addEventListener("unhandledrejection", e => reportar(e.reason && e.reason
   } catch { }
 })();
 
+// Sin código a la vista no se muestra nada de la demo (ni menú, ni clientes, ni textos): solo el fondo y la ventana del código.
+// Se destapa en cuanto la API responde algo distinto de «pide el código» (una demo sin código, o el código correcto).
+if (!guardado("demo_codigo")) document.body.classList.add("sin-acceso");
+const destapar = () => document.body.classList.remove("sin-acceso");
+
 // Si la API pide el código y no lo tenemos (o es otro), se pide aquí: sin esto una demo protegida no se podría abrir.
 function pedirCodigo() {
+  document.body.classList.add("sin-acceso");
   if (document.getElementById("pide-codigo")) return;
   const entrada = el("input", { placeholder: tr("Código de acceso a la demo"), autocomplete: "off", "aria-label": tr("Código de acceso a la demo") });
   const enviar = () => { guardado("demo_codigo", entrada.value.trim()); location.reload(); };
   entrada.addEventListener("keydown", e => { if (e.key === "Enter") enviar(); });
-  document.body.append(el("div", { id: "pide-codigo", class: "panel", style: "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;width:min(26rem,90vw);box-shadow:0 0 0 100vmax rgba(0,0,0,.72)" },
+  document.body.append(el("div", { id: "pide-codigo", class: "panel", style: "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;width:min(26rem,90vw)" },
     el("h3", {}, tr("Código de acceso a la demo")),
     bilingue("Este enlace público pide un código. Pídeselo a quien te lo compartió."),
     el("div", { class: "fila" }, entrada, el("button", { onclick: enviar }, tr("Entrar")))));
@@ -54,7 +60,8 @@ async function llamar(ruta, { metodo = "GET", cuerpo, token, archivo } = {}) {
   let body;
   if (archivo) { body = new FormData(); body.append("archivo", archivo); }
   else if (cuerpo !== undefined) { h["Content-Type"] = "application/json"; body = JSON.stringify(cuerpo); }
-  const r = await fetch(API + ruta, { method: metodo, headers: h, body });
+  const r = await fetch(API + ruta, { method: metodo, headers: h, body }).catch(e => { destapar(); throw e; });
+  if (r.status !== 401) destapar();
   if (!r.ok) {
     const detalle = await r.text();
     if (r.status === 401 && detalle.includes("codigo_de_demo")) pedirCodigo();
