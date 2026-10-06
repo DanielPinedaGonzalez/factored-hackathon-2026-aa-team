@@ -462,3 +462,11 @@ def test_en_la_demo_el_back_office_tambien_acepta_cualquier_habilidad(monkeypatc
     with admin() as c:
         c.execute("update atencion.reclamos set estado = 'cerrado' where reclamo_id = %s", (rid,))
 
+
+def test_la_web_se_revalida_siempre_y_la_cola_dice_quien_es_el_asesor():
+    """5-oct: tras un despliegue el navegador mostraba el JavaScript viejo (no había `Cache-Control`) y la pantalla del asesor no decía quién es."""
+    r = cli.get("/app/app.js")
+    assert r.status_code == 200 and r.headers["cache-control"] == "no-cache"
+    yo = cli.get("/equipo/cola", headers=_equipo("E81176", "asesor")).json()["yo"]
+    assert yo["employee_code"] == "E81176" and yo["habilidad"] == "reclamos" and "es" in yo["idiomas"] and yo["turno"] and yo["pais"]
+

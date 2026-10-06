@@ -568,6 +568,27 @@ function vistaOperacion(raiz) {
     return { cola, reclamos };
   }
 
+  // Lo primero que ve un asesor: quién es (de los datos de su perfil), qué es esta pantalla y qué herramientas tiene según su especialidad.
+  function presentacionAsesor(yo) {
+    if (!yo) return el("div", { class: "panel suave" }, tr("Elige un caso."));
+    const cosas = [
+      ["Receive the cases Lora hands to a person, with the whole package: verified facts, actions taken and open questions.",
+       "Recibir los casos que Lora pasa a una persona, con el paquete completo: hechos verificados, acciones hechas y preguntas abiertas."],
+      ["Reply to the customer in the same chat, search the bank's knowledge base and ask for a suggested reply.",
+       "Responder al cliente en el mismo chat, buscar en la base de conocimiento del banco y pedir una respuesta sugerida."],
+      ["Transfer a case to another specialty with a note, resolve it or return it to the assistant.",
+       "Transferir un caso a otra especialidad con una nota, resolverlo o devolverlo a la asistente."],
+      ...(yo.habilidad === "fraude" ? [["Unblock a card after a risk block (fraud specialty).", "Desbloquear una tarjeta tras un bloqueo por riesgo (especialidad de fraude)."]] : []),
+      ["Investigate claims: take the next one, ask the customer for information, decide, register the refund and close it.",
+       "Investigar reclamos: tomar el siguiente, pedir información al cliente, decidir, registrar el abono y cerrarlo."]];
+    return el("div", { class: "panel" },
+      el("h3", {}, `${tr("Asesor")} ${yo.employee_code} · ${tr("especialidad")}: ${cod(yo.habilidad)}`),
+      el("div", { class: "suave" }, `${tr("Idiomas")}: ${(yo.idiomas || []).join(", ")} · ${tr("Estado")}: ${cod(yo.presencia)}`),
+      bilingue(["This is the bank's side: the agents' message centre. Cases are classified by specialty and language, and you receive the ones that match (in this demo, any agent receives any case). Pick a case on the left to work on it.",
+        "Este es el lado del banco: el centro de mensajes de los asesores. Los casos se clasifican por especialidad e idioma y recibes los que te corresponden (en esta demo, cualquier asesor recibe cualquier caso). Elige un caso a la izquierda para atenderlo."]),
+      el("h4", {}, tr("Desde aquí puedes")), el("ul", {}, ...cosas.map(c => el("li", {}, bilingue(c)))));
+  }
+
   async function pintar() {
     if (!est.token) return login();
     if (est.rol === "supervisor") return supervisor();
@@ -579,7 +600,7 @@ function vistaOperacion(raiz) {
     }
     est.yo = cola.yo;
     const izq = el("div", { class: "panel" });
-    const der = el("div", { id: "caso" }, el("div", { class: "panel suave" }, tr("Elige un caso.")));
+    const der = el("div", { id: "caso" }, presentacionAsesor(cola.yo));
     zona.replaceChildren(el("div", { class: "grid3" }, izq, der));
     pintarLista(izq, cola, reclamos);
     if (est.reclamo) abrirReclamo(est.reclamo); else if (est.caso) abrir(est.caso);

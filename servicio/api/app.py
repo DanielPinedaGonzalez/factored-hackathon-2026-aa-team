@@ -413,7 +413,7 @@ def cola_equipo(claims: dict = Depends(equipo("asesor", "supervisor", "observado
         mios = c.execute("""select traspaso_id, numero, habilidad, idioma, prioridad, estado, llegada, primera_respuesta_vence
                             from atencion.traspasos where asesor = %s and estado in ('asignado','en_atencion','esperando_cliente')""",
                          (claims["sub"],)).fetchall() if claims["rol"] == "asesor" else []
-        yo = c.execute("""select a.habilidad, a.idiomas, coalesce(p.presencia, 'desconectado') as presencia
+        yo = c.execute("""select a.employee_code, a.habilidad, a.idiomas, a.turno, a.pais, coalesce(p.presencia, 'desconectado') as presencia
                           from atencion.asesores a left join lateral (select presencia from atencion.asesor_presencia_eventos e
                           where e.employee_code = a.employee_code order by id desc limit 1) p on true
                           where a.employee_code = %s""", (claims["sub"],)).fetchone() if claims["rol"] == "asesor" else None
@@ -935,4 +935,12 @@ def auditoria(ref: str, claims: dict = Depends(equipo("supervisor"))):
 
 WEB = RAIZ / "apps" / "web"
 if WEB.exists():
-    app.mount("/app", StaticFiles(directory=WEB, html=True), name="web")
+    class EstaticosQueSeRevalidan(StaticFiles):
+        """Sin esto el navegador adivina cuánto guardar cada archivo y, tras un despliegue, muestra la versión vieja hasta una recarga forzada.
+        `no-cache` no impide guardar: obliga a preguntar si cambió (el ETag responde 304 si no cambió)."""
+        async def get_response(self, path, scope):
+            r = await super().get_response(path, scope)
+            r.headers["Cache-Control"] = "no-cache"
+            return r
+
+    app.mount("/app", EstaticosQueSeRevalidan(directory=WEB, html=True), name="web")
