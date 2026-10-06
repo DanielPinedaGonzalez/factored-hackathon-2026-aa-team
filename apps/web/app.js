@@ -549,7 +549,7 @@ function vistaOperacion(raiz) {
   raiz.append(zona);
   async function entrar(codigo, rol) {
     const r = await llamar("/equipo/entrar", { metodo: "POST", cuerpo: { employee_code: codigo, rol } });
-    est.token = r.token; est.rol = rol; guardado("token_equipo", r.token); guardado("rol_equipo", rol); pintar();
+    est.token = r.token; est.rol = rol; est.caso = est.reclamo = null; guardado("token_equipo", r.token); guardado("rol_equipo", rol); pintar();
   }
   function login() {
     const cod = el("select", {}, el("option", { value: "E30142" }, tr("E30142 · fraude · es, pt")),
@@ -582,7 +582,8 @@ function vistaOperacion(raiz) {
     const der = el("div", { id: "caso" }, el("div", { class: "panel suave" }, tr("Elige un caso.")));
     zona.replaceChildren(el("div", { class: "grid3" }, izq, der));
     pintarLista(izq, cola, reclamos);
-    if (est.caso) abrir(est.caso);
+    if (est.reclamo) abrirReclamo(est.reclamo); else if (est.caso) abrir(est.caso);
+    else if (reclamos && reclamos.mios && reclamos.mios.length) abrirReclamo(reclamos.mios[0].reclamo_id);     // un asesor atiende un reclamo a la vez: el que ya tiene se abre solo
     // La lista se actualiza sola: un caso asignado tiene 60 s para abrirse (PROCESOS §P2.4)
     clearInterval(est.sondeo);
     est.sondeo = setInterval(async () => {
@@ -627,7 +628,7 @@ function vistaOperacion(raiz) {
       el("div", { class: "fila" }, el("button", { onclick: async () => {
         try { const t = await llamar("/equipo/reclamos/siguiente", { metodo: "POST", token: est.token });
           if (t.reclamo_id) abrirReclamo(t.reclamo_id); else aviso.textContent = tr("No hay reclamos en la cola."); pintar(); }
-        catch (e) { aviso.textContent = e.estado === 422 ? JSON.parse(e.detalle || "{}").detail : razon(e); } } }, tr("Tomar el siguiente")), aviso),
+        catch (e) { aviso.textContent = e.estado === 422 ? tr("Ya tienes un reclamo en revisión: termínalo (decidir y cerrar) antes de tomar el siguiente.") : razon(e); } } }, tr("Tomar el siguiente")), aviso),
       el("div", { class: `suave ${r.por_vencer ? "mal" : ""}` }, `${tr("En la cola")}: ${r.cola.length} · ${tr("por vencer")}: ${r.por_vencer}` +
         (r.cola[0] ? ` · ${tr("el siguiente")}: ${r.cola[0].numero} (${cod(r.cola[0].tipo_disputa)}, P${r.cola[0].prioridad}, ${r.cola[0].dias_habiles_restantes} ${tr("días hábiles")})` : "")),
       ...r.mios.map(m => el("div", { class: "fila" }, el("button", { class: `sec ${m.alarma ? "p1" : ""}`, onclick: () => abrirReclamo(m.reclamo_id) },
@@ -635,7 +636,10 @@ function vistaOperacion(raiz) {
   }
 
   async function abrirReclamo(id) {
-    const d = await llamar(`/equipo/reclamos/${id}`, { token: est.token });
+    est.reclamo = id; est.caso = null;          // se recuerda: la pantalla se redibuja tras cada acción y no debe borrar el reclamo que se está atendiendo
+    let d;
+    try { d = await llamar(`/equipo/reclamos/${id}`, { token: est.token }); }
+    catch (e) { est.reclamo = null; return $("#caso").replaceChildren(el("div", { class: "panel mal" }, `${tr("No se pudo")}: ${razon(e)}`)); }
     const rec = d.reclamo, mv = d.movimiento || {};
     const res = el("span", { class: "suave" });
     const hacer = async (ruta, cuerpo) => {
@@ -668,7 +672,7 @@ function vistaOperacion(raiz) {
       ["resuelto_a_favor", "resuelto_en_contra", "no_procede"].includes(rec.estado) ? el("button", { onclick: () => hacer("cerrar") }, tr("Cerrar el reclamo")) : null,
       res));
   }
-  const salir = () => el("button", { class: "sec", onclick: () => { guardado("token_equipo", ""); est.token = null; pintar(); } }, tr("Salir"));
+  const salir = () => el("button", { class: "sec", onclick: () => { guardado("token_equipo", ""); est.token = null; est.caso = est.reclamo = null; pintar(); } }, tr("Salir"));
   const pct = t => t && t.denominador ? `${t.numerador}/${t.denominador} = ${Math.round(t.tasa * 100)} %` : tr("no definido");
   const lista = o => Object.entries(o || {}).map(([k, v]) => `${k}: ${v}`).join(" · ") || "—";
 
@@ -788,7 +792,7 @@ function vistaOperacion(raiz) {
         ev.decision.acciones_permitidas && ev.decision.acciones_permitidas.length ? el("span", { class: "suave" }, ` · ${tr("puede hacerse sin una persona")}: ${ev.decision.acciones_permitidas.join(", ")}`) : "") : "");
   }
   async function abrir(id) {
-    est.caso = id;
+    est.caso = id; est.reclamo = null;
     const c = await llamar(`/equipo/caso/${id}`, { token: est.token });
     await llamar(`/equipo/caso/${id}/tomar`, { metodo: "POST", token: est.token }).catch(() => {});
     const p = c.paquete, texto = el("textarea", { rows: 3, style: "width:100%" });
