@@ -38,7 +38,10 @@ def test_b4_fuera_de_alcance_con_categoria_clave_encuentra_el_articulo_de_la_cla
     limpiar_cliente(cid)
     m = ModeloFalso(Guion(["IDIOMA: es\nCOMANDO: fuera_de_alcance | clave"]))
     procesar("c_" + secrets.token_hex(6), Entrada(texto="se me olvidó la clave, cámbienmela"), token, m)
-    assert any(e["clase"] == "RESPONDER" and e["articulo"].startswith("publico.cambiar-o-recuperar-tu-clave") for e in _estado_comunicable(m))
+    # El respaldo por texto completo ordena por rango: dos artículos de la clave responden bien («cambiar o recuperar» y «nunca te pedimos»); lo que se prueba es que
+    # una gestión fuera de alcance con categoría «clave» halla un artículo de la clave y no uno por una palabra suelta. El camino normal usa el tema del catálogo cerrado.
+    assert any(e["clase"] == "RESPONDER" and e["articulo"].startswith(("publico.cambiar-o-recuperar-tu-clave", "publico.nunca-te-pedimos-tu-clave"))
+               for e in _estado_comunicable(m))
 
 
 def test_b3_con_tema_del_catalogo_si_responde_con_ese_articulo():

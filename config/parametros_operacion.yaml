@@ -13,3 +13,10 @@ dias_espera_respuesta_cliente:
   maximo: 90
   unidad: días
   descripcion: "Días que un reclamo espera la respuesta del cliente antes de cerrarse por vencimiento; el cliente recibe el aviso."
+bloqueo_inmediato_a_pedido:
+  inicial: 0              # 0 = el cliente confirma con un toque antes de bloquear; 1 = bloquea de una vez cuando lo pide (decisión del banco)
+  minimo: 0
+  maximo: 1
+  unidad: 0 o 1
+  descripcion: "Si el cliente pide bloquear su tarjeta, 1 la bloquea de inmediato (queda el registro y la relectura) y 0 pide antes una confirmación. Solo aplica a lo que el cliente pide; lo que el sistema ofrece (por ejemplo, tras negar un cargo) siempre pide confirmar."
+

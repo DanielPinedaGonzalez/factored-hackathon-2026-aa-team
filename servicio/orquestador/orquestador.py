@@ -566,7 +566,7 @@ def _elegir(ctx: Contexto, alias: str):
         else:
             grafo.proponer(ctx, "bloquear_producto", product_id, {"product_id": product_id, "origen": "cliente",
                                                                  "motivo": ",".join(despues or []) or None, "producto_texto": texto},
-                           None, {"PRODUCTO": texto}, traspaso_despues=despues)
+                           None, {"PRODUCTO": texto}, traspaso_despues=despues, de_una=grafo.bloqueo_inmediato(ctx))
         e.opciones_mostradas = []
         return
     c = grafo._cargo(e, alias)

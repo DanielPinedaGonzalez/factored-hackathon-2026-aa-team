@@ -173,8 +173,10 @@ def productos_para_proteger(ctx: Contexto) -> list[dict]:
 # ---------------------------------------------------------------- acciones: proponer y ejecutar
 
 def proponer(ctx: Contexto, accion: str, recurso: str, parametros: dict, alias: str | None, valores: dict | None = None,
-             traspaso_despues: list[str] | None = None, datos_ui: dict | None = None, traspaso_extra: dict | None = None):
-    """N7: la acción exacta, con su intención de un solo uso. `valores` van al estado comunicable como marcadores;
+             traspaso_despues: list[str] | None = None, datos_ui: dict | None = None, traspaso_extra: dict | None = None,
+             de_una: bool = False):
+    """N7: la acción exacta, con su intención de un solo uso. Con `de_una` (el cliente la pidió y el banco decidió no pedir otra confirmación,
+    `bloqueo_inmediato_a_pedido`) se ejecuta en el mismo turno, por el mismo camino: intención, clave de idempotencia y relectura. `valores` van al estado comunicable como marcadores;
     `datos_ui`, solo a la tarjeta de confirmación de la interfaz. `traspaso_despues` son los motivos del traspaso que sigue a la
     acción y `traspaso_extra` lo que el traspaso necesita de este turno: de la política, `supera_umbral` y `plazo` (la prioridad), y,
     para el paquete del asesor, la `senal` de M1 y la `decision`. Se guardan con la intención porque el traspaso se pide al
@@ -185,6 +187,10 @@ def proponer(ctx: Contexto, accion: str, recurso: str, parametros: dict, alias: 
                                         **({"traspaso_extra": traspaso_extra} if traspaso_extra else {})})
     ctx.estado.accion_pendiente = AccionPendiente(codigo=accion, alias=alias, action_intent_id=aid,
                                                   session_id=ctx.session_id, expira=expira)
+    if de_una:
+        ctx.cambio = True
+        ejecutar_pendiente(ctx, version=ctx.estado.version + 1)         # la versión con la que se creó la intención
+        return
     ctx.estado.nodo = Nodo.N7
     ctx.ec.ofrecer(accion, alias, valores)
     ctx.ec.preguntar("confirmar_accion", alias)
@@ -193,7 +199,13 @@ def proponer(ctx: Contexto, accion: str, recurso: str, parametros: dict, alias: 
     ctx.cambio = True
 
 
-def ejecutar_pendiente(ctx: Contexto, action_intent_id: str | None = None):
+def bloqueo_inmediato(ctx: Contexto) -> bool:
+    """El banco decide (parámetro de operación) si lo que el cliente pide de bloquear se hace de una vez o pide confirmar."""
+    from servicio.registro import parametros
+    return parametros.leer(ctx.c, "bloqueo_inmediato_a_pedido") == 1
+
+
+def ejecutar_pendiente(ctx: Contexto, action_intent_id: str | None = None, version: int | None = None):
     """N7 → N8 → N9: confirma (INV-CONFIRMA), ejecuta con la clave de idempotencia y relee (INV-VERIFICA)."""
     p = ctx.estado.accion_pendiente
     aid = action_intent_id or (p.action_intent_id if p else None)
@@ -201,7 +213,7 @@ def ejecutar_pendiente(ctx: Contexto, action_intent_id: str | None = None):
         ctx.ec.preguntar("que_necesita")
         return
     try:
-        i = intenciones.confirmar(ctx.c, aid, ctx.session_id, ctx.estado.version)
+        i = intenciones.confirmar(ctx.c, aid, ctx.session_id, ctx.estado.version if version is None else version)
     except intenciones.ConfirmacionInvalida as e:
         _paso(ctx, "confirmacion", "fallo", motivo=str(e))
         vieja = ctx.c.execute("select * from atencion.intenciones_accion where action_intent_id = %s", (aid,)).fetchone()
@@ -606,7 +618,8 @@ def ruta(ctx: Contexto, intencion: str, interp: Interpretacion | None):
             p = prods[0]
             texto = formato.producto(p["tipo"], p["ultimos4"], ctx.idioma)
             proponer(ctx, "bloquear_producto", p["product_id"], {"product_id": p["product_id"], "origen": "cliente",
-                                                                "producto_texto": texto}, None, {"PRODUCTO": texto})
+                                                                "producto_texto": texto}, None, {"PRODUCTO": texto},
+                     de_una=bloqueo_inmediato(ctx))
         else:
             elegir_producto(ctx, prods, "tarjetas.bloquear")
     elif intencion == "tarjetas.desbloquear":
