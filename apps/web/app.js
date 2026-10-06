@@ -610,6 +610,10 @@ function vistaOperacion(raiz) {
     est.sondeo = setInterval(async () => {
       if (!document.body.contains(izq)) return clearInterval(est.sondeo);
       const d = await datosOperacion().catch(() => null);
+      // «Disponible» caduca si no hay señales de vida: mientras la pantalla esté abierta y disponible, se renueva (el servidor no asigna a quien cerró la pantalla)
+      if (d && d.cola.yo && d.cola.yo.presencia === "disponible" && Date.now() - (est.renovada || 0) > 40000) {
+        est.renovada = Date.now(); llamar("/equipo/presencia", { metodo: "POST", token: est.token, cuerpo: { presencia: "disponible", capacidad: 2 } }).catch(() => null);
+      }
       const hash = d && JSON.stringify(d);
       if (d && hash !== est.ultimo) { est.ultimo = hash; est.yo = d.cola.yo; pintarLista(izq, d.cola, d.reclamos); }     // solo se redibuja si algo cambió
     }, 5000);

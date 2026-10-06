@@ -413,10 +413,12 @@ def cola_equipo(claims: dict = Depends(equipo("asesor", "supervisor", "observado
         mios = c.execute("""select traspaso_id, numero, habilidad, idioma, prioridad, estado, llegada, primera_respuesta_vence
                             from atencion.traspasos where asesor = %s and estado in ('asignado','en_atencion','esperando_cliente')""",
                          (claims["sub"],)).fetchall() if claims["rol"] == "asesor" else []
-        yo = c.execute("""select a.employee_code, a.habilidad, a.idiomas, a.turno, a.pais, coalesce(p.presencia, 'desconectado') as presencia
-                          from atencion.asesores a left join lateral (select presencia from atencion.asesor_presencia_eventos e
+        yo = c.execute("""select a.employee_code, a.habilidad, a.idiomas, a.turno, a.pais,
+                                 case when p.presencia = 'disponible' and p.creado < now() - make_interval(secs => %s) then 'desconectado'
+                                      else coalesce(p.presencia, 'desconectado') end as presencia
+                          from atencion.asesores a left join lateral (select presencia, creado from atencion.asesor_presencia_eventos e
                           where e.employee_code = a.employee_code order by id desc limit 1) p on true
-                          where a.employee_code = %s""", (claims["sub"],)).fetchone() if claims["rol"] == "asesor" else None
+                          where a.employee_code = %s""", (enrutador.config().get("presencia_vigente_s", 90), claims["sub"])).fetchone() if claims["rol"] == "asesor" else None
     return {"cola": cola, "mios": mios, "yo": yo}
 
 

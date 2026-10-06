@@ -71,13 +71,16 @@ def elegibles(asesores: list[dict], habilidad: str, idioma: str, nivel: int, aho
 
 
 def _asesores(c) -> list[dict]:
+    """La plantilla con su presencia. «Disponible» solo vale si el asesor dio señales de vida hace poco (`presencia_vigente_s`): quien cerró la pantalla sin
+    ponerse en pausa no recibe casos (antes, un asesor «disponible» de una prueba anterior se quedaba con los casos de quien sí estaba conectado)."""
     return c.execute("""select a.employee_code, a.habilidad, a.idiomas, a.canal, a.turno, a.pais, a.demo,
-                               coalesce(p.presencia, case when a.demo then 'desconectado' else 'disponible' end) as presencia,
+                               case when p.presencia = 'disponible' and p.creado < now() - make_interval(secs => %s) then 'desconectado'
+                                    else coalesce(p.presencia, case when a.demo then 'desconectado' else 'disponible' end) end as presencia,
                                coalesce(p.capacidad, 2) as capacidad, coalesce(k.carga, 0) as carga, k.ultima_asignacion
                         from atencion.asesores a
-                        left join lateral (select presencia, capacidad from atencion.asesor_presencia_eventos e
+                        left join lateral (select presencia, capacidad, creado from atencion.asesor_presencia_eventos e
                                            where e.employee_code = a.employee_code order by id desc limit 1) p on true
-                        left join atencion.asesor_carga k using (employee_code)""").fetchall()
+                        left join atencion.asesor_carga k using (employee_code)""", (config().get("presencia_vigente_s", 90),)).fetchall()
 
 
 def nivel_desborde(habilidad: str, idioma: str, prioridad: int, llegada: datetime, ahora: datetime,

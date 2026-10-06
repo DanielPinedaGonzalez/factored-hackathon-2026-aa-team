@@ -470,3 +470,16 @@ def test_la_web_se_revalida_siempre_y_la_cola_dice_quien_es_el_asesor():
     yo = cli.get("/equipo/cola", headers=_equipo("E81176", "asesor")).json()["yo"]
     assert yo["employee_code"] == "E81176" and yo["habilidad"] == "reclamos" and "es" in yo["idiomas"] and yo["turno"] and yo["pais"]
 
+
+def test_disponible_caduca_si_el_asesor_no_da_senales_de_vida():
+    """5-oct: un asesor «disponible» de una prueba anterior se quedaba con los casos de quien sí estaba conectado (la presencia no caducaba)."""
+    from servicio.datos.db import transaccion
+    from servicio.enrutador import enrutador
+    _limpiar_asesores()
+    with admin() as c:
+        c.execute("insert into atencion.asesor_presencia_eventos (employee_code, presencia, capacidad, creado) values ('E81176','disponible',2, now() - interval '10 minutes')")
+        c.execute("insert into atencion.asesor_presencia_eventos (employee_code, presencia, capacidad) values ('E30142','disponible',2)")
+    with transaccion("app_enrutador") as c:
+        presencia = {a["employee_code"]: a["presencia"] for a in enrutador._asesores(c)}
+    assert presencia["E81176"] == "desconectado" and presencia["E30142"] == "disponible"
+

@@ -20,3 +20,4 @@ zona_horaria_por_defecto: America/Bogota     # quien escribe sin sesión: país 
 plazo_interno_investigacion_dias: 15           # si la regla del país es desconocida (§P3)
 asesores_demo_siempre_en_turno: true           # las identidades de demo reciben casos a cualquier hora (declarado)
 asesores_demo_cualquier_habilidad: true       # y casos de cualquier habilidad: quien entra a la demo no tiene que saber con qué asesor entrar (declarado; el idioma sí se respeta)
+presencia_vigente_s: 90                        # «disponible» caduca si el asesor no da señales de vida (la pantalla del asesor la renueva): no se asigna a quien ya se fue
