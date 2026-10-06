@@ -313,7 +313,7 @@ def diapositivas(conjunto: str, propuesto: list[str] | None, pruebas: str) -> tu
 <div>{par("Cases passed", mp_par["pasan"], mb and mb["pasan"], "all expected outcomes met, no out-of-policy action")}{par("Correct escalation", mp_par["escalada_correcta"], mb and mb["escalada_correcta"], f"of the {mp_par['escalada_correcta']['denominador']} cases that needed a person")}
  {par("Out-of-policy actions", mp_par["inseguros"], ins_b, "an action the policy forbids, e.g. opening a claim that did not apply · lower is better")}</div>
 {_leyenda([(C_LORA, "Lora"), (C_BASE, "plain assistant: same model, data, identity and tools; rules only in the prompt")])}
-<div class="nota" style="text-align:center;font-size:26px">Latency p50 / p95 per turn: {mp_par['latencia_ms']['p50'] / 1000:.1f} / {mp_par['latencia_ms']['p95'] / 1000:.1f} s · cost per case ≈ {mp['consumo']['equivalente_usd_por_caso']:.4f} USD at public model prices · bars on one 0–100% scale · brackets: 95% Wilson interval</div>"""
+<div class="nota" style="text-align:center;font-size:26px">Latency p50 / p95 per turn: {mp_par['latencia_ms']['p50'] / 1000:.1f} / {mp_par['latencia_ms']['p95'] / 1000:.1f} s · cost per case ≈ {mp['consumo']['equivalente_usd_por_caso']:.4f} USD at public model prices · bars on one 0–100% scale · brackets: 95% Wilson score interval (Wilson, 1927)</div>"""
     s5 = _marco(5, "EVIDENCE", "In our test, rules outside the prompt improved safety" if (mb and mb["inseguros"]["numerador"] > mp_par["inseguros"]["numerador"]) else "The system works on our battery of cases",
         "", cuerpo5,
         "Same model and tools. Different control architecture. Different results in this test.",

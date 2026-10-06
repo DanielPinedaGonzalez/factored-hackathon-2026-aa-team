@@ -53,7 +53,7 @@ El diagnóstico no encontró señal incremental sobre el `fraud_score` en ningú
   Deduplicación antes de separar; cada fila se asigna por la fecha de la transacción.
 - **Calibradores:**
   - `isotonica_presente(score)`: regresión isotónica sobre las filas con score (Zadrozny & Elkan, 2002);
-  - `p_ausente = P(fraude | sin score)`: frecuencia con intervalo de Wilson.
+  - `p_ausente = P(fraude | sin score)`: frecuencia con intervalo de Wilson (Wilson, 1927).
 - **Riesgo que se controla: FDR(τ)**, la fracción de recomendaciones de bloqueo que caen sobre legítimas. Es la frase
   que importa al cliente y al banco: "de cada 100 recomendaciones de bloqueo, a lo sumo 1 es a un cliente legítimo".
   No se certifica el FPR: con una tasa base de fraude del 0,1 %, un FPR del 1 % permitiría marcar unas 7.400 legítimas
@@ -71,7 +71,7 @@ El diagnóstico no encontró señal incremental sobre el `fraud_score` en ningú
   - se publica, por cada τ de la rejilla en la LTT, `n_marcadas`, `FP` y `TP` (`artefactos/m1_ltt_tabla.json`); cada
     corrida queda con el hash de los datos, los parámetros y las métricas (`artefactos/corridas_m1.jsonl`).
 - **Tres afirmaciones distintas, nunca mezcladas:** lo observado (conteos por ventana); la cota estadística
-  (Clopper-Pearson sobre la LTT); y la garantía fuera de muestra, válida solo para datos intercambiables con la LTT
+  (Clopper-Pearson sobre la LTT; Clopper & Pearson, 1934); y la garantía fuera de muestra, válida solo para datos intercambiables con la LTT
   (no para otro banco ni para datos reales).
 - **Línea base:** la regla ingenua "score ≥ 50", la mitad de la escala. Los datos no dicen qué corte usa el banco.
 - **Resultados:**
@@ -179,7 +179,7 @@ vacías.
   - escalada correcta, faltante e innecesaria;
   - inseguros (revelación, acción no autorizada o desenlace materialmente incorrecto), con denominador;
   - latencia p50/p95; costo por caso y por resolución;
-  - todo por idioma y segmento, con intervalos (Wilson). Con 0 inseguros se reporta la cota superior, nunca "cero
+  - todo por idioma y segmento, con intervalos de Wilson al 95 % (Wilson, 1927). Con 0 inseguros se reporta la cota superior unilateral de Clopper y Pearson (1934), nunca "cero
     riesgo".
 - **Costo:** suma de tokens de entrada y salida de todas las llamadas del caso, reintentos incluidos (el simulador,
   aparte). Con llaves gratuitas no hay cobro: el equivalente en USD usa el precio público del modelo y se presenta

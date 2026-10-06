@@ -555,7 +555,7 @@ function vistaOperacion(raiz) {
     const cod = el("select", {}, el("option", { value: "E30142" }, tr("E30142 · fraude · es, pt")),
       el("option", { value: "E81176" }, tr("E81176 · reclamos · es, pt")), el("option", { value: "E17183" }, tr("E17183 · general · es, pt")));
     zona.replaceChildren(el("div", { class: "panel", style: "max-width:520px" }, el("h3", {}, tr("Entrar (identidades de la demo)")),
-      bilingue(["In the demo, any advisor receives any case: pick one, press “Available” and open the case under “My cases”. The supervisor sees the whole system (queues, alarms, audit) and can step in.",
+      bilingue(["In the demo, any human agent receives any case: pick one, press “Available” and open the case under “My cases”. The supervisor sees the whole system (queues, alarms, audit) and can step in.",
         "En la demo, cualquier asesor recibe cualquier caso: elige uno, pulsa «Disponible» y abre el caso en «Mis casos». El supervisor ve todo el sistema (colas, alarmas, auditoría) e interviene."]),
       el("div", { class: "fila" }, cod, el("button", { onclick: () => entrar(cod.value, "asesor") }, tr("Entrar como asesor")),
         el("button", { class: "sec", onclick: () => entrar("SUP1", "supervisor") }, tr("Entrar como supervisor")))));
@@ -584,7 +584,7 @@ function vistaOperacion(raiz) {
     return el("div", { class: "panel" },
       el("h3", {}, `${tr("Asesor")} ${yo.employee_code} · ${tr("especialidad")}: ${cod(yo.habilidad)}`),
       el("div", { class: "suave" }, `${tr("Idiomas")}: ${(yo.idiomas || []).join(", ")} · ${tr("Estado")}: ${cod(yo.presencia)}`),
-      bilingue(["This is the bank's side: the agents' message centre. Cases are classified by specialty and language, and you receive the ones that match (in this demo, any agent receives any case). Pick a case on the left to work on it.",
+      bilingue(["This is the bank's side: the human agents' message centre. Cases are classified by specialty and language, and you receive the ones that match (in this demo, any human agent receives any case). Pick a case on the left to work on it.",
         "Este es el lado del banco: el centro de mensajes de los asesores. Los casos se clasifican por especialidad e idioma y recibes los que te corresponden (en esta demo, cualquier asesor recibe cualquier caso). Elige un caso a la izquierda para atenderlo."]),
       el("h4", {}, tr("Desde aquí puedes")), el("ul", {}, ...cosas.map(c => el("li", {}, bilingue(c)))));
   }
@@ -848,6 +848,7 @@ function vistaOperacion(raiz) {
     let origen = "escrito";
     const cont = el("div", { class: "panel" },
       el("h3", {}, `${tr("Caso")} ${c.traspaso.numero} · ${cod(c.traspaso.habilidad)} · ${tr("prioridad")} ${c.traspaso.prioridad} · ${c.traspaso.idioma}`),
+      el("h4", {}, tr("Resumen del caso")),
       el("div", {}, el("strong", {}, tr("Solicitud: ")), p.solicitud || (p.sin_resumen_ia ? tr("(sin resumen de IA: el asistente no estaba disponible)") : "—")),
       el("div", {}, ...p.motivo_traspaso.map(m => el("span", { class: "etiqueta" }, m)), p.identidad_verificada ? "" : el("span", { class: "etiqueta mal" }, tr("identidad no verificada")),
         p.evidencia && p.evidencia.dinero_en_juego ? el("span", { class: "etiqueta" }, tr("dinero en juego: monto en el 10 % más alto de su tipo")) : ""),
@@ -870,6 +871,7 @@ function vistaOperacion(raiz) {
       el("h4", {}, tr("Guía del caso")), el("ol", {}, ...c.guia.pasos.map(x => el("li", {}, x))),
       el("div", {}, ...c.guia.articulos.map(a => el("span", { class: "etiqueta" }, a))),
       buscador,
+      el("h4", {}, tr("Responder al cliente (le llega a su chat)")),
       texto,
       el("div", { class: "fila" },
         el("button", { class: "sec", onclick: async () => { const r = await llamar(`/equipo/caso/${id}/sugerir`, { metodo: "POST", token: est.token });

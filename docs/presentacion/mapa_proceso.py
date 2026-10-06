@@ -62,14 +62,16 @@ AP, CN = (395, 300), (600, 300)
 H1, H2, H3, H5 = (600, 415), (775, 415), (945, 415), (1140, 415)
 
 
-def _texto(cx, cy, lineas, color, tam=12.5, peso=600):
+def _texto(cx, cy, lineas, color, tam=14.5, peso=600):
     n = len(lineas)
-    ts = "".join(f'<tspan x="{cx}" y="{cy - (n - 1) * 8 + i * 16 + 5}">{escape(t)}</tspan>' for i, t in enumerate(lineas))
+    paso = 17.5
+    ts = "".join(f'<tspan x="{cx}" y="{cy - (n - 1) * paso / 2 + i * paso + 5}">{escape(t)}</tspan>' for i, t in enumerate(lineas))
     return f'<text text-anchor="middle" font-size="{tam}" font-weight="{peso}" fill="{color}">{ts}</text>'
 
 
 def _caja(centro, w, h, lineas, clase, forma="caja"):
     cx, cy = centro
+    w, h = w + 8, h + 6
     fondo, borde, color = COLORES[clase]
     if forma == "rombo":
         f = f'<polygon points="{cx},{cy - h / 2} {cx + w / 2},{cy} {cx},{cy + h / 2} {cx - w / 2},{cy}" fill="{fondo}" stroke="{borde}" stroke-width="2"/>'
@@ -83,11 +85,11 @@ def _etiqueta(x, y, lineas, ancla="middle"):
     lineas = lineas if isinstance(lineas, list) else [lineas]
     s = ""
     for i, t in enumerate(lineas):
-        ancho = 6.2 * len(t) + 8
+        ancho = 7.0 * len(t) + 8
         x0 = x - ancho / 2 if ancla == "middle" else (x - ancho + 4 if ancla == "end" else x - 4)
         yy = y + i * 14
         s += (f'<rect x="{x0}" y="{yy - 11}" width="{ancho}" height="14" rx="3" fill="#ffffff" fill-opacity="0.94"/>'
-              f'<text x="{x}" y="{yy}" text-anchor="{ancla}" font-size="11.5" fill="#334155">{escape(t)}</text>')
+              f'<text x="{x}" y="{yy}" text-anchor="{ancla}" font-size="13" fill="#334155">{escape(t)}</text>')
     return s
 
 
@@ -104,7 +106,7 @@ def svg(idioma: str = "en") -> str:
          '<path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker></defs>']
     for (y0, y1, c), nombre in zip(BANDAS, T["carriles"]):
         s.append(f'<rect x="4" y="{y0}" width="{ANCHO - 8}" height="{y1 - y0}" rx="10" fill="{c}" stroke="#d9e2ef"/>')
-        s.append(f'<text x="14" y="{y0 + 16}" font-size="11" font-weight="700" fill="#64748b" letter-spacing="0.6">{escape(nombre)}</text>')
+        s.append(f'<text x="14" y="{y0 + 16}" font-size="12.5" font-weight="700" fill="#64748b" letter-spacing="0.6">{escape(nombre)}</text>')
 
     # --- flechas (van debajo de las cajas)
     s += [
@@ -146,7 +148,7 @@ def svg(idioma: str = "en") -> str:
     for clase, nombre in T["leyenda"]:
         fondo, borde, _ = COLORES[clase]
         s.append(f'<rect x="{x}" y="494" width="14" height="14" rx="3" fill="{fondo}" stroke="{borde}" stroke-width="1.5"/>'
-                 f'<text x="{x + 20}" y="506" font-size="12" fill="#475569">{escape(nombre)}</text>')
+                 f'<text x="{x + 20}" y="506" font-size="13" fill="#475569">{escape(nombre)}</text>')
         x += 120
     s.append("</svg>")
     return "".join(s)
