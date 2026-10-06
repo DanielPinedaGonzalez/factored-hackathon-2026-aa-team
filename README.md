@@ -19,7 +19,7 @@ or hands the case to the right person with full context.
 **What is delivered.** This repository (code, tests, documentation); the deployed demo and the video (the links come in the submission, the demo link carries an access
 code); six slides in English (`docs/presentacion/presentacion.pdf`); the HTML version (`presentacion.html`) adds speaker notes and a presenter mode (`F` full screen, `P` speaker window).
 
-**Try it.** Open the link and press **Try it** (*Probar*): pick one of seven ready-made demo customers (no need to search a customer), the session is already open, and you can tap a suggested message or write anything. On the right you see the customer's account (no internal identifiers) and, after every message, what the system did step by step. *End session* clears everything. The chat lives inside the bank app and inherits its session. Pick a demo identity (`DEMO-1001` to `DEMO-1007`: normal path, ambiguous, needs a person, stolen card,
+**Try it.** The demo runs on free hosting with limited resources and a free model quota: **the first load can take about a minute while the service starts**, and under heavy use a turn may pass to a person. Open the link and press **Try it** (*Probar*): pick one of seven ready-made demo customers (no need to search a customer), the session is already open, and you can tap a suggested message or write anything. On the right you see the customer's account (no internal identifiers) and, after every message, what the system did step by step. *End session* clears everything. The chat lives inside the bank app and inherits its session. Pick a demo identity (`DEMO-1001` to `DEMO-1007`: normal path, ambiguous, needs a person, stolen card,
 Portuguese, Premium, risk signal) and write, for example, *"me salió un cobro raro de ayer, yo no hice eso"* or *"me robaron la tarjeta"*. The staff screens (live view, operation,
 system) have an **EN / ES** switch in the header; the conversation itself is in Spanish or Portuguese.
 **Launch film.** `docs/lanzamiento/lanzamiento.html` tells one customer's story in 12 scenes, from the notification to the close, with the 15-step map of the conversation staying on screen and lighting up as the narration names each step. It is generated from `docs/lanzamiento/escenas.py`; `voz.py` makes the narration (an AI voice) and `grabar.py` records it scene by scene. Open the HTML in a browser, press `F`, advance with Space (`A` runs it alone, `V` adds the voice, `P` opens a window with the line to say).
@@ -71,7 +71,7 @@ tarjeta, aclara, se abstiene o pasa el caso a la persona correcta del equipo con
 
 ## Cómo probarlo
 
-1. **Probar** (`/app/#/jurado`, la entrada): elige uno de los siete clientes «Cliente N» (Lora es una sola asistente que los atiende a todos) (`DEMO-1001`…`DEMO-1007`; el chat vive
+1. **Probar** (`/app/#/jurado`, la entrada; corre en alojamiento gratuito con recursos limitados: **la primera carga puede tardar cerca de un minuto** mientras arranca el servicio): elige uno de los siete clientes «Cliente N» (Lora es una sola asistente que los atiende a todos) (`DEMO-1001`…`DEMO-1007`; el chat vive
    dentro de la app del banco y hereda la sesión) y escribe, por ejemplo, *"me salió un cobro raro de ayer, yo no hice eso"* o
    *"me robaron la tarjeta"*. La opción «Not signed in» muestra el sitio web: ahí se pide el formulario seguro y el
    código llega al buzón del sandbox, que el formulario muestra.

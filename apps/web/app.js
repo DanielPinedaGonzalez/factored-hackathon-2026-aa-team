@@ -607,7 +607,10 @@ function vistaOperacion(raiz) {
     if (est.rol === "asesor") izq.append(el("div", { class: "fila" },
       el("button", { onclick: async () => { await llamar("/equipo/presencia", { metodo: "POST", token: est.token, cuerpo: { presencia: "disponible", capacidad: 2 } }); pintar(); } }, tr("● Disponible")),
       el("button", { class: "sec", onclick: async () => { await llamar("/equipo/presencia", { metodo: "POST", token: est.token, cuerpo: { presencia: "en_pausa", capacidad: 2 } }); pintar(); } }, tr("Pausa"))));
-    izq.append(el("h3", {}, tr("Mis casos")), ...cola.mios.map(m => el("div", { class: "fila" }, el("button", { class: "sec", onclick: () => abrir(m.traspaso_id) },
+    izq.append(el("h3", {}, tr("Mis casos")),
+      ...(cola.mios.length || est.rol !== "asesor" ? [] : [bilingue(["You have no cases yet. To get one: open “Try it”, pick a customer and write “quiero hablar con una persona”; come back here and press “Available”.",
+        "Aún no tienes casos. Para tener uno: en «Probar» elige un cliente y escribe «quiero hablar con una persona»; vuelve aquí y pulsa «Disponible»."], "suave")]),
+      ...cola.mios.map(m => el("div", { class: "fila" }, el("button", { class: "sec", onclick: () => abrir(m.traspaso_id) },
       `${m.numero} · P${m.prioridad} · ${cod(m.habilidad)} · ${m.idioma}`))), el("h3", {}, tr("Cola (enmascarada)")),
       el("table", { class: "cola" }, el("tr", {}, el("th", {}, tr("Caso")), el("th", {}, tr("Hab.")), el("th", {}, tr("Idioma")), el("th", {}, "P"), el("th", {}, tr("Estado"))),
         ...cola.cola.map(c => el("tr", {}, el("td", {}, c.numero), el("td", {}, cod(c.habilidad)), el("td", {}, c.idioma),
