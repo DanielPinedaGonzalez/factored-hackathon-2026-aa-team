@@ -550,11 +550,19 @@ function vistaOperacion(raiz) {
       el("div", { class: "fila" }, cod, el("button", { onclick: () => entrar(cod.value, "asesor") }, tr("Entrar como asesor")),
         el("button", { class: "sec", onclick: () => entrar("SUP1", "supervisor") }, tr("Entrar como supervisor")))));
   }
+  // Todo lo que la pantalla del asesor necesita, traído ANTES de dibujar: dibujar a medias (la lista primero y los reclamos cuando lleguen) hacía que
+  // la sección de reclamos desapareciera y reapareciera con cada actualización.
+  async function datosOperacion() {
+    const cola = await llamar("/equipo/cola", { token: est.token });
+    const reclamos = est.rol === "asesor" ? await llamar("/equipo/reclamos", { token: est.token }).catch(e => ({ error: razon(e) })) : null;
+    return { cola, reclamos };
+  }
+
   async function pintar() {
     if (!est.token) return login();
     if (est.rol === "supervisor") return supervisor();
-    let cola;
-    try { cola = await llamar("/equipo/cola", { token: est.token }); }
+    let cola, reclamos;
+    try { ({ cola, reclamos } = await datosOperacion()); est.ultimo = JSON.stringify({ cola, reclamos }); }
     catch (e) {
       if (sesionInvalida(e)) { guardado("token_equipo", ""); est.token = null; return login(); }
       return zona.replaceChildren(el("div", { class: "panel mal" }, `${tr("No se pudo leer la cola")}: ${razon(e)}.`), salir());
@@ -563,18 +571,19 @@ function vistaOperacion(raiz) {
     const izq = el("div", { class: "panel" });
     const der = el("div", { id: "caso" }, el("div", { class: "panel suave" }, tr("Elige un caso.")));
     zona.replaceChildren(el("div", { class: "grid3" }, izq, der));
-    pintarLista(izq, cola);
+    pintarLista(izq, cola, reclamos);
     if (est.caso) abrir(est.caso);
     // La lista se actualiza sola: un caso asignado tiene 60 s para abrirse (PROCESOS §P2.4)
     clearInterval(est.sondeo);
     est.sondeo = setInterval(async () => {
       if (!document.body.contains(izq)) return clearInterval(est.sondeo);
-      const c = await llamar("/equipo/cola", { token: est.token }).catch(() => null);
-      if (c) { est.yo = c.yo; pintarLista(izq, c); }
+      const d = await datosOperacion().catch(() => null);
+      const hash = d && JSON.stringify(d);
+      if (d && hash !== est.ultimo) { est.ultimo = hash; est.yo = d.cola.yo; pintarLista(izq, d.cola, d.reclamos); }     // solo se redibuja si algo cambió
     }, 5000);
   }
 
-  function pintarLista(izq, cola) {
+  function pintarLista(izq, cola, reclamos) {
     izq.replaceChildren();
     izq.append(el("div", { class: `suave ${cola.yo && cola.yo.presencia === "ausente" ? "mal" : ""}` },
       `${tr("Estado")}: ${cola.yo ? cod(cola.yo.presencia) : "—"}${cola.yo && cola.yo.presencia === "ausente" ? tr(" (un caso no se abrió a tiempo y volvió a la cola)") : ""}`));
@@ -594,13 +603,12 @@ function vistaOperacion(raiz) {
         ...cola.cola.map(c => el("tr", {}, el("td", {}, c.numero), el("td", {}, cod(c.habilidad)), el("td", {}, c.idioma),
           el("td", { class: `p${c.prioridad}` }, c.prioridad), el("td", {}, cod(c.estado))))),
       el("div", { class: "fila" }, el("button", { class: "sec", onclick: pintar }, tr("Actualizar")), salir()));
-    if (est.rol === "asesor") backOffice(izq);
+    if (est.rol === "asesor") backOffice(izq, reclamos);
   }
 
   // Investigación en back-office (PROCESOS §P3): la cola llega sin datos del cliente; se toma el siguiente.
-  async function backOffice(izq) {
-    let r;
-    try { r = await llamar("/equipo/reclamos", { token: est.token }); } catch (e) { return izq.append(el("div", { class: "mal" }, `${tr("Reclamos")}: ${razon(e)}`)); }
+  function backOffice(izq, r) {
+    if (!r || r.error) return izq.append(el("div", { class: "mal" }, `${tr("Reclamos")}: ${r ? r.error : "—"}`));
     const aviso = el("span", { class: "suave" });
     izq.append(el("h3", {}, tr("Reclamos por investigar")),
       el("div", { class: "fila" }, el("button", { onclick: async () => {
