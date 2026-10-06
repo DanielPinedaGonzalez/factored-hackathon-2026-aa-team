@@ -15,11 +15,11 @@ atencion:
   personas_general_y_reclamos: "de lunes a viernes de 8:00 a 17:00 y los sábados de 9:00 a 13:00, en la hora local de cada país"
 
 canales:
-  telefono: "0000 000 0000"                    # ficticio
+  telefono: "800 555 0100"                     # ficticio (los números 555 no existen)
   correo: "atencion@banco-demostracion.example"
   aplicacion: "Aplicación del banco"
 
 sucursales:                                    # ficticias, una por país de la demo
-  - {pais: MX, ciudad: "Ciudad de México", direccion: "Calle Ficticia 100", horario: "lunes a viernes de 9:00 a 16:00"}
-  - {pais: CO, ciudad: "Bogotá", direccion: "Carrera Ficticia 100", horario: "lunes a viernes de 8:00 a 16:00"}
-  - {pais: AR, ciudad: "Córdoba", direccion: "Calle Ficticia 100", horario: "lunes a viernes de 10:00 a 15:00"}
+  - {pais: MX, ciudad: "Ciudad de México", direccion: "Calle Ficticia 100", telefono: "(55) 5555 0101", horario: "lunes a viernes de 9:00 a 16:00"}
+  - {pais: CO, ciudad: "Bogotá", direccion: "Carrera Ficticia 100", telefono: "(601) 555 0102", horario: "lunes a viernes de 8:00 a 16:00"}
+  - {pais: AR, ciudad: "Córdoba", direccion: "Calle Ficticia 100", telefono: "(0351) 555 0103", horario: "lunes a viernes de 10:00 a 15:00"}
