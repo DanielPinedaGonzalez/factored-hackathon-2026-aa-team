@@ -632,8 +632,10 @@ def cola_de_reclamos(claims: dict = Depends(equipo("asesor", "supervisor"))):
     """La cola de su habilidad, sin datos del cliente, y los reclamos que ya tomó."""
     rol = "app_asesor" if claims["rol"] == "asesor" else "app_supervisor"
     with transaccion(rol, asesor_id=claims["sub"]) as c:
-        a = c.execute("select habilidad from atencion.asesores where employee_code = %s", (claims["sub"],)).fetchone()
-        habilidades = [a["habilidad"]] if a and claims["rol"] == "asesor" else ["fraude", "reclamos"]
+        a = c.execute("select habilidad, demo from atencion.asesores where employee_code = %s", (claims["sub"],)).fetchone()
+        # La demo declara que sus identidades reciben casos de cualquier habilidad (config/atencion_humana.yaml): también en el back-office.
+        cualquiera = bool(a and a["demo"] and enrutador.config().get("asesores_demo_cualquier_habilidad", False))
+        habilidades = [a["habilidad"]] if a and claims["rol"] == "asesor" and not cualquiera else ["fraude", "reclamos"]
         cola = [dict(f) for h in habilidades for f in c.execute("select * from atencion.cola_reclamos(%s)", (h,)).fetchall()]
         mios = c.execute("""select r.reclamo_id, r.numero, r.tipo_disputa, r.prioridad, r.estado, r.plazo_vence, r.creado, cl.pais
                             from atencion.reclamos r left join servicio.clientes cl using (customer_id)
@@ -651,7 +653,9 @@ def tomar_siguiente(claims: dict = Depends(equipo("asesor"))):
     import psycopg
     try:
         with transaccion("app_asesor", asesor_id=claims["sub"]) as c:
-            rid = c.execute("select atencion.tomar_siguiente_reclamo(%s) r", (claims["sub"],)).fetchone()["r"]
+            demo = c.execute("select demo from atencion.asesores where employee_code = %s", (claims["sub"],)).fetchone()
+            cualquiera = bool(demo and demo["demo"] and enrutador.config().get("asesores_demo_cualquier_habilidad", False))
+            rid = c.execute("select atencion.tomar_siguiente_reclamo(%s, %s) r", (claims["sub"], cualquiera)).fetchone()["r"]
     except psycopg.errors.RaiseException as e:
         raise _error_de_base(e)
     return {"reclamo_id": rid}

@@ -320,12 +320,20 @@ def test_cambio_de_estado_avisa_al_cliente_y_el_silencio_cierra_por_vencimiento(
     assert [a[0] for a in avisos] == ["en_revision", "esperando_cliente", "cerrado"]
 
 
-def test_investigacion_en_back_office_de_punta_a_punta():
+def _regla(monkeypatch, cualquiera: bool):
+    """La demo declara (config/atencion_humana.yaml) que sus identidades toman casos de cualquier habilidad; las pruebas de la regla de producción la apagan."""
+    from servicio.enrutador import enrutador
+    real = enrutador.config()
+    monkeypatch.setattr(enrutador, "config", lambda: {**real, "asesores_demo_cualquier_habilidad": cualquiera})
+
+
+def test_investigacion_en_back_office_de_punta_a_punta(monkeypatch):
     """PROCESOS §P3: la cola llega sin datos del cliente; el asesor de la habilidad toma el siguiente (uno a la vez), lo
     ve completo, pide información, decide con fundamento (la negativa sin explicación y documentos se rechaza), registra
     el abono solo si resolvió a favor y cierra; el supervisor reabre con motivo. Cada cambio avisa al cliente."""
     import secrets
     from tests.apoyo import limpiar_cliente, token_de
+    _regla(monkeypatch, False)                            # la regla de producción: cada asesor toma solo lo de su habilidad
     _, cid = token_de("DEMO-1001")
     limpiar_cliente(cid)
     with admin() as c:
@@ -430,3 +438,27 @@ def test_los_adjuntos_se_sirven_sin_ejecutar_nada_y_el_pdf_con_contenido_activo_
         assert v.status_code == 200 and v.headers["content-type"] == tipo
         assert v.headers["content-disposition"].startswith(disposicion)
         assert v.headers["x-content-type-options"] == "nosniff" and "sandbox" in v.headers["content-security-policy"]
+
+
+def test_en_la_demo_el_back_office_tambien_acepta_cualquier_habilidad(monkeypatch):
+    """5-oct: un reclamo de fraude no aparecía en la cola de quien entró como asesor de reclamos y el back-office se veía vacío. Con la regla declarada de la demo
+    lo ve y lo toma (la base comprueba que sea una identidad de demo)."""
+    import secrets
+    from tests.apoyo import limpiar_cliente, token_de
+    _regla(monkeypatch, True)
+    _, cid = token_de("DEMO-1001")
+    limpiar_cliente(cid)
+    with admin() as c:
+        c.execute("update atencion.reclamos set estado = 'cerrado' where estado = 'abierto' and asesor is null")
+        c.execute("update atencion.reclamos set estado = 'cerrado' where asesor in ('E30142','E81176','E17183') and estado = 'en_revision'")
+        tx = c.execute("select transaction_id, product_id from servicio.transacciones where customer_id = %s limit 1", (cid,)).fetchone()
+        rid = "rec_" + secrets.token_hex(6)
+        c.execute("""insert into atencion.reclamos (reclamo_id, numero, customer_id, transaction_id, product_id, tipo_disputa,
+                       prioridad, habilidad, estado, plazo_vence) values (%s,%s,%s,%s,%s,'no_autorizada',4,'fraude','abierto','2026-08-02')""",
+                  (rid, "R-D" + secrets.token_hex(3), cid, tx[0], tx[1]))
+    reclamos = _equipo("E81176", "asesor")                # habilidad «reclamos»: el reclamo es de «fraude»
+    assert [x["habilidad"] for x in cli.get("/equipo/reclamos", headers=reclamos).json()["cola"]] == ["fraude"]
+    assert cli.post("/equipo/reclamos/siguiente", headers=reclamos).json()["reclamo_id"] == rid
+    with admin() as c:
+        c.execute("update atencion.reclamos set estado = 'cerrado' where reclamo_id = %s", (rid,))
+
