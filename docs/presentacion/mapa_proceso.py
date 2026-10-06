@@ -14,15 +14,15 @@ ANCHO, ALTO = 1240, 514
 TEXTOS = {
     "en": {
         "carriles": ["CUSTOMER", "ASSISTANT · model + code", "HUMAN TEAM"],
-        "c1": ["“I don't recognize", "this charge”"], "c2": ["Confirms", "the action"],
-        "c3": ["Gets a real answer", "in the same chat"], "c4": ["Comes back later:", "status · add · withdraw"],
-        "a1": ["Model understands.", "Code finds the", "real charge"],
-        "p": ["Policy", "4 checks + country rules:", "may we act alone?"],
-        "a2": ["Proposes the", "allowed action"], "a3": ["Code executes and", "re-reads the real state"],
+        "c1": ["“I don't", "recognize", "this charge”"], "c2": ["Confirms", "the action"],
+        "c3": ["Gets a real", "answer in the", "same chat"], "c4": ["Comes back later:", "status · add ·", "withdraw"],
+        "a1": ["Model", "understands.", "Code finds the", "real charge"],
+        "p": ["Policy:", "4 checks +", "country rules:", "may we act alone?"],
+        "a2": ["Proposes", "the allowed", "action"], "a3": ["Code executes", "and re-reads", "the real state"],
         "ap": ["Handoff package:", "facts · actions ·", "open questions"],
         "cn": ["Tells the customer:", "“Your case goes to the", "fraud team. You are #3.”"],
-        "h1": ["Router: skill ·", "language · priority"], "h2": ["Agent sees the package,", "does not ask again"],
-        "h3": ["Agent", "decides"], "h5": ["Investigates the claim,", "decides · customer", "is notified"],
+        "h1": ["Router: skill ·", "language ·", "priority"], "h2": ["Human agent sees", "the package, does", "not ask again"],
+        "h3": ["Human", "agent", "decides"], "h5": ["Investigates the", "claim, decides ·", "customer is", "notified"],
         "si": "yes", "no": ["no: risk, high amount,", "doubt, or no model"],
         "verifica": "verified", "no_coincide": "does not match", "responde": "replies",
         "devuelve": ["returns it to the", "assistant, with a note"], "transfiere": "not mine: transfers with a note",
@@ -58,27 +58,32 @@ BANDAS = [(8, 126, "#f4f8ff"), (134, 334, "#faf7fd"), (342, 478, "#f1faf5")]
 # Centros (x, y) de cada elemento.
 C1, C2, C3, C4 = (110, 64), (600, 64), (985, 64), (1140, 64)
 A1, P, A2, A3 = (215, 205), (395, 205), (600, 205), (840, 205)
-AP, CN = (395, 300), (600, 300)
+AP, CN = (395, 304), (612, 300)
 H1, H2, H3, H5 = (600, 415), (775, 415), (945, 415), (1140, 415)
 
 
-def _texto(cx, cy, lineas, color, tam=14.5, peso=600):
+def _texto(cx, cy, lineas, color, tam=14, peso=600):
     n = len(lineas)
-    paso = 17.5
+    paso = tam * 1.18
     ts = "".join(f'<tspan x="{cx}" y="{cy - (n - 1) * paso / 2 + i * paso + 5}">{escape(t)}</tspan>' for i, t in enumerate(lineas))
     return f'<text text-anchor="middle" font-size="{tam}" font-weight="{peso}" fill="{color}">{ts}</text>'
 
 
 def _caja(centro, w, h, lineas, clase, forma="caja"):
     cx, cy = centro
-    w, h = w + 8, h + 6
+    w = w + 8
+    tam = 14
+    mas_larga = max(len(t) for t in lineas)
+    if forma == "caja":
+        tam = min(14, (w - 16) / (mas_larga * 0.56))                # que ninguna línea se salga de su caja
+    h = max(h + 6, len(lineas) * tam * 1.18 + 16) if forma != "pildora" else h + 6
     fondo, borde, color = COLORES[clase]
     if forma == "rombo":
         f = f'<polygon points="{cx},{cy - h / 2} {cx + w / 2},{cy} {cx},{cy + h / 2} {cx - w / 2},{cy}" fill="{fondo}" stroke="{borde}" stroke-width="2"/>'
     else:
         rx = h / 2 if forma == "pildora" else 8
         f = f'<rect x="{cx - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="{rx}" fill="{fondo}" stroke="{borde}" stroke-width="2"/>'
-    return f + _texto(cx, cy, lineas, color)
+    return f + _texto(cx, cy, lineas, color, tam)
 
 
 def _etiqueta(x, y, lineas, ancla="middle"):
@@ -117,13 +122,13 @@ def svg(idioma: str = "en") -> str:
         _flecha([(655, 64), (840, 64), (840, 182)]),                                   # confirma → ejecuta
         _flecha([(928, 205), (985, 205), (985, 89)]),                                  # ejecuta y verifica → respuesta
         _flecha([(470, 159), (470, 170)]),                                             # M1 → política
-        _flecha([(395, 240), (395, 273)]),                                             # política: no → paquete
-        _flecha([(460, 300), (485, 300)]),                                             # paquete → aviso al cliente
+        _flecha([(395, 246), (395, 270)]),                                             # política: no → paquete
+        _flecha([(474, 304), (489, 300)]),                                             # paquete → aviso al cliente
         _flecha([(600, 327), (600, 388)]),                                             # aviso → enrutador
         _flecha([(790, 228), (790, 262), (440, 262), (440, 273)]),                     # no coincide → paquete
         _flecha([(665, 415), (695, 415)]),                                             # enrutador → asesor ve el paquete
-        _flecha([(855, 415), (897, 415)]),                                             # → decide
-        _flecha([(993, 415), (1040, 415), (1040, 89)]),                                # responde en el mismo chat
+        _flecha([(855, 415), (880, 415)]),                                             # → decide
+        _flecha([(1012, 415), (1040, 415), (1040, 89)]),                                # responde en el mismo chat
         _flecha([(930, 375), (930, 252), (880, 252), (880, 228)]),                     # lo devuelve al asistente
         _flecha([(945, 455), (945, 468), (600, 468), (600, 442)]),                     # transfiere con una nota
         _flecha([(840, 228), (840, 345), (1100, 345), (1100, 386)], True),             # reclamo abierto → investigación
@@ -135,9 +140,9 @@ def svg(idioma: str = "en") -> str:
           _caja(C3, 150, 50, T["c3"], "cliente", "pildora"), _caja(C4, 158, 50, T["c4"], "cliente", "pildora"),
           _caja(A1, 136, 56, T["a1"], "modelo"), _caja(P, 170, 70, T["p"], "politica"),
           _caja(A2, 120, 46, T["a2"], "codigo"), _caja(A3, 175, 46, T["a3"], "codigo"),
-          _caja((530, 146), 130, 24, T["m1"], "m1", "pildora"), _caja(AP, 130, 54, T["ap"], "codigo"), _caja(CN, 230, 54, T["cn"], "codigo"),
+          _caja((530, 146), 130, 24, T["m1"], "m1", "pildora"), _caja(AP, 150, 54, T["ap"], "codigo"), _caja(CN, 230, 54, T["cn"], "codigo"),
           _caja(H1, 140, 56, T["h1"], "codigo"), _caja(H2, 160, 46, T["h2"], "persona"),
-          _caja(H3, 96, 80, T["h3"], "persona", "rombo"), _caja(H5, 162, 58, T["h5"], "persona")]
+          _caja(H3, 118, 104, T["h3"], "persona", "rombo"), _caja(H5, 162, 58, T["h5"], "persona")]
     # --- etiquetas de las flechas
     s += [_etiqueta(510, 198, T["si"]), _etiqueta(388, 254, T["no"], "end"), _etiqueta(952, 198, T["verifica"]),
           _etiqueta(650, 257, T["no_coincide"]), _etiqueta(1043, 250, T["responde"]),

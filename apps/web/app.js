@@ -154,12 +154,19 @@ function crearChat(contenedor, { alTurno } = {}) {
     return caja;
   }
 
-  async function enviar(cuerpo) {
+  async function enviar(cuerpo, renovada = false) {
     const idm = "m_" + Math.random().toString(36).slice(2);
     // Las tarjetas anteriores ya no se pueden pulsar: la acción vigente es siempre la última mostrada
     mensajes.querySelectorAll(".caja:not(.formulario) button").forEach(b => { b.disabled = true; });
     try {
       const s = await llamar("/conversacion/turno", { metodo: "POST", token: est.token, cuerpo: { conversation_id: est.conv, mensaje_cliente_id: idm, ...cuerpo } });
+      // Quien entró por la app y se encuentra con el formulario de identificación es una sesión vencida, no un visitante: la app la renueva sola (como en un banco real)
+      // y el mensaje se repite una vez; el cliente no tiene que volver a identificarse.
+      if (!renovada && guardado("canal") === "app" && guardado("documento_app") && (s.ui || []).some(u => u.tipo === "formulario_identidad")) {
+        const conv = est.conv;
+        try { await entrarApp(guardado("documento_app")); est.token = guardado("token_cliente"); est.conv = conv; guardado("conversacion", conv || ""); return enviar(cuerpo, true); }
+        catch { /* si no se puede renovar, se muestra el formulario como antes */ }
+      }
       est.conv = s.conversation_id; guardado("conversacion", s.conversation_id);
       burbuja("asistente", s.texto);
       for (const u of s.ui || []) { const n = uiElemento(u); if (n) mensajes.append(n); }
