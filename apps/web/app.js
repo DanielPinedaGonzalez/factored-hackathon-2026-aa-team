@@ -372,7 +372,7 @@ function vistaJurado(raiz) {
     };
     const alTurno = async s => {
       pintarCuenta();
-      const traza = await llamar(`/traza/${s.conversation_id}`, { token: await tokenObservador() }).catch(() => []);
+      const traza = await llamarObservador(`/traza/${s.conversation_id}`).catch(() => []);
       const ultimo = sinIds(traza[traza.length - 1]);
       pintarRegistro(ultimo, resumen, lista, true);
       queOcurrio.replaceChildren(...[notaDeTurno(ultimo)].filter(Boolean));
@@ -411,6 +411,16 @@ function vistaJurado(raiz) {
     const i = previo && guardado("token_cliente") && guardado("canal") === "app" ? demos.find(x => x.documento === previo) : null;
     if (i) elegir(previo, i);
   });
+}
+
+// El observador se identifica solo y su token vence (un token vencido llega a la API como 403): si lo rechaza, entra de nuevo una vez y repite la llamada.
+async function llamarObservador(ruta, opciones = {}) {
+  try { return await llamar(ruta, { ...opciones, token: await tokenObservador() }); }
+  catch (e) {
+    if (!sesionInvalida(e)) throw e;
+    guardado("token_observador", "");
+    return llamar(ruta, { ...opciones, token: await tokenObservador() });
+  }
 }
 
 async function tokenObservador() {
@@ -462,7 +472,7 @@ function vistaEnVivo(raiz) {
     const der = el("div", { class: "panel" }, el("h3", {}, tr("Por dentro")), queOcurrio, mapa, bilingue("Cada paso es un componente del sistema; si un paso no corrió en el turno, aparece como «no aplica»."), resumen, lista);
     cuerpo.replaceChildren(el("div", { class: "dos" }, izq, der));
     montarCliente(izq, { alTurno: async s => {
-      const traza = await llamar(`/traza/${s.conversation_id}`, { token: await tokenObservador() });
+      const traza = await llamarObservador(`/traza/${s.conversation_id}`);
       pintarRegistro(traza[traza.length - 1], resumen, lista);
       queOcurrio.replaceChildren(...[notaDeTurno(traza[traza.length - 1])].filter(Boolean));
       pintarMapa(mapa, traza);
@@ -520,7 +530,7 @@ function vistaEnVivo(raiz) {
           chat.scrollTop = 1e9;
         }
         vistos = a.turnos.length;
-        const traza = await llamar(`/traza/${r.id}`, { token: await tokenObservador() }).catch(() => []);
+        const traza = await llamarObservador(`/traza/${r.id}`).catch(() => []);
         pintarRegistro(traza[traza.length - 1], resumen, lista);
         if (a.fin) { clearInterval(t); estado.textContent = a.error ? `${tr("error")}: ${a.error}` : tr("terminó"); }
       }, 2500);
@@ -856,7 +866,7 @@ function vistaSistema(raiz) {
   async function pintar() {
     if (!document.body.contains(zona)) return clearInterval(temporizador);
     let d;
-    try { d = await llamar(`/sistema?horas=${horas}`, { token: await tokenObservador() }); }
+    try { d = await llamarObservador(`/sistema?horas=${horas}`); }
     catch (e) {
       if (sesionInvalida(e)) guardado("token_observador", "");        // token vencido: el próximo intento entra de nuevo
       zona.replaceChildren(el("div", { class: "panel mal" }, `${tr("No se pudo leer el estado del sistema")}: ${razon(e)}.`));
