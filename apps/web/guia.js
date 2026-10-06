@@ -36,7 +36,8 @@ export const NOTAS_VISTA = {
     "Siete clientes de prueba, escogidos entre los 150.000 del banco para que se diferencien en país, productos e historial. Elige uno y escríbele a Lora lo que quieras."],
   "#/cliente": ["What the customer sees: the bank app.", "Lo que ve el cliente: la app del banco."],
   "#/vista": ["The conversation, and what the system did.", "La conversación, y lo que hizo el sistema."],
-  "#/operacion": ["The bank's side: a person gets the case.", "El lado del banco: una persona recibe el caso."],
+  "#/operacion": ["The bank's side. An agent receives the cases Lora hands to a person (classified by specialty and language), works them and investigates claims; the supervisor, the owner's view, sees every queue and the operation indicators, can reassign and reopen, decides the operating parameters and audits any conversation.",
+    "El lado del banco. Un asesor recibe los casos que Lora pasa a una persona (clasificados por especialidad e idioma), los atiende e investiga reclamos; el supervisor, la vista del dueño, ve todas las colas y los indicadores de la operación, puede reasignar y reabrir, decide los parámetros de operación y audita cualquier conversación."],
   "#/sistema": ["System health: model, spend, alerts.", "Salud del sistema: modelo, gasto, alertas."],
 };
 

@@ -620,6 +620,14 @@ function vistaOperacion(raiz) {
     izq.append(el("div", { class: `suave ${cola.yo && cola.yo.presencia === "ausente" ? "mal" : ""}` },
       `${tr("Estado")}: ${cola.yo ? cod(cola.yo.presencia) : "—"}${cola.yo && cola.yo.presencia === "ausente" ? tr(" (un caso no se abrió a tiempo y volvió a la cola)") : ""}`));
     const esperando = cola.cola.length, presencia = cola.yo && cola.yo.presencia;
+    // Resumen: las cifras de lo que hay ahora, de los mismos datos que las listas de abajo
+    if (est.rol === "asesor") {
+      const chip = (rotulo, n, alerta) => el("span", { class: `etiqueta${alerta && n ? " p1" : ""}` }, `${rotulo}: ${n}`);
+      const rec = reclamos && !reclamos.error ? reclamos : { cola: [], mios: [], por_vencer: 0 };
+      izq.append(el("div", { class: "fila" }, chip(tr("Mis casos"), cola.mios.length), chip(tr("En la cola"), cola.cola.length),
+        chip(tr("prioridad alta"), cola.cola.filter(c => c.prioridad <= 2).length, true), chip(tr("Reclamos por investigar"), rec.cola.length),
+        chip(tr("por vencer"), rec.por_vencer, true)));
+    }
     if (est.rol === "asesor" && presencia && presencia !== "disponible" && esperando)       // sin esto «Mis casos» queda vacío y parece que nadie escaló
       izq.append(el("div", { class: "aviso advertencia" }, llenar(tr("Hay {} casos esperando en la cola y no estás disponible: pulsa «Disponible» para recibir los de tu habilidad."), esperando)));
     const pedidas = [...new Set(cola.cola.map(c => c.habilidad))];
