@@ -6,6 +6,20 @@
   "huella_nueva": "270836c9ca03591e",
   "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/nova-regra-do-pix-amplia-prazo-para-contestar-golpe"
  },
+ "angelopoulos2021": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "d8e286849c91ee5c",
+  "huella_nueva": "e70c419315a7543c",
+  "url": "https://arxiv.org/abs/2110.01052"
+ },
+ "angelopoulos2024": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "ca61fdb295239280",
+  "huella_nueva": "d9f48e2cdc9217cc",
+  "url": "https://arxiv.org/abs/2208.02814"
+ },
  "anthropic2025": {
   "articulos": [],
   "detectado": "2026-10-19T16:02:52+00:00",
@@ -41,6 +55,13 @@
   "huella_nueva": "b1a637bee16b0fcf",
   "url": "https://www.callcentrehelper.com/pci-compliance-call-recording-transcription-141226.htm"
  },
+ "casanueva2020": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "d53f41ecb7f6a79f",
+  "huella_nueva": "3d3a57c04a4211eb",
+  "url": "https://arxiv.org/abs/2003.04807"
+ },
  "chargebacks911": {
   "articulos": [],
   "detectado": "2026-10-19T16:02:52+00:00",
@@ -73,6 +94,20 @@
   "huella_nueva": "02b12a844b72b79c",
   "url": "https://www.crmbuyer.com/story/ai-customer-service-when-the-handoff-becomes-the-hang-up-177746.html"
  },
+ "cxtoday": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "944976883cc3d951",
+  "huella_nueva": "15ca5a4627659ba9",
+  "url": "https://www.cxtoday.com/contact-center/the-algorithm-never-blinks-why-contact-center-ai-is-creating-a-new-kind-of-agent-burnout/"
+ },
+ "debenedetti2025": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "d044c68eaee526ab",
+  "huella_nueva": "9487a6d96cf0f4e8",
+  "url": "https://arxiv.org/abs/2503.18813"
+ },
  "egain": {
   "articulos": [],
   "detectado": "2026-10-19T16:02:52+00:00",
@@ -87,6 +122,15 @@
   "huella_nueva": "befbea846bb527a9",
   "url": "https://www.elcolombiano.com/negocios/bancos-con-mas-quejas-en-colombia-2025-EB33896570"
  },
+ "fli_aiact": {
+  "articulos": [
+   "publico.privacidad-y-uso-de-ia"
+  ],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "1149629b36c71a9b",
+  "huella_nueva": "f08ecb99e7f0537a",
+  "url": "https://artificialintelligenceact.eu/high-level-summary/"
+ },
  "iapp_ar": {
   "articulos": [],
   "detectado": "2026-10-19T16:02:52+00:00",
@@ -100,6 +144,13 @@
   "huella_anterior": "6938b25ffed1a122",
   "huella_nueva": "6d2c5c0711895011",
   "url": "https://www.infobae.com/mexico/2025/12/19/te-hicieron-un-cargo-no-reconocido-condusef-explica-como-reportarlo-y-cuando-deben-reembolsarte/"
+ },
+ "li_devto": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "fb1d7571c76457f0",
+  "huella_nueva": "f7ecabe367d7650f",
+  "url": "https://dev.to/jamesli/building-a-production-grade-llm-customer-service-in-8-weeks-architecture-decisions-pitfalls-and-4nmi"
  },
  "nu_mx_a": {
   "articulos": [
@@ -180,6 +231,34 @@
   "huella_nueva": "15ef6e8010eed8a2",
   "url": "https://openrouter.ai/docs/guides/privacy/provider-logging"
  },
+ "owasp2025": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "9e4cbc4ab94a2877",
+  "huella_nueva": "5be42dc2652c97ce",
+  "url": "https://genai.owasp.org/llm-top-10/"
+ },
+ "pai2026": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "3c27582bd8cad3a4",
+  "huella_nueva": "d8442e9c7e83a0f6",
+  "url": "https://arxiv.org/abs/2608.18136"
+ },
+ "panickssery2024": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "8a40c1df4caec516",
+  "huella_nueva": "8afa7230706be7e4",
+  "url": "https://arxiv.org/abs/2404.13076"
+ },
+ "rabanser2026": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "c477a4dcbefc3116",
+  "huella_nueva": "b521fddd60b7a9b3",
+  "url": "https://arxiv.org/abs/2602.16666"
+ },
  "rasa_a": {
   "articulos": [],
   "detectado": "2026-10-19T16:02:52+00:00",
@@ -193,6 +272,13 @@
   "huella_anterior": "e187dfed26b0705b",
   "huella_nueva": "503770910fa85d8e",
   "url": "https://rasa.com/docs/learn/concepts/calm/"
+ },
+ "salesforce_b": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "e64dce9e62597358",
+  "huella_nueva": "a5367e8d0478ee8a",
+  "url": "https://trailhead.salesforce.com/content/learn/modules/omni-channel-lex/start-routing-omnichannel"
  },
  "salesforceben": {
   "articulos": [],
@@ -225,5 +311,26 @@
   "huella_anterior": "0f1883dd4dd9fd8a",
   "huella_nueva": "78bd280dca20f663",
   "url": "https://dernegocios.uexternado.edu.co/comercio-electronico/derecho-del-consumo-el-abc-de-la-reversion-de-pagos/"
+ },
+ "yao2024": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "3e84adfb2b45cf2c",
+  "huella_nueva": "487d69fc54c9d05d",
+  "url": "https://arxiv.org/abs/2406.12045"
+ },
+ "zenml": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "b79dee4157a84aa1",
+  "huella_nueva": "f12a6d0f9073dcf2",
+  "url": "https://www.zenml.io/blog/the-agent-deployment-gap-why-your-llm-loop-isnt-production-ready-and-what-to-do-about-it"
+ },
+ "zheng2023": {
+  "articulos": [],
+  "detectado": "2026-10-26T15:39:38+00:00",
+  "huella_anterior": "0bf54d7d52aa320e",
+  "huella_nueva": "880911f5504e7833",
+  "url": "https://arxiv.org/abs/2306.05685"
  }
 }
