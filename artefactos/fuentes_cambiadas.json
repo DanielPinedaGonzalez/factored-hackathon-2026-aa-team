@@ -1,4 +1,11 @@
 {
+ "advani2026": {
+  "articulos": [],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "55899408f15ddf31",
+  "huella_nueva": "e90b53f509793853",
+  "url": "https://arxiv.org/abs/2606.09863"
+ },
  "agenciabrasil2026": {
   "articulos": [],
   "detectado": "2026-10-19T16:02:52+00:00",
@@ -62,6 +69,13 @@
   "huella_nueva": "3d3a57c04a4211eb",
   "url": "https://arxiv.org/abs/2003.04807"
  },
+ "ccpipeline2025": {
+  "articulos": [],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "bd403e619537a9b5",
+  "huella_nueva": "404a0e65663b3404",
+  "url": "https://blog.contactcenterpipeline.com/2025/09/how-to-avoid-repeatsrepeats/"
+ },
  "chargebacks911": {
   "articulos": [],
   "detectado": "2026-10-19T16:02:52+00:00",
@@ -85,6 +99,22 @@
   "huella_nueva": "579b140915ca006f",
   "url": "https://revista.condusef.gob.mx/usuario-inteligente/sabias-que/2021/12/unidades-especializadas-de-atencion-a-usuarios/"
  },
+ "condusef_b": {
+  "articulos": [
+   "interno.investigacion-de-un-reclamo",
+   "interno.recomendacion-de-abono",
+   "interno.robo-o-perdida-bloquear-primero",
+   "publico.bloqueo-y-desbloqueo",
+   "publico.como-funciona-un-reclamo",
+   "publico.plazos-por-pais",
+   "publico.que-pasa-con-mi-dinero",
+   "publico.robo-o-perdida-de-tarjeta"
+  ],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "fb5aa416ed8a0beb",
+  "huella_nueva": "9a6c08f57075d059",
+  "url": "https://www.gob.mx/condusef/articulos/cargos-no-reconocidos?idiom=es"
+ },
  "crmbuyer2026": {
   "articulos": [
    "publico.hablar-con-una-persona"
@@ -107,6 +137,16 @@
   "huella_anterior": "d044c68eaee526ab",
   "huella_nueva": "9487a6d96cf0f4e8",
   "url": "https://arxiv.org/abs/2503.18813"
+ },
+ "decagon": {
+  "articulos": [
+   "interno.como-transferir-con-nota",
+   "publico.hablar-con-una-persona"
+  ],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "86d2a08f972b1b2c",
+  "huella_nueva": "ab7dd110a223aaf6",
+  "url": "https://decagon.ai/glossary/what-is-warm-transfer-vs-cold-transfer"
  },
  "egain": {
   "articulos": [],
@@ -151,6 +191,22 @@
   "huella_anterior": "fb1d7571c76457f0",
   "huella_nueva": "f7ecabe367d7650f",
   "url": "https://dev.to/jamesli/building-a-production-grade-llm-customer-service-in-8-weeks-architecture-decisions-pitfalls-and-4nmi"
+ },
+ "meta_flows": {
+  "articulos": [
+   "publico.como-te-identificamos"
+  ],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "5db12f150019c257",
+  "huella_nueva": "781a23fdc726c722",
+  "url": "https://developers.facebook.com/docs/whatsapp/flows/guides/implementingyourflowendpoint"
+ },
+ "nist_playbook": {
+  "articulos": [],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "ec35d1e9a589366a",
+  "huella_nueva": "fe40dbace70d98b3",
+  "url": "https://airc.nist.gov/airmf-resources/playbook/govern/"
  },
  "nu_mx_a": {
   "articulos": [
@@ -231,6 +287,13 @@
   "huella_nueva": "15ef6e8010eed8a2",
   "url": "https://openrouter.ai/docs/guides/privacy/provider-logging"
  },
+ "openrouter_b": {
+  "articulos": [],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "80e99fea63c6186b",
+  "huella_nueva": "104f88d7099ebdcc",
+  "url": "https://openrouter.ai/blog/insights/zero-data-retention/"
+ },
  "owasp2025": {
   "articulos": [],
   "detectado": "2026-10-26T15:39:38+00:00",
@@ -272,6 +335,13 @@
   "huella_anterior": "e187dfed26b0705b",
   "huella_nueva": "503770910fa85d8e",
   "url": "https://rasa.com/docs/learn/concepts/calm/"
+ },
+ "rastogi2020": {
+  "articulos": [],
+  "detectado": "2026-11-02T18:59:25+00:00",
+  "huella_anterior": "6051eae4313954ec",
+  "huella_nueva": "df0ce322492c94d1",
+  "url": "https://arxiv.org/abs/1909.05855"
  },
  "salesforce_b": {
   "articulos": [],
